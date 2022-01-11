@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'number_of_employees' => 'عدد الموظفين',
+    'number_of_products' => 'عدد المنتجات',
+    'today_sales' => 'مبيعات اليوم',
+    'today_revenue' => 'ارباح اليوم',
+    'information' => 'معلومات',
+    'card' => 'البطاقة',
+    'cashier' => 'الصندوق',
+    'today_invoices' => 'فواتير اليوم',
+    'month_invoices' => 'فواتير الشهر',
+    'delivered' => 'مستلمة',
+    'hanging' => 'معلقة',
+    'retrieved' => 'مسترجعة',
+    'cash' => 'كاش',
+    'money_collected' => 'الأموال المحصلة',
+    'today_money_pending' => 'أموال اليوم المعلقة',
+    'total_pending_money' => 'الأموال المعلقة الإجمالية',
+    'today_purchases' => 'مشتريات اليوم',
+    'today_paid_money' => 'الاموال المدفوعة اليوم',
+    'pending_paid_money' => 'الاموال المعلقة الواجب دفعها',
+    'month_purchases' => 'مشتريات الشهر',
+    'none' => 'لا يوجد',
+    'highest_five_suppliers' => 'أعلى خمسة موردين يجب الدفع لهم',
+    'Month_sales' => 'مبيعات الشهر',
+    'collected_money_month' => 'الأموال المحصلة هذا الشهر',
+    'year_sales' => 'مبيعات السنة',
+    'collected_money_year' => 'الأموال المحصلة هذه السنة',
+    'highest_five_customers_should_pay' => 'اعلى 5 عملاء عليهم اموال معلقة',
+];
+?>
