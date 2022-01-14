@@ -587,8 +587,21 @@ class Repository extends Model
         return $invoices;
     }
 
+    /*
     public function thisYearMonthlyDashboardChart(){
         $reports = $this->monthlyReports()->whereYear('created_at',now()->year)->orderBy('created_at','DESC')->get();
+        // this month
+        $invoices = $this->invoices()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        $purchases = $this->purchases()->whereYear('created_at', '=', now()->year)
+        ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
+        $chart_info = array('reports' => $reports,'invoices'=>$invoices,'purchases'=>$purchases);
+        return $chart_info;
+    }
+    */
+    public function thisYearMonthlyDashboardChart($year){
+        $reports = $this->monthlyReports()->whereYear('created_at',$year)->orderBy('created_at','DESC')->get();
+        // just for this year chart
         // this month
         $invoices = $this->invoices()->whereYear('created_at', '=', now()->year)
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();

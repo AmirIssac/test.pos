@@ -383,5 +383,17 @@ class RepositoryController extends Controller
             return $content;
         }
 
+        
+        public function getYearChart($id,Request $request){
+            $repository = Repository::find($id);
+            $user = Auth::user();
+            $user = User::find($user->id);
+            $chart_year = $request->years_chart;
+            $chart_info = $repository->thisYearMonthlyDashboardChart($chart_year);
+            if($user->hasRole('مالك-مخزن'))
+                return view('manager.Dashboard.index')->with(['repository'=>$repository,'chart_info'=>$chart_info,'chart_year'=>$chart_year]);
+            elseif($user->hasRole('عامل-مخزن'))
+                return view('manager.Dashboard.worker_index')->with(['repository'=>$repository,'chart_info'=>$chart_info,'chart_year'=>$chart_year]);
+        }
        
 }

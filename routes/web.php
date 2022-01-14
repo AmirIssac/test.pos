@@ -62,7 +62,10 @@ Route::get('/ltr',function () {
 
 
 
+
 Route::group(['middleware'=>['auth','is_verify_email']],function(){
+    
+    Route::get('/get/year/chart/{repository_id}','Manager\RepositoryController@getYearChart')->name('get.year.chart')->middleware('check_user');
 
     // Admin
     /*

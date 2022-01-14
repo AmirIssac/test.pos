@@ -15,6 +15,15 @@
     background-color: #001bb7;
     transform: scale(1.1);
   }
+  #years-chart{
+    background-color: #001bb7;
+    color: white;
+    transition: transform .2s;
+  }
+  #years-chart:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+  }
 </style>
 @section('body')
 <div class="content home">
@@ -22,12 +31,25 @@
       <div class="col-md-9">
           <div class="col-12">
               <!-- Chart -->
-              <div class="chart">
-                  <select class="select" name="" id="">
-                      <option value="">{{now()->year}}</option>
-                  </select>
-                  <canvas id="myChart" style="max-height: 100%;"></canvas>
-              </div>
+              <form action="{{route('get.year.chart',$repository->id)}}" method="GET">
+                @csrf
+                  <div class="chart">
+                      <select class="select" name="years_chart" id="years-chart" onchange="this.form.submit()">  {{-- 2021 start of the application --}}
+                          @for($year=now()->year;$year>=2021;$year--)
+                          @if(isset($chart_year))
+                              @if($chart_year == $year)
+                              <option value="{{$year}}" selected>{{$year}}</option>
+                              @else
+                              <option value="{{$year}}">{{$year}}</option>
+                              @endif
+                          @else
+                          <option value="{{$year}}">{{$year}}</option>
+                          @endif
+                          @endfor
+                      </select>
+                      <canvas id="myChart" style="max-height: 100%;"></canvas>
+                  </div>
+            </form>
           </div>
           <div class="row">
             @can('لوحة نظام الاموال للمبيعات')
@@ -296,28 +318,24 @@
   </div>
 </div>
 {{-- dashboard chart data --}}
-<?php $chart_info = $repository->thisYearMonthlyDashboardChart();
+<?php
+      if(!isset($chart_info))    // open dashboard with no submitting form
+            $chart_info = $repository->thisYearMonthlyDashboardChart(now()->year);
       $reports = $chart_info['reports'];
      /* $invoices = $chart_info['invoices'];
       $purchases = $chart_info['purchases']; */
 ?>
-{{--
-php $total_sum_invoices = 0 ?>
-@foreach($invoices as $invoice) 
-@if($invoice->status != 'retrieved' && $invoice->status != 'deleted')
-php $total_sum_invoices += $invoice->total_price ?>
-@endif
-@endforeach
---}}
+
+@if(!isset($chart_year) || (isset($chart_year) && $chart_year == now()->year))   {{-- display chart with no form options submit --}}
 <input type="hidden" id="this-month-sales" value="{{$repository->monthSales()}}">
-{{--
-php $total_sum_purchases = 0 ?>
-@foreach($purchases as $purchase)
-@if($purchase->status == 'done')
-php $total_sum_purchases += $purchase->total_price ?>
-@endif
-@endforeach--}}
 <input type="hidden" id="this-month-pur" value="{{$repository->monthPurchases()}}">
+<input type="hidden" id="form-status" value="thisyear">
+<input type="hidden" id="year" value="{{now()->year}}">
+@else
+<input type="hidden" id="form-status" value="notthisyear">
+<input type="hidden" id="year" value="{{$chart_year}}">
+@endif
+
 @foreach($reports as $report)
 <?php $total_sum_invoices = 0 ?>
 @foreach($report->invoices as $invoice)
@@ -346,6 +364,7 @@ php $total_sum_purchases += $purchase->total_price ?>
 {{-- current year number --}}
 <input type="hidden" id="current-year" value="{{now()->year}}">
 <!-- JavaScript Bundle with Popper -->
+
 <script src="{{asset('public/js/jquery-3.6.0.min.js')}}"></script>
 {{--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>--}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -353,49 +372,34 @@ php $total_sum_purchases += $purchase->total_price ?>
 
 <script>
 var current_month = $('#current-month').val();
-for(var i=1;i<=12;i++){
-    if(i != current_month){
-        window["sales_month_"+i] = $('#sales-'+i).val(); 
-        window["purchase_month_"+i] = $('#pur-'+i).val(); 
+var form_status = $('#form-status').val();
+if(form_status == 'thisyear'){
+    for(var i=1;i<=12;i++){
+        if(i != current_month){
+            window["sales_month_"+i] = $('#sales-'+i).val(); 
+            window["purchase_month_"+i] = $('#pur-'+i).val(); 
+        }
+        else{
+            window["sales_month_"+i] = $('#this-month-sales').val(); 
+            window["purchase_month_"+i] = $('#this-month-pur').val();
+        }
     }
-    else{
-        window["sales_month_"+i] = $('#this-month-sales').val(); 
-        window["purchase_month_"+i] = $('#this-month-pur').val();
-    }
-    
 }
-/*
-var sales_month_1 = $('#sales-1').val();
-var sales_month_2 = $('#sales-2').val();
-var sales_month_3 = $('#sales-3').val();
-var sales_month_4 = $('#sales-4').val();
-var sales_month_5 = $('#sales-5').val();
-var sales_month_6 = $('#sales-6').val();
-var sales_month_7 = $('#sales-7').val();
-var sales_month_8 = $('#sales-8').val();
-var sales_month_9 = $('#sales-9').val();
-var sales_month_10 = $('#sales-10').val();
-var sales_month_11 = $('#sales-11').val();
-var sales_month_12 = $('#sales-12').val();
-var purchase_month_1 = $('#pur-1').val();
-var purchase_month_2 = $('#pur-2').val();
-var purchase_month_3 = $('#pur-3').val();
-var purchase_month_4 = $('#pur-4').val();
-var purchase_month_5 = $('#pur-5').val();
-var purchase_month_6 = $('#pur-6').val();
-var purchase_month_7 = $('#pur-7').val();
-var purchase_month_8 = $('#pur-8').val();
-var purchase_month_9 = $('#pur-9').val();
-var purchase_month_10 = $('#pur-10').val();
-var purchase_month_11 = $('#pur-11').val();
-var purchase_month_12 = $('#pur-12').val();
-*/
+else{    // not this year
+    for(var i=1;i<=12;i++){
+            window["sales_month_"+i] = $('#sales-'+i).val(); 
+            window["purchase_month_"+i] = $('#pur-'+i).val(); 
+        }
+    }
+
+
 var ctx = document.getElementById('myChart');
-var current_year = $('#current-year').val();
+//var current_year = $('#current-year').val();
+var year = $('#year').val();
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
-      labels: ['1/'+current_year, '2/'+current_year, '3/'+current_year, '4/'+current_year, '5/'+current_year, '6/'+current_year,'7/'+current_year,'8/'+current_year,'9/'+current_year,'10/'+current_year,'11/'+current_year,'12/'+current_year],
+      labels: ['1/'+year, '2/'+year, '3/'+year, '4/'+year, '5/'+year, '6/'+year,'7/'+year,'8/'+year,'9/'+year,'10/'+year,'11/'+year,'12/'+year],
       datasets: [{
           label: 'مبيعات',
           data: [sales_month_1, sales_month_2, sales_month_3, sales_month_4, sales_month_5, sales_month_6,sales_month_7,sales_month_8,sales_month_9,sales_month_10,sales_month_11,sales_month_12],
@@ -431,5 +435,31 @@ var myChart = new Chart(ctx, {
 });
 </script>
 
+<script>    // years chart AJAX
+    
+    $('#years-chart').on('change',function(){
+    var repo_id = $('#repo_id').val();
+    $.ajax({
+           type: "get",
+           url: '/ajax/get/purchase/product/'+repo_id+'/'+barcode,
+           //dataType: 'json',
+          success: function(data){    // data is the response come from controller
+              if(data != 'no_data'){
+              $('#'+id).addClass('success').removeClass('failed');
+              $('#ar'+gold+'').val(data.name_ar);
+              $('#price'+gold+'').val(data.price);
+              $('#price'+gold+'').prop('readonly',false);
+              }
+              else{
+                $('#'+id).addClass('failed').removeClass('success');
+                $('#ar'+gold+'').val(null);
+                $('#price'+gold+'').val(0);
+                $('#price'+gold+'').prop('readonly',true);
+              }
+          }
+    }); // ajax close
+  });
+
+</script>
 
  @endsection
