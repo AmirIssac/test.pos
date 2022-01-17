@@ -95,10 +95,18 @@ class SystemController extends Controller
             $activate = 0;
         }
         if($request->end_at){    // تحديد زمن اشتراك
-            $setting->update([
-                'is_active' => $activate,
-                'end_of_experience' => $request->end_at,
-            ]);
+            if($request->end_at > now()){
+                $setting->update([
+                    'is_active' => true,
+                    'end_of_experience' => $request->end_at,
+                ]);
+            }
+            else{
+                $setting->update([
+                    'is_active' => false,
+                    'end_of_experience' => $request->end_at,
+                ]);
+            }
         }
         else{   // بلا تحديد مدة اشتراك
             $setting->update([
