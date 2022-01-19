@@ -263,7 +263,7 @@ class CashierController extends Controller
             */
 
             // Send Mail notification
-            /*
+            
             $users = $repository->users;
             $close_date = now();
             foreach($users as $user){
@@ -272,7 +272,7 @@ class CashierController extends Controller
                     Mail::to($user->email)->send(new MailDailyReport($details));
                 }
             }
-            */
+            
             //return redirect()->route('cashier.index', ['success' => 'تم إغلاق الكاشير اليومي بنجاح']);
             return redirect()->route('daily.reports.index',$repository->id)->with('success',__('alerts.cashier_closed_success'));
         }
