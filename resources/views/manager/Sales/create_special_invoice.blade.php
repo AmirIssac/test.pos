@@ -697,7 +697,7 @@ input:read-only{
               {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">--}}
             </td>
             <td>
-              <input type="number" min="0" max="180" name="axis_r" value="0" class="form-control" required>
+              <input type="number" min="0" max="180" name="axis_r" value="" class="form-control">
             </td>
             <td>
               <select name="add_r" class="form-control" required>
@@ -748,7 +748,7 @@ input:read-only{
             </td>
             <td>
              
-             <input type="number" min="0" max="180" name="axis_l" value="0" class="form-control" required>
+             <input type="number" min="0" max="180" name="axis_l" value="" class="form-control">
             </td>
             <td>
               {{--<input type="text" list="addl" min="0" max="20.00" step="0.25">
@@ -1074,7 +1074,7 @@ input:read-only{
               {{--<input type="number" step="0.25" min="-20" max="20" name="cyl_r" value="0">--}}
             </td>
             <td>
-              <input type="number" min="0" max="180" name="axis_r_arr[]" value="0" class="form-control" required>
+              <input type="number" min="0" max="180" name="axis_r_arr[]" value="" class="form-control">
             </td>
             <td>
               <select name="add_r_arr[]" class="form-control" required>
@@ -1125,7 +1125,7 @@ input:read-only{
             </td>
             <td>
              
-             <input type="number" min="0" max="180" name="axis_l_arr[]" value="0" class="form-control" required>
+             <input type="number" min="0" max="180" name="axis_l_arr[]" value="" class="form-control">
             </td>
             <td>
               {{--<input type="text" list="addl" min="0" max="20.00" step="0.25">

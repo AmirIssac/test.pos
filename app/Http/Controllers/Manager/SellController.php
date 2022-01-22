@@ -924,9 +924,12 @@ class SellController extends Controller
                 
             
                 $recipe = array();
+                // prepare axis null values to consider it as zero values
+                $axis_r = $request->axis_r ? $request->axis_r : 0 ;
+                $axis_l = $request->axis_l ? $request->axis_l : 0 ;
                 if($request->recipe_radio == 0){  // BASIC RECIPE
-                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                                    'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                                     'ipd'=>$request->ipdval,);
                     }
                     else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
@@ -934,13 +937,16 @@ class SellController extends Controller
                         //$recipe = array();
                         do{
                         if($gg == 0){  // basic recipe we insert it in the begin
-                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                             'ipd'=>$request->ipdval,));
                         }
                         else{
-                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
-                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                            // fix null axis values to zero
+                            $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
+                            $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
+                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
                             'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
                         }
                         $gg--;
@@ -1190,9 +1196,12 @@ class SellController extends Controller
                 // Save model
                 $repository = Repository::find($id);
                 $recipe = array();
+                // prepare axis null values to consider it as zero values
+                $axis_r = $request->axis_r ? $request->axis_r : 0 ;
+                $axis_l = $request->axis_l ? $request->axis_l : 0 ;
                 if($request->recipe_radio == 0){  // BASIC RECIPE
-                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                                    'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                                     'ipd'=>$request->ipdval,);
                     }
                     else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
@@ -1200,13 +1209,16 @@ class SellController extends Controller
                         //$recipe = array();
                         do{
                         if($gg == 0){  // basic recipe we insert it in the begin
-                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                             'ipd'=>$request->ipdval,));
                         }
                         else{
-                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
-                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                            // fix null axis values to zero
+                            $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
+                            $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
+                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
                             'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
                         }
                         $gg--;
@@ -1563,9 +1575,12 @@ class SellController extends Controller
         }
         
         $recipe = array();
+        // prepare axis null values to consider it as zero values
+        $axis_r = $request->axis_r ? $request->axis_r : 0 ;
+        $axis_l = $request->axis_l ? $request->axis_l : 0 ;
         if($request->recipe_radio == 0){  // BASIC RECIPE
-            $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+            $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                             'ipd'=>$request->ipdval,);
             }
             else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
@@ -1573,13 +1588,16 @@ class SellController extends Controller
                 //$recipe = array();
                 do{
                 if($gg == 0){  // basic recipe we insert it in the begin
-                    array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                    array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                    'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                     'ipd'=>$request->ipdval,));
                 }
                 else{
-                    $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
-                    'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                    // fix null axis values to zero
+                    $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
+                    $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
+                    $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                    'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
                     'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
                 }
                 $gg--;
@@ -1925,9 +1943,12 @@ class SellController extends Controller
                 // Save model
                 $repository = Repository::find($id);
                 $recipe = array();
+                // prepare axis null values to consider it as zero values
+                $axis_r = $request->axis_r ? $request->axis_r : 0 ;
+                $axis_l = $request->axis_l ? $request->axis_l : 0 ;
                 if($request->recipe_radio == 0){  // BASIC RECIPE
-                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                                    'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                    $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                                    'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                                     'ipd'=>$request->ipdval,);
                     }
                     else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
@@ -1935,13 +1956,16 @@ class SellController extends Controller
                         //$recipe = array();
                         do{
                         if($gg == 0){  // basic recipe we insert it in the begin
-                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$request->axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
-                            'add_l'=>$request->add_l,'axis_l'=>$request->axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
+                            array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
+                            'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
                             'ipd'=>$request->ipdval,));
                         }
                         else{
-                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$request->axis_r_arr[$request->recipe_radio-$gg],'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
-                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$request->axis_l_arr[$request->recipe_radio-$gg],'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
+                            // fix null axis values to zero
+                            $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
+                            $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
+                            $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
+                            'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
                             'ipd'=>$request->ipdval_arr[$request->recipe_radio-$gg],);
                         }
                         $gg--;
