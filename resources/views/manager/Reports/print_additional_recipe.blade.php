@@ -60,9 +60,13 @@
       #back{
         display: none;
       }
+      #manual-print{
+        display: none;
+      }
     }
     </style>
     <body>
+        <button id="manual-print" onclick="manualPrint()" class="btn btn-warning">طباعة</button>
         <h3>{{$invoice->created_at}}</h3>
         <h3>Invoice number : {{$invoice->code}}</h3>
         <div class="bordred">
@@ -238,6 +242,11 @@
           window.print();
           window.onafterprint  = afterPrint;
         }
+
+        var manualPrint = function() {
+              window.print();
+              window.location.href = "/create/special/invoice/form/"+repo_id;
+          };
       </script>
    </body>
 </html>

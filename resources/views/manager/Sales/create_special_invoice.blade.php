@@ -778,7 +778,7 @@ input:read-only{
               IPD
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipdval" value="0" class="form-control" required>
+              <input type="number" min="0" max="100" name="ipdval" value="" class="form-control">
              </td>
              <td style="border: none">
             </td>
@@ -1155,7 +1155,7 @@ input:read-only{
               IPD
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipdval_arr[]" value="0" class="form-control" required>
+              <input type="number" min="0" max="100" name="ipdval_arr[]" value="" class="form-control">
              </td>
              <td style="border: none">
             </td>
