@@ -289,6 +289,45 @@ i:hover{
                           </i> </a>
                           @endif
                           --}}
+                          .
+                          {{--
+                          @if($invoice->status == 'pending') {{-- change the payment values for today invoices and not edited or edited invoices just for p-d and allow from another day 
+                          <a style="color: #17d13f" data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="active-a"> <i id="{{$i}}" class="material-icons">
+                            perm_phone_msg
+                          </i> </a>
+                                                                   <!-- Modal for sending SMS -->
+                        <div class="modal fade" id="exampleModal{{$invoice->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$invoice->id}}" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{$invoice->id}}"> SMS </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                   SMS to  {{$invoice->customer->name}} <p style="color: #ff4454; font-weight: bold">{{$invoice->customer->phone}} </p>
+                                   <input style="width: 100%; border:1px solid #03a4ec !important;" type="text" name="smstext" value="مرحبا منتجاتك جاهزة من متجر {{$repository->name}} فرع {{$repository->address}} يرجى القدوم واستلامها وشكرا">
+                              </div>
+                              <div class="modal-footer">
+                                <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
+                                <form action="{{route('send.sms.for.invoice',$invoice->id)}}" method="POST">
+                                  @csrf
+                                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                              </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                          @else
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            perm_phone_msg
+                          </i> </a>
+                          @endif
+                          --}}
+                          <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                            perm_phone_msg
+                          </i> </a>
                       </td>
                     </tr>
                     

@@ -1462,7 +1462,7 @@ class SellController extends Controller
         $invoces_count += 1;
         $invoice_code = str_pad($invoces_count, 3, '0', STR_PAD_LEFT);     // fourth segment
         $code = $company_code.$order_repo_number.$dtformat.$invoice_code;
-
+        
        // return $code;
         // prevent user from selling the invoice twice by refreshing the printing page
         $invoice = Invoice::where('repository_id',$repository->id)->where('code',$code)->first();

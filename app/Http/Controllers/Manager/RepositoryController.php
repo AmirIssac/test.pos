@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Imports\ProductsImport;
 use App\Imports\ProductsImportSpecial;
+use App\Invoice;
 use App\Product;
 use App\Record;
 use App\Repository;
@@ -394,6 +395,31 @@ class RepositoryController extends Controller
                 return view('manager.Dashboard.index')->with(['repository'=>$repository,'chart_info'=>$chart_info,'chart_year'=>$chart_year]);
             elseif($user->hasRole('عامل-مخزن'))
                 return view('manager.Dashboard.worker_index')->with(['repository'=>$repository,'chart_info'=>$chart_info,'chart_year'=>$chart_year]);
+        }
+
+        public function sendSMSForInvoiceReady(Request $request , $id){
+            $invoice = Invoice::findOrFail($id);
+            $customer_phone = $invoice->customer->phone;
+            $username = "karma";		    // اسم المستخدم الخاص بك في الموقع 
+            $password = "abdabd@@!!7953048"; 		// كلمة المرور الخاصة بك 
+            $destinations = $customer_phone; //الارقام المرسل لها  ,, يتم وضع فاصلة بين الارقام المراد الارسال لها 
+            $message = $request->smstext;      // محتوى الرسالة 
+            //$message = "test";
+            $sender = "OTP-SMS";         // اسم المرسل الخاص بك المفعل  في الموقع 
+             // using curl in laravel
+             $endpoint = "http://www.jawalbsms.ws/api.php/sendsms";
+             $client = new Client();
+             $response = $client->request('GET', $endpoint, ['query' => [
+                 'user' => $username,
+                 'pass' => $password,
+                 'to'   => $destinations,
+                 //'unicode' => 'u',
+                 'message' => $message,
+                 'sender' => $sender,
+             ]]);
+             //$statusCode = $response->getStatusCode();
+             //$content = $response->getBody();
+             return back()->with('success','تم ارسال الرسالة بنجاح');
         }
        
 }

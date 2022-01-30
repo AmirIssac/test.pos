@@ -114,7 +114,8 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     /*
     Route::post('delete/invoice/{invoice_id}','Manager\SellController@deleteInvoice')->name('delete.invoice');
     */
-
+    // send sms
+    Route::post('send/sms/{invoice_id}','Manager\RepositoryController@sendSMSForInvoiceReady')->name('send.sms.for.invoice');
 });
 Route::get('view/customer/invoices/{customer_id}','Manager\ReportController@viewCustomerInvoices')->name('view.customer.invoices');
 
