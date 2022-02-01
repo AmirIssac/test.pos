@@ -23,7 +23,16 @@
     <link rel="stylesheet" href="{{asset('public/css/main.css')}}">
     <link rel="stylesheet" href="{{asset('public/css/responsive.css')}}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    
+
+    <!-- Global site tag (gtag.js) - Google Ads: 10845715257 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10845715257"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-10845715257');
+    </script>
     @yield('links')
 </head>
 <body> 

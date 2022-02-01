@@ -1,5 +1,21 @@
 @extends('layouts.guest')
 @section('links')
+<!-- Event snippet for اشتراك-تم التسجيل بنجاح conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        //window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-10845715257/aFDPCLT35pQDELn20bMo',
+        'event_callback': callback
+    });
+    return false;
+  }
+</script>
 <style>
 .hidden{
   visibility: hidden;
@@ -81,7 +97,7 @@
                                   </tr>
                                   <tr>
                                     <td>
-                                  <button class="btn btn-primary"> التالي </button>
+                                  <button onclick="gtag_report_conversion('/waitFor/verify');" class="btn btn-primary"> التالي </button>
                                     </td>
                                   </tr>
                               </tbody>

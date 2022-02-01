@@ -41,6 +41,16 @@
    <link href="{{asset('public/css/material-dashboard-rtl.min.css?v=1.1')}}" rel="stylesheet" />
    <!-- CSS Just for demo purpose, don't include it in your project -->
    <link href="{{asset('public/demo/demo.css')}}" rel="stylesheet" />
+
+   <!-- Global site tag (gtag.js) - Google Ads: 10845715257 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10845715257"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-10845715257');
+  </script>
    @if(LaravelLocalization::getCurrentLocale() == 'ar')
    <style>
      body{
