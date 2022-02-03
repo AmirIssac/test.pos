@@ -26,6 +26,10 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
 .displaynone{
   display: none;
 }
+label{
+  font-weight: bold;
+  padding: 10px;
+}
 </style>
 @endsection
 @section('body')
@@ -63,6 +67,7 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
                       <h4 class="card-title float-right">أدخل بياناتك من فضلك كمالك للمتجر</h4>
                         </div>
                          <div class="card-body">
+                          {{--
                           <div class="table-responsive">
                             <table class="table">
                               <thead class=" text-primary">
@@ -102,8 +107,20 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
                                   </tr>
                               </tbody>
                             </table>
-                            
                               </div>
+                            --}}
+                            <div id="credentials">
+                              <label>الاسم</label>
+                              <input type="text" name="ownerName" class="form-control" placeholder="الاسم " required>
+                              <label>الايميل</label>
+                              <input type="email" name="owneremail" class="form-control" placeholder="الايميل" required>
+                              <label>كلمة المرور</label>
+                              <input type="password" name="ownerpassword" class="form-control" placeholder="كلمة المرور" required>
+                              <label>رقم الجوال</label>
+                              <input type="text" name="ownerphone" class="form-control" placeholder="رقم الجوال" required>
+                              <button style="margin-top:10px;" onclick="gtag_report_conversion('/waitFor/verify');" class="btn btn-primary"> التالي </button>
+                            </div>
+
                             </div>
                           </div>
                  </form>

@@ -62,7 +62,7 @@
                                 @enderror
                 </div>
                 <div class="form-group text-center">
-                    <input type="submit" class="btn" value="تسجيل الدخول" />
+                    <input style="width: 150px;" type="submit" class="btn" value="تسجيل الدخول" />
                 </div>
                 
                 <div class="text-center">

@@ -44,11 +44,12 @@ class GuestController extends Controller
               'user_id' => $user->id, 
               'token' => $token
             ]);
-  
+            
         Mail::send('Mail.emailVerificationEmail', ['token' => $token], function($message) use($request){
               $message->to($request->owneremail);
               $message->subject('Email Verification Mail');
           });
+          
 
           Session::put('register_email',$request->owneremail);
           Session::put('owner_name',$request->ownerName);
