@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Guest;
 
 use App\Branch;
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyMail;
 use App\Repository;
 use App\RepositoryCategory;
 use App\Setting;
@@ -44,12 +45,13 @@ class GuestController extends Controller
               'user_id' => $user->id, 
               'token' => $token
             ]);
-            
+        /*
         Mail::send('Mail.emailVerificationEmail', ['token' => $token], function($message) use($request){
               $message->to($request->owneremail);
               $message->subject('Email Verification Mail');
           });
-          
+          */
+          Mail::to($request->owneremail)->send(new VerifyMail($token));
 
           Session::put('register_email',$request->owneremail);
           Session::put('owner_name',$request->ownerName);
