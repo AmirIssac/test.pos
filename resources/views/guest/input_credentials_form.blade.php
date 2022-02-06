@@ -128,6 +128,10 @@ label{
               </div>
             </div>
         </div>
+
+        <div style="margin-top: -15px">
+          <a href="https://wa.me/966538027198"> <img style="float: left" src="{{asset('public/images/whatsapp_icon.png')}}" height="75px"> </a>
+       </div>
 @endsection
 @section('scripts')
 

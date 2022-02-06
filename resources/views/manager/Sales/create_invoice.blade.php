@@ -424,6 +424,7 @@ input:read-only{
           @if($repository->setting->discount_by_percent == true)
           {{--<i style="color: #001bb7" id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.max_is')}} %{{$repository->max_discount}} ">live_help</i>--}}
            <input style="margin: 10px;" type="number" name="max_discount"  step="0.01" min="0" max="{{$repository->max_discount}}" placeholder="{{__('sales.percent')}}"  id="max-field" class="form-control">
+           <input style="display:none;" type="number"  id="max-allowed" value="{{$repository->max_discount}}">
            <input type="hidden" name="discountVal" id="discountVal" value="0.00">
            <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
            @else
@@ -1731,6 +1732,16 @@ window.onload=function(){
  </script>
  <script>  /* change discount value */
   $('#max-field').on("keyup",function(){
+                var maxy = $(this).val();
+                var allowed = $('#max-allowed').val();
+                if(parseFloat(maxy) > parseFloat(allowed)){    // warning alert
+                      cuteAlert({
+                        type: "error",
+                        title: "تخطيت الحد الأعلى للخصم",
+                        message: "الحد الأعلى هو  "+'%'+allowed,
+                        buttonText: "حسنا",
+                        });
+                }
                 var s = 0 ;
                 var s1 = 0;
                 var s2 = 0 ;

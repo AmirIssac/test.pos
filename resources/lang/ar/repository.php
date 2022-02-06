@@ -37,5 +37,6 @@ return [
     'storing_method' => 'اجرائية التخزين',
     'buy_from_market' => 'مشترى من السوق',
     'booked_will_be_ignored' => 'محجوز (سيتم تجاهله)',
+    'barcode_or_name' => 'الباركود | الاسم',
 ];
 ?>

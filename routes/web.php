@@ -128,6 +128,7 @@ Route::group(['middleware' => ['permission:المخزون']], function () {
         Route::post('/store/products/excel/{repository_id}','Manager\RepositoryController@importExcel')->name('import.excel');
         Route::get('/show/products/{repository_id}','Manager\RepositoryController@showProducts')->name('show.products');
         Route::get('/filter/products/{repository_id}','Manager\RepositoryController@filterProducts')->name('filter.products');
+        Route::get('/search/products/{repository_id}','Manager\RepositoryController@searchProducts')->name('search.products');
     });
 });
 

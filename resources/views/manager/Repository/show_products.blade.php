@@ -5,9 +5,11 @@
     width: 50px;
   }
   .select{
-  
     background-color: #007bff;
     color: white
+  }
+  #search-product{
+    border: 2px solid #001bb7 !important;
   }
   .search-btn{
   border:none;
@@ -44,6 +46,7 @@ i:hover{
               <h4 class="card-title">{{__('repository.all_products')}}</h4>
               @endif
               {{-- filter --}}
+    <div style="display:flex">
     @if($repository->isSpecial() || $repository->isStorehouse())  {{-- محل خاص --}}
   <form action="{{route('filter.products',$repository->id)}}" method="GET">
     @csrf
@@ -71,6 +74,14 @@ i:hover{
     </button>
     </form>
     @endif
+    <form action="{{route('search.products',$repository->id)}}" method="GET">
+      @csrf
+      <input type="text" name="search" placeholder="{{__('repository.barcode_or_name')}}" id="search-product">
+      <button type="submit" class="search-btn">
+        <i class="material-icons">search</i>
+      </button>
+    </form>
+    </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -190,13 +201,30 @@ i:hover{
                         <button style="color: white" type="submit" class="btn btn-info"> {{__('buttons.edit')}} </button>
                       </form>
                     </td>
-                    {{--<td>
-                      <form action="{{route('delete.product')}}" method="POST">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{$product->id}}">
-                        <button type="submit" class="btn btn-danger"> {{__('buttons.delete')}} </button>
-                      </form>
-                    </td>--}}
+                    <td>
+                        <button data-toggle="modal" data-target="#exampleModal{{$product->id}}" id="modaltrigger" class="btn btn-danger"> {{__('buttons.delete')}} </button>
+                      <!-- Modal for deleting product -->
+              <div class="modal fade" id="exampleModal{{$product->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{$product->id}}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel{{$product->id}}">حذف المنتج</h5>
+                    </div>
+                    <form action="{{route('delete.product')}}" method="POST">
+                      @csrf
+                      <input type="hidden" name="product_id" value="{{$product->id}}">
+                    <div class="modal-body">
+                      حذفك لهذا المنتج سيؤدي لتقييد عملية استكمال أي فاتورة تحوي هذا المنتج
+                    </div>
+                    <div class="modal-footer">
+                      <a data-dismiss="modal" class="btn btn-danger">{{__('buttons.cancel')}}</a>
+                      <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+
+                    </td>
                     </tr>
                     @endforeach
                     @else

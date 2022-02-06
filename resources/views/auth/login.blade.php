@@ -76,6 +76,11 @@
         </div>
     </div>
 
+    <div>
+       <a href="https://wa.me/966538027198"> <img style="float: left" src="{{asset('public/images/whatsapp_icon.png')}}" height="75px"> </a>
+    </div>
+    
+
     <!-- JavaScript Bundle with Popper -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>

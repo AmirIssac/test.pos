@@ -177,6 +177,16 @@ class RepositoryController extends Controller
         }
     }
 
+    public function searchProducts(Request $request , $id){
+        $repository = Repository::find($id);
+        $products = $repository->products()->where(function($q) use ($request) {
+            $q->where('barcode', 'like' , '%'.$request->search.'%')
+              ->orWhere('name_ar', 'like' , '%'.$request->search.'%')
+              ->orWhere('name_en', 'like' , '%'.$request->search.'%');
+        })->paginate(15)->withQueryString();
+        return view('manager.Repository.show_products')->with(['products'=>$products , 'repository'=>$repository]);
+    }
+
     public function importExcelForm($id){
         $repository = Repository::find($id);
         $types = Type::all();
