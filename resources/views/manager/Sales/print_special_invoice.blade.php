@@ -358,17 +358,47 @@
                   <tr>
                    <td style="border: none">
                    </td>
-                   <td style="border: none">
-                   </td>
                    <td style="text-align: center; font-weight: bold; font-size: 18px;">
-                     IPD
+                     ipd distance
                    </td>
                     <td>
                       {{$recipe[$i]['ipd']}}
                     </td>
-                    <td style="border: none">
-                   </td>
+                    <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                      ipd near
+                    </td>
+                    <td>
+                      @if(isset($recipe[$i]['ipd2']))  {{-- old version --}}
+                      {{$recipe[$i]['ipd2']}}
+                      @else
+                      0
+                      @endif
+                    </td>
                   </tr>
+                  <tr>
+                    <td style="border: none">
+                    </td>
+                    <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                      recipe source
+                    </td>
+                     <td>
+                      @if(isset($recipe[$i]['recipe_source']))  {{-- old version --}}
+                      {{$recipe[$i]['recipe_source']}}
+                      @else
+                      customer
+                      @endif
+                     </td>
+                     <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                       ipd source
+                     </td>
+                     <td>
+                      @if(isset($recipe[$i]['ipd_source']))  {{-- old version --}}
+                      {{$recipe[$i]['ipd_source']}}
+                      @else
+                      customer
+                      @endif
+                     </td>
+                   </tr>
                   </tbody>
                 </table>
               </div>

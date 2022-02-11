@@ -218,6 +218,16 @@ input:read-only{
 .green:focus{
   background-color: greenyellow;
 }
+input[id^=recipe_name]::placeholder{ /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: red;
+  opacity: 1; /* Firefox */
+  font-weight: bold;
+}
+input[id^=recipe_name]::-ms-input-placeholder{
+  color: red;
+  opacity: 1; /* Firefox */
+  font-weight: bold;
+}
 @media print{
  /* body, html, #myform { 
           height: 100%;
@@ -650,17 +660,67 @@ input:read-only{
            <tr>
             <td style="border: none">
             </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD distance
+            </td>
+            <td>
+              <input type="number" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}" class="form-control" required>
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD near
+            </td>
+             <td>
+              <input type="number" min="0" max="100" name="ipd2val" value="{{$saved_recipe['ipd2']}}" class="form-control" required>
+             </td>
+           </tr>
+           <tr>
             <td style="border: none">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-              IPD
-            </td>
-             <td>
-              <input type="number" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}" class="form-control" required>
-             </td>
-             <td style="border: none">
-            </td>
-           </tr>
+                 recipe source
+           </td>
+           <td>
+             <select name="recipe_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+               @if($saved_recipe['recipe_source'] == 'customer')
+               <option value="customer" selected>customer</option>
+               @foreach($checkers as $checker)
+                 <option value="{{$checker->id}}">{{$checker->name}}</option>
+               @endforeach
+               @else {{-- not customer --}}
+               <option value="customer">customer</option>
+               @foreach($checkers as $checker)
+                 @if($saved_recipe['recipe_source'] == $checker->id)
+                 <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
+                 @else
+                 <option value="{{$checker->id}}">{{$checker->name}}</option>
+                 @endif
+               @endforeach
+               @endif
+             </select>
+           </td>
+           <td style="text-align: center; font-weight: bold; font-size: 18px;">
+             IPD-source
+           </td>
+           <td>
+             <select name="ipd_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+              @if($saved_recipe['ipd_source'] == 'customer')
+              <option value="customer" selected>customer</option>
+              @foreach($checkers as $checker)
+                <option value="{{$checker->id}}">{{$checker->name}}</option>
+              @endforeach
+              @else {{-- not customer --}}
+              <option value="customer">customer</option>
+              @foreach($checkers as $checker)
+                @if($saved_recipe['ipd_source'] == $checker->id)
+                <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
+                @else
+                <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endif
+              @endforeach
+              @endif
+             </select>
+           </td>
+          </tr>
            @endif
            @endforeach
            @else
@@ -772,15 +832,43 @@ input:read-only{
            <tr>
             <td style="border: none">
             </td>
-            <td style="border: none">
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD distance
+            </td>
+            <td>
+              <input type="number" min="0" max="100" name="ipdval" value="" class="form-control">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-              IPD
+              IPD near
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipdval" value="" class="form-control">
+              <input type="number" min="0" max="100" name="ipd2val" value="" class="form-control">
              </td>
+           </tr>
+           <tr>
              <td style="border: none">
+             </td>
+             <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                  recipe source
+            </td>
+            <td>
+              <select name="recipe_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+                <option value="customer">customer</option>
+                @foreach($checkers as $checker)
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endforeach
+              </select>
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD-source
+            </td>
+            <td>
+              <select name="ipd_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+                <option value="customer">customer</option>
+                @foreach($checkers as $checker)
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endforeach
+              </select>
             </td>
            </tr>
            @endif
@@ -827,7 +915,7 @@ input:read-only{
     <div class="card-header card-header-primary">
       <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
       <span class="badge badge-success">{{$nickname}}</span>
-      <input type="hidden" id="recipe_name{{$additional_archived}}" name="recipe_name[]" value="{{$nickname}}" placeholder="اكتب الاسم هنا">
+      <input type="hidden" id="recipe_name{{$additional_archived}}" name="recipe_name[]" value="{{$nickname}}" placeholder="اكتب الاسم هنا (الزامي)">
      {{-- <input type="radio" name="recipe_radio" value="{{$additional_archived}}"> --}}{{-- to determine which recipe we are doing sell proccess now --}}
     </div>                                {{-- we determine the index of arr from the recipe radio in controller --}}
     <div class="card-body">
@@ -992,17 +1080,67 @@ input:read-only{
              <tr>
               <td style="border: none">
               </td>
+              <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                IPD distance
+              </td>
+              <td>
+                <input type="number" min="0" max="100" name="ipdval_arr[]" value="{{$saved_recipe['ipd']}}" class="form-control" required>
+              </td>
+              <td style="text-align: center; font-weight: bold; font-size: 18px;">
+                IPD near
+              </td>
+               <td>
+                <input type="number" min="0" max="100" name="ipd2val_arr[]" value="{{$saved_recipe['ipd2']}}" class="form-control" required>
+               </td>
+             </tr>
+             <tr>
               <td style="border: none">
               </td>
               <td style="text-align: center; font-weight: bold; font-size: 18px;">
-                IPD
-              </td>
-               <td>
-                <input type="number" min="0" max="100" name="ipdval_arr[]" value="{{$saved_recipe['ipd']}}" class="form-control" required>
-               </td>
-               <td style="border: none">
-              </td>
-             </tr>
+                   recipe source
+             </td>
+             <td>
+               <select name="recipe_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+                @if($saved_recipe['recipe_source'] == 'customer')
+                <option value="customer" selected>customer</option>
+                @foreach($checkers as $checker)
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endforeach
+                @else {{-- not customer --}}
+                <option value="customer">customer</option>
+                @foreach($checkers as $checker)
+                  @if($saved_recipe['recipe_source'] == $checker->id)
+                  <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
+                  @else
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                  @endif
+                @endforeach
+                @endif
+               </select>
+             </td>
+             <td style="text-align: center; font-weight: bold; font-size: 18px;">
+               IPD-source
+             </td>
+             <td>
+               <select name="ipd_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+                @if($saved_recipe['ipd_source'] == 'customer')
+                <option value="customer" selected>customer</option>
+                @foreach($checkers as $checker)
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endforeach
+                @else {{-- not customer --}}
+                <option value="customer">customer</option>
+                @foreach($checkers as $checker)
+                  @if($saved_recipe['ipd_source'] == $checker->id)
+                  <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
+                  @else
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                  @endif
+                @endforeach
+                @endif
+               </select>
+             </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -1017,7 +1155,7 @@ input:read-only{
 <div class="card add-box-table">
   <div class="card-header card-header-primary">
     <h4 class="card-title ">  {{__('sales.prescription')}}  </h4>
-    <input type="text" id="recipe_name{{$t}}" name="recipe_name[]" placeholder="اكتب الاسم هنا">
+    <input type="text" id="recipe_name{{$t}}" name="recipe_name[]" placeholder="اكتب الاسم هنا (الزامي)">
    {{-- <input type="radio" name="recipe_radio" value="{{$t}}"> --}} {{-- to determine which recipe we are doing sell proccess now --}}
   </div>
   <div class="card-body">
@@ -1149,17 +1287,45 @@ input:read-only{
            <tr>
             <td style="border: none">
             </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD distance
+            </td>
+            <td>
+              <input type="number" min="0" max="100" name="ipdval_arr[]" value="" class="form-control">
+            </td>
+            <td style="text-align: center; font-weight: bold; font-size: 18px;">
+              IPD near
+            </td>
+             <td>
+              <input type="number" min="0" max="100" name="ipd2val_arr[]" value="" class="form-control">
+             </td>
+           </tr>
+           <tr>
             <td style="border: none">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-              IPD
-            </td>
-             <td>
-              <input type="number" min="0" max="100" name="ipdval_arr[]" value="" class="form-control">
-             </td>
-             <td style="border: none">
-            </td>
-           </tr>
+                 recipe source
+           </td>
+           <td>
+             <select name="recipe_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+               <option value="customer">customer</option>
+               @foreach($checkers as $checker)
+                 <option value="{{$checker->id}}">{{$checker->name}}</option>
+               @endforeach
+             </select>
+           </td>
+           <td style="text-align: center; font-weight: bold; font-size: 18px;">
+             IPD-source
+           </td>
+           <td>
+             <select name="ipd_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+               <option value="customer">customer</option>
+               @foreach($checkers as $checker)
+                 <option value="{{$checker->id}}">{{$checker->name}}</option>
+               @endforeach
+             </select>
+           </td>
+          </tr>
      </tbody>
    </table>
 </div>

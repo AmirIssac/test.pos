@@ -187,17 +187,48 @@
             </tr>
             <td>
             </td>
-            <td>
-            </td>
-            <th>
-              IPD
+            <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              ipd distance
             </th>
-            <th>
+            <th style="text-align: center;">
               {{$recipe[$i]['ipd']}}
             </th>
-            <td>
-            </td>
+            <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              ipd near
+            </th>
+            <th style="text-align: center;">
+              @if(isset($recipe[$i]['ipd2']))  {{-- old version --}}
+              {{$recipe[$i]['ipd2']}}
+              @else
+              0
+              @endif
+            </th>
             <tr>
+
+              <tr>
+                <td>
+                </td>
+                <th style="text-align: center; font-weight: bold; font-size: 18px;">
+                  recipe source
+                </th>
+                <th style="text-align: center; font-weight: bold; font-size: 18px;">
+                  @if(isset($recipe[$i]['recipe_source']))  {{-- old version --}}
+                  {{$recipe[$i]['recipe_source']}}
+                  @else
+                  customer
+                  @endif
+                </th>
+                <th style="text-align: center; font-weight: bold; font-size: 18px;">
+                  ipd source
+                </th>
+                <th style="text-align: center; font-weight: bold; font-size: 18px;">
+                  @if(isset($recipe[$i]['ipd_source']))  {{-- old version --}}
+                  {{$recipe[$i]['ipd_source']}}
+                  @else
+                  customer
+                  @endif
+                </th>
+              </tr>
         </table>
         </div>
         @endfor

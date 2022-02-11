@@ -82,10 +82,14 @@ class SellController extends Controller
         if(!$request->phone){  // first page
             if($request->old == 'yes'){  // create invoice by old date
                 $date = 'custom';
-                return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository,'date'=>$date]);
+                // get الفاحص
+                $checkers = $repository->users()->permission('فاحص')->get();
+                return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository,'date'=>$date,'checkers'=>$checkers]);
             }
             else{
-                return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository]);
+                // get الفاحص
+                $checkers = $repository->users()->permission('فاحص')->get();
+                return view('manager.Sales.create_special_invoice')->with(['repository'=>$repository,'checkers'=>$checkers]);
             }
         }
         $new = true;
@@ -159,6 +163,8 @@ class SellController extends Controller
                 else
                 $date = now();  // invoice date
                 $repository = Repository::find($id);
+                // get الفاحص
+                $checkers = $repository->users()->permission('فاحص')->get();
                 return view('manager.Sales.create_special_invoice')->with([
                     'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
                     'code' => $code,
@@ -167,6 +173,7 @@ class SellController extends Controller
                     'saved_recipes' => $saved_recipe,
                     'new' => $new,
                     'name_generated' => $name_generated,
+                    'checkers' => $checkers,
                     ]);
                     } // end customer exists before
         else{ // not exists before
@@ -231,12 +238,15 @@ class SellController extends Controller
                 else
                 $date = now();  // invoice date
             $repository = Repository::find($id);
+            // get الفاحص
+            $checkers = $repository->users()->permission('فاحص')->get();
             return view('manager.Sales.create_special_invoice')->with([
                 'repository'=>$repository,'customer_name'=>$customer_name,'phone'=>$request->phone,
                 'code' => $code,
                 'date' => $date,
                 'new' => $new,
                 'name_generated' => $name_generated,
+                'checkers' => $checkers,
                 ]);
     } // end customer not exists
     }
@@ -928,10 +938,11 @@ class SellController extends Controller
                 $axis_r = $request->axis_r ? $request->axis_r : 0 ;
                 $axis_l = $request->axis_l ? $request->axis_l : 0 ;
                 $ipd = $request->ipdval ? $request->ipdval : 0 ;
+                $ipd2 = $request->ipd2val ? $request->ipd2val : 0 ;
                 if($request->recipe_radio == 0){  // BASIC RECIPE
                     $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                                     'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                                    'ipd'=>$ipd,);
+                                    'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source);
                     }
                     else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
                         $gg = $request->recipe_radio;
@@ -940,16 +951,17 @@ class SellController extends Controller
                         if($gg == 0){  // basic recipe we insert it in the begin
                             array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                             'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                            'ipd'=>$ipd,));
+                            'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source));
                         }
                         else{
                             // fix null axis values to zero
                             $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
                             $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
                             $ipd_add = $request->ipdval_arr[$request->recipe_radio-$gg] ? $request->ipdval_arr[$request->recipe_radio-$gg] : 0 ;
+                            $ipd2_add = $request->ipd2val_arr[$request->recipe_radio-$gg] ? $request->ipd2val_arr[$request->recipe_radio-$gg] : 0 ;
                             $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
                             'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
-                            'ipd'=>$ipd_add,);
+                            'ipd'=>$ipd_add,'ipd2'=>$ipd2_add,'recipe_source'=>$request->recipe_source_arr[$request->recipe_radio-$gg],'ipd_source'=>$request->ipd_source_arr[$request->recipe_radio-$gg]);
                         }
                         $gg--;
                         }
@@ -1145,16 +1157,41 @@ class SellController extends Controller
                 */
         
                 // send recipe
+                /*
                 $r = array();
                 if(count($recipe)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
                     // check if recipe values 0 so we dont print the recipe
                     // send to printing just the valuable recipes
                     for($i=0;$i<count($recipe);$i++){
-                    if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' )
+                    if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' && $recipe[$i]['ipd2']=='0' )
                         continue;
                         $r[] = $recipe[$i]; // input array into array so we get array of arrays
                     }
                 }
+                */
+                // send new recipe sourced  NEW VERSION
+                $re = array();
+                if(count($recipe)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
+                    // check if recipe values 0 so we dont print the recipe
+                    // send to printing just the valuable recipes
+                    for($i=0;$i<count($recipe);$i++){
+                    if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' && $recipe[$i]['ipd2']=='0' )
+                        continue;
+                    // insert dynamic users names by their ID's
+                        $s1 = $recipe[$i]['recipe_source'];
+                        if($s1 != 'customer'){
+                            $employee = User::find($s1);
+                            $recipe[$i]['recipe_source'] = $employee->name;
+                        }
+                        $s2 = $recipe[$i]['ipd_source'];
+                        if($s2 != 'customer'){
+                            $employee = User::find($s2);
+                            $recipe[$i]['ipd_source'] = $employee->name;
+                        }
+                        $re[] = $recipe[$i]; // input array into array so we get array of arrays
+                    }
+                }
+
 
                 // create Encoding QRCode
                 $encode = new Encode();
@@ -1181,7 +1218,7 @@ class SellController extends Controller
                   'discount' => $discounting,
                   'date'=>$request->date,'repository' => $repository,
                   'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-                  'recipe' => $r,'qrcode'=>$base64
+                  'recipe' => $re,'qrcode'=>$base64
                 ]);   // to print the invoice
                 else
                 return view('manager.Sales.print_epson_special_invoice')->with([
@@ -1190,10 +1227,10 @@ class SellController extends Controller
                     'discount' => $discounting,
                     'date'=>$request->date,'repository' => $repository,
                     'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-                    'recipe' => $r,'qrcode'=>$base64
+                    'recipe' => $re,'qrcode'=>$base64
                   ]);   
                 break;
-
+ 
             case 'save':
                 // Save model
                 $repository = Repository::find($id);
@@ -1202,10 +1239,11 @@ class SellController extends Controller
                 $axis_r = $request->axis_r ? $request->axis_r : 0 ;
                 $axis_l = $request->axis_l ? $request->axis_l : 0 ;
                 $ipd = $request->ipdval ? $request->ipdval : 0 ;
+                $ipd2 = $request->ipd2val ? $request->ipd2val : 0 ;
                 if($request->recipe_radio == 0){  // BASIC RECIPE
                     $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                                     'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                                    'ipd'=>$ipd,);
+                                    'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source);
                     }
                     else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
                         $gg = $request->recipe_radio;
@@ -1214,16 +1252,17 @@ class SellController extends Controller
                         if($gg == 0){  // basic recipe we insert it in the begin
                             array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                             'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                            'ipd'=>$ipd,));
+                            'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source));
                         }
                         else{
                             // fix null axis values to zero
                             $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
                             $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
                             $ipd_add = $request->ipdval_arr[$request->recipe_radio-$gg] ? $request->ipdval_arr[$request->recipe_radio-$gg] : 0 ;
+                            $ipd2_add = $request->ipd2val_arr[$request->recipe_radio-$gg] ? $request->ipd2val_arr[$request->recipe_radio-$gg] : 0 ;
                             $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
                             'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
-                            'ipd'=>$ipd_add,);
+                            'ipd'=>$ipd_add,'ipd2'=>$ipd2_add,'recipe_source'=>$request->recipe_source_arr[$request->recipe_radio-$gg],'ipd_source'=>$request->ipd_source_arr[$request->recipe_radio-$gg]);
                         }
                         $gg--;
                         }
@@ -1583,10 +1622,11 @@ class SellController extends Controller
         $axis_r = $request->axis_r ? $request->axis_r : 0 ;
         $axis_l = $request->axis_l ? $request->axis_l : 0 ;
         $ipd = $request->ipdval ? $request->ipdval : 0 ;
+        $ipd2 = $request->ipd2val ? $request->ipd2val : 0 ;
         if($request->recipe_radio == 0){  // BASIC RECIPE
             $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                             'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                            'ipd'=>$ipd,);
+                            'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source);
             }
             else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
                 $gg = $request->recipe_radio;
@@ -1595,16 +1635,17 @@ class SellController extends Controller
                 if($gg == 0){  // basic recipe we insert it in the begin
                     array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                     'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                    'ipd'=>$ipd,));
+                    'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source));
                 }
                 else{
                     // fix null axis values to zero
                     $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
                     $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
                     $ipd_add = $request->ipdval_arr[$request->recipe_radio-$gg] ? $request->ipdval_arr[$request->recipe_radio-$gg] : 0 ;
+                    $ipd2_add = $request->ipd2val_arr[$request->recipe_radio-$gg] ? $request->ipd2val_arr[$request->recipe_radio-$gg] : 0 ;
                     $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
                     'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
-                    'ipd'=>$ipd_add,);
+                    'ipd'=>$ipd_add,'ipd2'=>$ipd2_add,'recipe_source'=>$request->recipe_source_arr[$request->recipe_radio-$gg],'ipd_source'=>$request->ipd_source_arr[$request->recipe_radio-$gg]);
                 }
                 $gg--;
                 }
@@ -1894,17 +1935,42 @@ class SellController extends Controller
 
 
         // send recipe
+        /*
         $r = array();
         //$recipe = unserialize($recipe);
         if(count($recipe)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
             // check if recipe values 0 so we dont print the recipe
             // send to printing just the valuable recipes
             for($i=0;$i<count($recipe);$i++){
-            if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' )
+            if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' && $recipe[$i]['ipd2']=='0')
                 continue;
                 $r[] = $recipe[$i]; // input array into array so we get array of arrays
             }
         }
+        */
+
+         // send new recipe sourced  NEW VERSION
+         $re = array();
+         if(count($recipe)<7){   // new version  array of arrays (impossible to have more than 6 recipes)
+             // check if recipe values 0 so we dont print the recipe
+             // send to printing just the valuable recipes
+             for($i=0;$i<count($recipe);$i++){
+             if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' && $recipe[$i]['ipd2']=='0' )
+                 continue;
+             // insert dynamic users names by their ID's
+                 $s1 = $recipe[$i]['recipe_source'];
+                 if($s1 != 'customer'){
+                     $employee = User::find($s1);
+                     $recipe[$i]['recipe_source'] = $employee->name;
+                 }
+                 $s2 = $recipe[$i]['ipd_source'];
+                 if($s2 != 'customer'){
+                     $employee = User::find($s2);
+                     $recipe[$i]['ipd_source'] = $employee->name;
+                 }
+                 $re[] = $recipe[$i]; // input array into array so we get array of arrays
+             }
+         }
 
         // create Encoding QRCode
         $encode = new Encode();
@@ -1933,7 +1999,7 @@ class SellController extends Controller
           'discount' => $discounting,
           'date'=>$request->date,'repository' => $repository,
           'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-          'recipe' => $r,'saving_old_invoice' => $saving_old_invoice,'qrcode'=>$base64
+          'recipe' => $re,'saving_old_invoice' => $saving_old_invoice,'qrcode'=>$base64
         ]);   // to print the invoice
         else
         return view('manager.Sales.print_epson_special_invoice')->with([
@@ -1942,7 +2008,7 @@ class SellController extends Controller
             'discount' => $discounting,
             'date'=>$request->date,'repository' => $repository,
             'customer' => $customer,'employee'=>$employee,'note'=>$request->note,'remaining_amount'=>$remaining_amount,'invoice'=>$invoice,
-            'recipe' => $r,'saving_old_invoice' => $saving_old_invoice,'qrcode'=>$base64
+            'recipe' => $re,'saving_old_invoice' => $saving_old_invoice,'qrcode'=>$base64
           ]);   // to print the invoice
         break;
             case 'save':
@@ -1953,10 +2019,11 @@ class SellController extends Controller
                 $axis_r = $request->axis_r ? $request->axis_r : 0 ;
                 $axis_l = $request->axis_l ? $request->axis_l : 0 ;
                 $ipd = $request->ipdval ? $request->ipdval : 0 ;
+                $ipd2 = $request->ipd2val ? $request->ipd2val : 0 ;
                 if($request->recipe_radio == 0){  // BASIC RECIPE
                     $recipe[] = array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                                     'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                                    'ipd'=>$ipd,);
+                                    'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source);
                     }
                     else{  // additional recipe  from the index and going back   // beacuse the system changed and now the invoice may contain several recipes
                         $gg = $request->recipe_radio;
@@ -1965,16 +2032,17 @@ class SellController extends Controller
                         if($gg == 0){  // basic recipe we insert it in the begin
                             array_unshift($recipe, array('add_r'=>$request->add_r,'axis_r'=>$axis_r,'cyl_r'=>$request->cyl_r,'sph_r'=>$request->sph_r,
                             'add_l'=>$request->add_l,'axis_l'=>$axis_l,'cyl_l'=>$request->cyl_l,'sph_l'=>$request->sph_l,
-                            'ipd'=>$ipd,));
+                            'ipd'=>$ipd,'ipd2'=>$ipd2,'recipe_source'=>$request->recipe_source,'ipd_source'=>$request->ipd_source));
                         }
                         else{
                             // fix null axis values to zero
                             $axis_r_add = $request->axis_r_arr[$request->recipe_radio-$gg] ? $request->axis_r_arr[$request->recipe_radio-$gg] : 0 ;
                             $axis_l_add = $request->axis_l_arr[$request->recipe_radio-$gg] ? $request->axis_l_arr[$request->recipe_radio-$gg] : 0 ;
                             $ipd_add = $request->ipdval_arr[$request->recipe_radio-$gg] ? $request->ipdval_arr[$request->recipe_radio-$gg] : 0 ;
+                            $ipd2_add = $request->ipd2val_arr[$request->recipe_radio-$gg] ? $request->ipd2val_arr[$request->recipe_radio-$gg] : 0 ;
                             $recipe[] = array('name'=>$request->recipe_name[$request->recipe_radio-$gg],'add_r'=>$request->add_r_arr[$request->recipe_radio-$gg],'axis_r'=>$axis_r_add,'cyl_r'=>$request->cyl_r_arr[$request->recipe_radio-$gg],'sph_r'=>$request->sph_r_arr[$request->recipe_radio-$gg],
                             'add_l'=>$request->add_l_arr[$request->recipe_radio-$gg],'axis_l'=>$axis_l_add,'cyl_l'=>$request->cyl_l_arr[$request->recipe_radio-$gg],'sph_l'=>$request->sph_l_arr[$request->recipe_radio-$gg],
-                            'ipd'=>$ipd_add,);
+                            'ipd'=>$ipd_add,'ipd2'=>$ipd2_add,'recipe_source'=>$request->recipe_source_arr[$request->recipe_radio-$gg],'ipd_source'=>$request->ipd_source_arr[$request->recipe_radio-$gg]);
                         }
                         $gg--;
                         }
@@ -2668,7 +2736,7 @@ class SellController extends Controller
                                 // check if recipe values 0 so we dont print the recipe
                                 // send to printing just the valuable recipes
                                 for($i=0;$i<count($r);$i++){
-                                if($r[$i]['add_r']=='0' && $r[$i]['axis_r']=='0' && $r[$i]['cyl_r']=='0' && $r[$i]['sph_r']=='0' && $r[$i]['add_l']=='0' && $r[$i]['axis_l']=='0' && $r[$i]['cyl_l']=='0' && $r[$i]['sph_l']=='0' && $r[$i]['ipd']=='0' )
+                                if($r[$i]['add_r']=='0' && $r[$i]['axis_r']=='0' && $r[$i]['cyl_r']=='0' && $r[$i]['sph_r']=='0' && $r[$i]['add_l']=='0' && $r[$i]['axis_l']=='0' && $r[$i]['cyl_l']=='0' && $r[$i]['sph_l']=='0' && $r[$i]['ipd']=='0' && $r[$i]['ipd2']=='0')
                                     continue;
                                     $recipe[] = $r[$i]; // input array into array so we get array of arrays
                                 }
