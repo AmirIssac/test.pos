@@ -670,7 +670,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
               IPD near
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipd2val" value="{{$saved_recipe['ipd2']}}" class="form-control" required>
+              <input type="number" min="0" max="100" name="ipd2val" value="{{isset($saved_recipe['ipd2']) ? $saved_recipe['ipd2'] : 0}}" class="form-control" required>
              </td>
            </tr>
            <tr>
@@ -681,6 +681,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
            </td>
            <td>
              <select name="recipe_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+              @if(isset($saved_recipe['recipe_source']))
                @if($saved_recipe['recipe_source'] == 'customer')
                <option value="customer" selected>customer</option>
                @foreach($checkers as $checker)
@@ -696,6 +697,12 @@ input[id^=recipe_name]::-ms-input-placeholder{
                  @endif
                @endforeach
                @endif
+               @else
+               <option value="customer" selected>customer</option>
+                @foreach($checkers as $checker)
+                <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endforeach
+               @endif
              </select>
            </td>
            <td style="text-align: center; font-weight: bold; font-size: 18px;">
@@ -703,6 +710,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
            </td>
            <td>
              <select name="ipd_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+              @if(isset($saved_recipe['ipd_source']))
               @if($saved_recipe['ipd_source'] == 'customer')
               <option value="customer" selected>customer</option>
               @foreach($checkers as $checker)
@@ -716,6 +724,12 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 @else
                 <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endif
+              @endforeach
+              @endif
+              @else
+              <option value="customer" selected>customer</option>
+              @foreach($checkers as $checker)
+                <option value="{{$checker->id}}">{{$checker->name}}</option>
               @endforeach
               @endif
              </select>
@@ -1090,7 +1104,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 IPD near
               </td>
                <td>
-                <input type="number" min="0" max="100" name="ipd2val_arr[]" value="{{$saved_recipe['ipd2']}}" class="form-control" required>
+                <input type="number" min="0" max="100" name="ipd2val_arr[]" value="{{isset($saved_recipe['ipd2']) ? $saved_recipe['ipd2'] : 0}}" class="form-control" required>
                </td>
              </tr>
              <tr>
@@ -1101,6 +1115,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
              </td>
              <td>
                <select name="recipe_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+                @if(isset($saved_recipe['recipe_source']))
                 @if($saved_recipe['recipe_source'] == 'customer')
                 <option value="customer" selected>customer</option>
                 @foreach($checkers as $checker)
@@ -1116,6 +1131,12 @@ input[id^=recipe_name]::-ms-input-placeholder{
                   @endif
                 @endforeach
                 @endif
+                @else
+                <option value="customer" selected>customer</option>
+                @foreach($checkers as $checker)
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
+                @endforeach
+                @endif
                </select>
              </td>
              <td style="text-align: center; font-weight: bold; font-size: 18px;">
@@ -1123,6 +1144,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
              </td>
              <td>
                <select name="ipd_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
+                @if(isset($saved_recipe['ipd_source']))
                 @if($saved_recipe['ipd_source'] == 'customer')
                 <option value="customer" selected>customer</option>
                 @foreach($checkers as $checker)
@@ -1136,6 +1158,12 @@ input[id^=recipe_name]::-ms-input-placeholder{
                   @else
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                   @endif
+                @endforeach
+                @endif
+                @else
+                <option value="customer" selected>customer</option>
+                @foreach($checkers as $checker)
+                  <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
                 @endif
                </select>
