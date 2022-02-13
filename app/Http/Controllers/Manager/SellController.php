@@ -2736,9 +2736,16 @@ class SellController extends Controller
                                 // check if recipe values 0 so we dont print the recipe
                                 // send to printing just the valuable recipes
                                 for($i=0;$i<count($r);$i++){
+                                if(isset($r[$i]['ipd2'])){   // old version
                                 if($r[$i]['add_r']=='0' && $r[$i]['axis_r']=='0' && $r[$i]['cyl_r']=='0' && $r[$i]['sph_r']=='0' && $r[$i]['add_l']=='0' && $r[$i]['axis_l']=='0' && $r[$i]['cyl_l']=='0' && $r[$i]['sph_l']=='0' && $r[$i]['ipd']=='0' && $r[$i]['ipd2']=='0')
                                     continue;
                                     $recipe[] = $r[$i]; // input array into array so we get array of arrays
+                                }
+                                else{
+                                    if($r[$i]['add_r']=='0' && $r[$i]['axis_r']=='0' && $r[$i]['cyl_r']=='0' && $r[$i]['sph_r']=='0' && $r[$i]['add_l']=='0' && $r[$i]['axis_l']=='0' && $r[$i]['cyl_l']=='0' && $r[$i]['sph_l']=='0' && $r[$i]['ipd']=='0')
+                                    continue;
+                                    $recipe[] = $r[$i]; // input array into array so we get array of arrays
+                                }
                                 }
                             }
                             else{   // old version

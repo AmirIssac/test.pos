@@ -83,8 +83,14 @@ class ReportController extends Controller
              // check if recipe values 0 so we dont print the recipe
              // send to printing just the valuable recipes
              for($i=0;$i<count($recipe);$i++){
+            if(isset($r[$i]['ipd2'])){   // old version
              if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0' && $recipe[$i]['ipd2']=='0' )
                  continue;
+            }
+            else{
+                if($recipe[$i]['add_r']=='0' && $recipe[$i]['axis_r']=='0' && $recipe[$i]['cyl_r']=='0' && $recipe[$i]['sph_r']=='0' && $recipe[$i]['add_l']=='0' && $recipe[$i]['axis_l']=='0' && $recipe[$i]['cyl_l']=='0' && $recipe[$i]['sph_l']=='0' && $recipe[$i]['ipd']=='0')
+                 continue;
+            }
              // insert dynamic users names by their ID's
                 if(array_key_exists('recipe_source', $recipe[$i])){
                  $s1 = $recipe[$i]['recipe_source'];
