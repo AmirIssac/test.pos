@@ -102,7 +102,11 @@ input[type=number] {
                        {{__('purchases.purchases')}} &nbsp;&nbsp; {{$total_sum_invoices}}
                       </td>
                     </tr>
-                    
+                    <tr>
+                      <td>{{__('purchases.payed_from_cashier_purchases')}} {{$repository->statistic->d_out_cashier}}</td>
+                      <td> {{__('purchases.payed_from_external_money_purchases')}} {{$repository->statistic->d_out_external}}</td>
+                      
+                    </tr>
                     
                     <tr class="price">
                      {{--  <td>

@@ -51,4 +51,6 @@ return [
     'store_in_stock' => 'يسجل في المخزون',
     'yes' => 'نعم',
     'no' => 'لا',
+    'payed_from_cashier_purchases' => 'مشتريات مدفوعة من الصندوق',
+    'payed_from_external_money_purchases' => 'مشتريات مدفوعة من ميزانية خارجية',
 ];

@@ -708,6 +708,38 @@ input:read-only{
                   }
                   
               } // end if
+
+                          // warning notification if quantity not enough
+            $.each(data,function(i,value){
+              if(value.stored && value.quantity < $('#quantity'+gold).val()){
+                cuteAlert({
+                  type: "error",
+                  title: "كمية غير كافية",
+                  message: " الكمية في المخزون للمنتج غير كافية "+value.name_ar,
+                  buttonText: "حسنا",
+                });
+                var audio_link = $('#error-audio').val();
+                var audio = new Audio(audio_link);
+                audio.play();
+                }
+                // now we check for all rows because maybe we have some repeated barcode in several rows
+                if(value.stored){
+                  var temp_qty = 0 ;
+                  for(var i=0;i<=25;i++){   // number of records
+                    if($('#bar'+i).val() == value.barcode)
+                      temp_qty = temp_qty + parseInt($('#quantity'+i).val());
+                  }
+                  console.log(temp_qty);
+                  if(temp_qty > value.quantity)
+                      cuteAlert({
+                      type: "error",
+                      title: "كمية غير كافية",
+                      message: " الكمية في المخزون للمنتج غير كافية "+value.name_ar,
+                      buttonText: "حسنا",
+                    });
+                }
+              
+            });
               
            });
             } // end if data != null
@@ -1035,6 +1067,49 @@ $('#sell-form').keypress(function(e) {
                   }
                 }
                 $('#cart').text(cartVal);
+
+                // notification for quantity not enough
+                var repo_id = $('#repo_id').val();
+                var barcode = $('#bar'+gold).val();
+                $.ajax({
+                    type: "get",
+                    url: '/ajax/get/product/'+repo_id+'/'+barcode,
+                    //dataType: 'json',
+                    success: function(data){    // data is the response come from controller
+                      if(data != ""){
+                        $.each(data,function(i,value){
+                              if(value.stored && value.quantity < $('#quantity'+gold).val()){
+                                cuteAlert({
+                                  type: "error",
+                                  title: "كمية غير كافية",
+                                  message: " الكمية في المخزون للمنتج غير كافية "+value.name_ar,
+                                  buttonText: "حسنا",
+                                });
+                                var audio_link = $('#error-audio').val();
+                                var audio = new Audio(audio_link);
+                                audio.play();
+                                }
+                                // now we check for all rows because maybe we have some repeated barcode in several rows
+                                if(value.stored){
+                                  var temp_qty = 0 ;
+                                  for(var i=0;i<=25;i++){   // number of records
+                                    if($('#bar'+i).val() == value.barcode)
+                                      temp_qty = temp_qty + parseInt($('#quantity'+i).val());
+                                  }
+                                  console.log(temp_qty);
+                                  if(temp_qty > value.quantity)
+                                      cuteAlert({
+                                      type: "error",
+                                      title: "كمية غير كافية",
+                                      message: " الكمية في المخزون للمنتج غير كافية "+value.name_ar,
+                                      buttonText: "حسنا",
+                                    });
+                                }
+              
+                        });
+                      }
+                    }
+                });
   });
 </script>
 <script>  // hide and show div
@@ -2330,6 +2405,38 @@ window.onload=function(){
                   }
                   
               } // end if
+
+                          // warning notification if quantity not enough
+            $.each(data,function(i,value){
+              if(value.stored && value.quantity < $('#quantity'+gold).val()){
+                cuteAlert({
+                  type: "error",
+                  title: "كمية غير كافية",
+                  message: " الكمية في المخزون للمنتج غير كافية "+value.name_ar,
+                  buttonText: "حسنا",
+                });
+                var audio_link = $('#error-audio').val();
+                var audio = new Audio(audio_link);
+                audio.play();
+                }
+                // now we check for all rows because maybe we have some repeated barcode in several rows
+                if(value.stored){
+                  var temp_qty = 0 ;
+                  for(var i=0;i<=25;i++){   // number of records
+                    if($('#bar'+i).val() == value.barcode)
+                      temp_qty = temp_qty + parseInt($('#quantity'+i).val());
+                  }
+                  console.log(temp_qty);
+                  if(temp_qty > value.quantity)
+                      cuteAlert({
+                      type: "error",
+                      title: "كمية غير كافية",
+                      message: " الكمية في المخزون للمنتج غير كافية "+value.name_ar,
+                      buttonText: "حسنا",
+                    });
+                }
+              
+            });
               
            });
             }  // end if data != null

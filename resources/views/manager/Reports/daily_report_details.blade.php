@@ -288,6 +288,14 @@ input[type=number] {
                       <td></td>
                       <td></td>
                     </tr>
+                    <tr>
+                      <td>{{__('purchases.payed_from_cashier_purchases')}} {{$report->out_cashier}}</td>
+                      <td> {{__('purchases.payed_from_external_money_purchases')}} {{$report->out_external}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
                   </tbody>
                 </table>
               <div class="table-responsive">
