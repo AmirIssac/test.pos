@@ -297,7 +297,7 @@ input:read-only{
                     <tr id="record0">
                       <td>
                         <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus">
+                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus" autofocus>
                           {{-- error delay --}}
                           <input type="hidden" id="timeout0" value="">
                           <input type="hidden" id="cart-init0" value="0">

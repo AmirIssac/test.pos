@@ -340,7 +340,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 <tbody>
                <tr>
                 <td>
-                  <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="{{__('sales.type_here_input_new_cust')}}" required>
+                  <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="{{__('sales.type_here_input_new_cust')}}" required autofocus>
                 </td>
                 @if(!request()->query('phone'))
                  <td>
