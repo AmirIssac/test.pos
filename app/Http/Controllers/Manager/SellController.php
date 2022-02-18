@@ -38,6 +38,7 @@ class SellController extends Controller
     }
 
     public function createInvoiceForm($id){
+        Session::put('lock_process','start');
         $repository = Repository::find($id);
         // code generate
              /* generate code by new algorithm */
@@ -77,6 +78,7 @@ class SellController extends Controller
    
 
     public function createSpecialInvoiceForm(Request $request,$id){
+        Session::put('lock_process','start');
         $repository = Repository::find($id); 
         // check if phone not inserted = make new invoice clicked in index
         if(!$request->phone){  // first page
@@ -696,6 +698,8 @@ class SellController extends Controller
               'note' => serialize($info),
           ]);
 
+          session()->forget('lock_process');
+
           if($repository->setting->standard_printer) 
         return view('manager.Sales.print_special_invoice')->with([
             'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
@@ -1210,6 +1214,7 @@ class SellController extends Controller
                     'action_id' => $action->id,
                     'note' => serialize($info),
                 ]);
+                session()->forget('lock_process');
 
                 if($repository->setting->standard_printer) 
               return view('manager.Sales.print_special_invoice')->with([

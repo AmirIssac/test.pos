@@ -113,7 +113,7 @@
              </div>
             @endcan
 
-            @if($repository->isSpecial())  {{-- محل خاص --}}
+            
             @can('استرجاع فاتورة')
             <div class="col-lg-3 col-md-6 col-sm-6">
               <a data-toggle="modal" data-target="#exampleModal{{$repository->id}}" id="modaltrigger">
@@ -147,7 +147,7 @@
               </div>
               @endcan
 
-              
+              @if($repository->isSpecial())  {{-- محل خاص --}}
               @can('انشاء فاتورة')
              @if($repository->isSpecial())  {{-- محل خاص --}}
              <div class="col-lg-3 col-md-6 col-sm-6">

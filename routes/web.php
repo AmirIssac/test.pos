@@ -93,15 +93,15 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     Route::group(['middleware' => ['check_user','is_repository_active']], function () {
         Route::get('/create/invoice/form/{repository_id}','Manager\SellController@createInvoiceForm')->name('create.invoice');
         Route::get('/create/special/invoice/form/{repository_id}','Manager\SellController@createSpecialInvoiceForm')->name('create.special.invoice'); // 2
-        Route::post('/sell/{repository_id}','Manager\SellController@sell')->name('make.sell');
+        Route::post('/sell/{repository_id}','Manager\SellController@sell')->name('make.sell')->middleware('lock_process');
         Route::get('/show/pending/invoices/{repository_id}','Manager\SellController@showPending')->name('show.pending');
         Route::get('/search/pending/{repository_id}','Manager\ReportController@searchPending')->name('search.pending');
         Route::get('/show/invoice/details/{repository_id}','Manager\SellController@invoiceDetails')->name('invoice.details');
         //Route::get('/show/special/invoice/details/{repository_id}','Manager\SellController@specialInvoiceDetails')->name('special.invoice.details');  // 2
-        Route::post('/sell/special/invoice/{repository_id}','Manager\SellController@sellSpecialInvoice')->name('sell.special.invoice');  // 2
+        Route::post('/sell/special/invoice/{repository_id}','Manager\SellController@sellSpecialInvoice')->name('sell.special.invoice')->middleware('lock_process');  // 2
         Route::post('/save/special/invoice/{repository_id}','Manager\SellController@saveSpecialInvoice')->name('save.special.invoice');  // 2
         Route::get('/create/old/special/invoice/form/{repository_id}','Manager\SellController@createSpecialInvoiceForm')->name('create.old.special.invoice');
-        Route::post('/save/old/special/invoice/{repository_id}','Manager\SellController@saveOldSpecialInvoice')->name('save.old.special.invoice');
+        Route::post('/save/old/special/invoice/{repository_id}','Manager\SellController@saveOldSpecialInvoice')->name('save.old.special.invoice')->middleware('lock_process');
     });
     // need middleware for variable id
     Route::get('/complete/invoice/form/{invoice_uuid}','Manager\SellController@completeInvoiceForm')->name('complete.invoice.form')->middleware('permission:استكمل فاتورة معلقة');

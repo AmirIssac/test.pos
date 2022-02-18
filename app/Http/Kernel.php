@@ -78,5 +78,6 @@ class Kernel extends HttpKernel
         'is_verify_email' => \App\Http\Middleware\IsVerifyEmail::class,
         'admin_check' => \App\Http\Middleware\AdminCheck::class,
         'is_repository_active' => \App\Http\Middleware\IsRepositoryActive::class,
+        'lock_process' => \App\Http\Middleware\LockProcess::class,
     ];
 }

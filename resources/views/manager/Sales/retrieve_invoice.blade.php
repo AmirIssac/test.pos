@@ -182,7 +182,12 @@
 
                       <input type="hidden" name="repo_id" value="{{$repository->id}}">
                     <div class="modal-body">
-                      {{__('sales.sure_you_want_retrieve_invoice_for_customer')}} {{$invoice->customer->name}}
+                      {{__('sales.sure_you_want_retrieve_invoice_for_customer')}}
+                      @if(isset($invoice->customer))
+                      {{$invoice->customer->name}}
+                      @else
+                      {{$invoice->phone}}
+                      @endif
                       <div>
                       @if($invoice->note)
                       <h5>{{__('sales.edit_note')}}</h5>

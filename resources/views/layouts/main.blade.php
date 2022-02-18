@@ -192,6 +192,13 @@
             @endcan
              <p style="color: white"> {{__('reports.last_login')}} 
             {{$auther->last_login_old()}} </p>
+                
+            {{--
+                <p style="color: white">
+                    lock is : {{Session::get('lock_process')}}
+                </p>
+                --}}
+        
             {{--
             <form action="{{route('send.sms')}}" method="POST">
                 @csrf
