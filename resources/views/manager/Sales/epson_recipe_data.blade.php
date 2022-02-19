@@ -279,7 +279,7 @@
               <td style="border: none">
               </td>
               <th style="text-align: center; font-weight: bold; font-size: 18px;">
-                recipe source
+                مصدر الوصفة الطبية 
               </th>
               <th style="text-align: center; font-weight: bold; font-size: 18px;">
                 @if(isset($recipe[$i]['recipe_source']))  {{-- old version --}}
@@ -289,7 +289,7 @@
                 @endif
               </th>
               <th style="text-align: center; font-weight: bold; font-size: 18px;">
-                ipd source
+                ipd مصدر
               </th>
               <th style="text-align: center; font-weight: bold; font-size: 18px;">
                 @if(isset($recipe[$i]['ipd_source']))  {{-- old version --}}

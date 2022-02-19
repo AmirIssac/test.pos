@@ -267,7 +267,7 @@
             <td>
             </td>
             <th>
-              recipe source
+              مصدر الوصفة الطبية 
             </th>
             <th style="text-align: center;">
               @if(isset($recipe[$i]['recipe_source']))  {{-- old version --}}
@@ -277,7 +277,7 @@
               @endif
             </th>
             <th>
-              ipd source
+              ipd مصدر
             </th>
             <th style="text-align: center;">
               @if(isset($recipe[$i]['ipd_source']))  {{-- old version --}}

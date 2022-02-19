@@ -78,5 +78,8 @@ return [
     'inv_not_belong_to_todays_invoices' => 'الفاتورة لا تنتمي لفواتير اليوم الحالي',
     'additional_recipes' => 'الوصفات الاضافية',
     'percent' => 'نسبة مئوية',
+    'prescription_source' => 'مصدر الوصفة الطبية',
+    'ipd_source' => 'ipd مصدر',
+    'customer' => 'الزبون',
 ];
 ?>

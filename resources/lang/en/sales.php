@@ -78,5 +78,8 @@ return [
     'inv_not_belong_to_todays_invoices' => 'Invoice Not belong to the invoices of current day',
     'additional_recipes' => 'Additional recipes',
     'percent' => 'Percent',
+    'prescription_source' => 'prescription source',
+    'ipd_source' => 'ipd source',
+    'customer' => 'customer',
 ];
 ?>

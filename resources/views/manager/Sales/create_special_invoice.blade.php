@@ -677,18 +677,18 @@ input[id^=recipe_name]::-ms-input-placeholder{
             <td style="border: none">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-                 recipe source
+              {{__('sales.prescription_source')}}
            </td>
            <td>
              <select name="recipe_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
               @if(isset($saved_recipe['recipe_source']))
                @if($saved_recipe['recipe_source'] == 'customer')
-               <option value="customer" selected>customer</option>
+               <option value="customer" selected>{{__('sales.customer')}}</option>
                @foreach($checkers as $checker)
                  <option value="{{$checker->id}}">{{$checker->name}}</option>
                @endforeach
                @else {{-- not customer --}}
-               <option value="customer">customer</option>
+               <option value="customer">{{__('sales.customer')}}</option>
                @foreach($checkers as $checker)
                  @if($saved_recipe['recipe_source'] == $checker->id)
                  <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
@@ -698,7 +698,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                @endforeach
                @endif
                @else
-               <option value="customer" selected>customer</option>
+               <option value="customer" selected>{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                 <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
@@ -706,18 +706,18 @@ input[id^=recipe_name]::-ms-input-placeholder{
              </select>
            </td>
            <td style="text-align: center; font-weight: bold; font-size: 18px;">
-             IPD-source
+             {{__('sales.ipd_source')}}
            </td>
            <td>
              <select name="ipd_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
               @if(isset($saved_recipe['ipd_source']))
               @if($saved_recipe['ipd_source'] == 'customer')
-              <option value="customer" selected>customer</option>
+              <option value="customer" selected>{{__('sales.customer')}}</option>
               @foreach($checkers as $checker)
                 <option value="{{$checker->id}}">{{$checker->name}}</option>
               @endforeach
               @else {{-- not customer --}}
-              <option value="customer">customer</option>
+              <option value="customer">{{__('sales.customer')}}</option>
               @foreach($checkers as $checker)
                 @if($saved_recipe['ipd_source'] == $checker->id)
                 <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
@@ -727,7 +727,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
               @endforeach
               @endif
               @else
-              <option value="customer" selected>customer</option>
+              <option value="customer" selected>{{__('sales.customer')}}</option>
               @foreach($checkers as $checker)
                 <option value="{{$checker->id}}">{{$checker->name}}</option>
               @endforeach
@@ -863,22 +863,22 @@ input[id^=recipe_name]::-ms-input-placeholder{
              <td style="border: none">
              </td>
              <td style="text-align: center; font-weight: bold; font-size: 18px;">
-                  recipe source
+              {{__('sales.prescription_source')}}
             </td>
             <td>
               <select name="recipe_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
-                <option value="customer">customer</option>
+                <option value="customer">{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
               </select>
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-              IPD-source
+              {{__('sales.ipd_source')}}
             </td>
             <td>
               <select name="ipd_source" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
-                <option value="customer">customer</option>
+                <option value="customer">{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
@@ -1111,18 +1111,18 @@ input[id^=recipe_name]::-ms-input-placeholder{
               <td style="border: none">
               </td>
               <td style="text-align: center; font-weight: bold; font-size: 18px;">
-                   recipe source
-             </td>
+                {{__('sales.prescription_source')}}
+              </td>
              <td>
                <select name="recipe_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
                 @if(isset($saved_recipe['recipe_source']))
                 @if($saved_recipe['recipe_source'] == 'customer')
-                <option value="customer" selected>customer</option>
+                <option value="customer" selected>{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
                 @else {{-- not customer --}}
-                <option value="customer">customer</option>
+                <option value="customer">{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   @if($saved_recipe['recipe_source'] == $checker->id)
                   <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
@@ -1132,7 +1132,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 @endforeach
                 @endif
                 @else
-                <option value="customer" selected>customer</option>
+                <option value="customer" selected>{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
@@ -1140,18 +1140,18 @@ input[id^=recipe_name]::-ms-input-placeholder{
                </select>
              </td>
              <td style="text-align: center; font-weight: bold; font-size: 18px;">
-               IPD-source
-             </td>
+              {{__('sales.ipd_source')}}
+            </td>
              <td>
                <select name="ipd_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
                 @if(isset($saved_recipe['ipd_source']))
                 @if($saved_recipe['ipd_source'] == 'customer')
-                <option value="customer" selected>customer</option>
+                <option value="customer" selected>{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
                 @else {{-- not customer --}}
-                <option value="customer">customer</option>
+                <option value="customer">{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   @if($saved_recipe['ipd_source'] == $checker->id)
                   <option value="{{$checker->id}}" selected>{{$checker->name}}</option>
@@ -1161,7 +1161,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 @endforeach
                 @endif
                 @else
-                <option value="customer" selected>customer</option>
+                <option value="customer" selected>{{__('sales.customer')}}</option>
                 @foreach($checkers as $checker)
                   <option value="{{$checker->id}}">{{$checker->name}}</option>
                 @endforeach
@@ -1332,22 +1332,22 @@ input[id^=recipe_name]::-ms-input-placeholder{
             <td style="border: none">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
-                 recipe source
+              {{__('sales.prescription_source')}}
            </td>
            <td>
              <select name="recipe_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
-               <option value="customer">customer</option>
+               <option value="customer">{{__('sales.customer')}}</option>
                @foreach($checkers as $checker)
                  <option value="{{$checker->id}}">{{$checker->name}}</option>
                @endforeach
              </select>
            </td>
            <td style="text-align: center; font-weight: bold; font-size: 18px;">
-             IPD-source
-           </td>
+            {{__('sales.ipd_source')}}
+          </td>
            <td>
              <select name="ipd_source_arr[]" class="form-control" style="text-align: center; font-weight: bold; font-size: 18px;">
-               <option value="customer">customer</option>
+               <option value="customer">{{__('sales.customer')}}</option>
                @foreach($checkers as $checker)
                  <option value="{{$checker->id}}">{{$checker->name}}</option>
                @endforeach
