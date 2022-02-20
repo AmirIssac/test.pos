@@ -278,20 +278,20 @@
             <tr>
               <td style="border: none">
               </td>
-              <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              <th style="text-align: center; font-weight: bold; font-size: 11px;">
                 مصدر الوصفة الطبية 
               </th>
-              <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              <th style="text-align: center; font-weight: bold; font-size: 11px;">
                 @if(isset($recipe[$i]['recipe_source']))  {{-- old version --}}
                 {{$recipe[$i]['recipe_source']}}
                 @else
                 customer
                 @endif
               </th>
-              <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              <th style="text-align: center; font-weight: bold; font-size: 11px;">
                 ipd مصدر
               </th>
-              <th style="text-align: center; font-weight: bold; font-size: 18px;">
+              <th style="text-align: center; font-weight: bold; font-size: 11px;">
                 @if(isset($recipe[$i]['ipd_source']))  {{-- old version --}}
                 {{$recipe[$i]['ipd_source']}}
                 @else
