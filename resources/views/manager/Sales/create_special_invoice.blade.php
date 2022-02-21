@@ -1835,6 +1835,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
            });
 
             // warning notification if quantity not enough
+            /*
             $.each(data,function(i,value){
               if(value.stored && value.quantity < $('#quantity'+gold).val()){
                 cuteAlert({
@@ -1865,7 +1866,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 }
               
             });
-
+            */
 
             }  // end if data != null
             else{  // data is Null
@@ -2220,6 +2221,7 @@ $('#sell-form').keypress(function(e) {
                 $('#cart').text(cartVal);
 
                 // notification for quantity not enough
+                /*
                 var repo_id = $('#repo_id').val();
                 var barcode = $('#bar'+gold).val();
                 $.ajax({
@@ -2261,7 +2263,7 @@ $('#sell-form').keypress(function(e) {
                       }
                     }
                 });
-
+                */
 
                   
   });
@@ -3588,6 +3590,7 @@ window.onload=function(){
            });
 
            // warning notification if quantity not enough
+           /*
            $.each(data,function(i,value){
               if(value.stored && value.quantity < $('#quantity'+gold).val()){
                 cuteAlert({
@@ -3618,7 +3621,7 @@ window.onload=function(){
                 }
               
             });
-
+            */
 
             } // end if data != null
               else{  // data is Null
