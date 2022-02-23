@@ -66,11 +66,18 @@
                    @if($permissionsOwner->contains('id',$permission->id))  {{-- display the permissions the just owner has --}}
                     {{-- condition to check if the user has this permission because you cant as worker give permission you don't have to another worker --}}
                     @if($user->can($permission->name))
-                    <div class="form-check form-switch">
+                      @if($permission->name == 'فاحص')
+                      <div style="display: none" class="form-check form-switch">
+                      <label style="display: none" class="form-check-label">{{$permission->name}}</label>
+                      <input style="display: none;" class="form-check-input" type="checkbox" value="{{$permission->name}}" name="permissions[]" checked>
+                      </div>
+                      @else
+                      <div class="form-check form-switch">
                       <label class="form-check-label">{{$permission->name}}</label>
                       <input class="form-check-input" type="checkbox" value="{{$permission->name}}" name="permissions[]">
-                     </div>
-                       <hr>
+                      </div>
+                      <hr>
+                      @endif
                     @endif
                      @endif
                 @endforeach
