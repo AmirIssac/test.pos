@@ -76,6 +76,19 @@ i{
 i:hover{
   transform: scale(1.3);
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+input[name="external_value"] , input[name="cash_value"]{
+  border: 1px solid #001bb7 !important;
+  font-weight: bold;
+}
 </style>
 @endsection
 @section('body')
@@ -169,6 +182,9 @@ i:hover{
                       {{__('purchases.supplier')}}   
                     </th>
                     <th>
+                      المدفوع   
+                    </th> 
+                    <th>
                       {{__('purchases.total_price')}}   
                     </th> 
                   <th>
@@ -192,11 +208,27 @@ i:hover{
                         <td>
                             {{$purchase->supplier->name}}
                         </td>
-                       
+
                         <td>
+                          @if($purchase->purchaseProcesses()->count() > 0)
+                            <?php $pay_amount = 0 ; ?>
+                            @foreach($purchase->purchaseProcesses as $process)
+                              <?php $pay_amount += $process->pay_amount ; ?>
+                            @endforeach
+                            <?php $pay_amount += $purchase->pay_amount ; ?>
+                            <b style="color: #1ec92f">
+                            {{$pay_amount}}
+                            </b>
+                          @else    {{-- no purchase processes --}}
+                          <b style="color: #1ec92f">
+                          {{$purchase->pay_amount}}
+                          </b>
+                          @endif
+                        </td>
+                       
+                        <td style="color: #f14000; font-weight:bold">
                             {{$purchase->total_price}}
                         </td>
-                        
                       <td>
                        
                      <a style="color: #03a4ec" href="{{route('show.purchase.details',$purchase->uuid)}}"> <i class="material-icons eye">
@@ -239,9 +271,23 @@ i:hover{
                           </div>
                         </div>
                         @endcan
+                        {{--
+                        .
+                        @if($purchase->status == 'pending' || $purchase->status == 'later')
+                        <a style="color: #f4c721" href="" class="active-a"> <i class="material-icons">
+                          incomplete_circle
+                        </i> </a>
+                        @else
+                        <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
+                          incomplete_circle
+                        </i> </a>
+                        @endif
+                        --}}
+
+
                           @can('دفع فاتورة مورد')
                           .
-                          @if($purchase->status != 'retrieved' && $purchase->payment == 'later')
+                          @if($purchase->status == 'pending' || $purchase->status == 'later')
                           <a style="color: #1ec92f" data-toggle="modal" data-target="#exampleModale{{$purchase->id}}" id="modalicon" class="active-a"">  <i class="material-icons">
                             payment
                           </i> </a>
@@ -250,7 +296,7 @@ i:hover{
                             payment
                           </i> </a>
                           @endif
-                                                                  <!-- Modal for confirming pay proccess -->
+                                            <!-- Modal for confirming pay proccess -->
                         <div class="modal fade" id="exampleModale{{$purchase->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabele{{$purchase->id}}" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -262,28 +308,37 @@ i:hover{
                                   <span aria-hidden="true"></span>
                                 </button>
                               </div>
-                              <div style="display: flex; flex-direction: column;" class="modal-body">
-                                <div>
-                                {{__('purchases.cash_from_cashier')}} <input type="radio" name="payment" value="cashier" checked>
+                              <div class="modal-body">
+                               <h6> اجمالي الفاتورة <b style="color: #f14000"> {{$purchase->total_price}} </b> </h6>
+                               <h6> المدفوع منها  <b style="color: #48a44c"> {{$purchase->pay_amount}} </b> </h6>
+                               <h6>أكمل عملية الدفع عن طريق : </h6>
+                              </div>
+                              <div style="display: flex; flex-direction: column; margin-top: -20px;" class="modal-body">
+                                <div style="margin: 10px;">
+                                {{__('purchases.cash_from_cashier')}} <input type="radio" id="cash-radio-{{$purchase->id}}" name="payment" value="cashier" checked> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <input style="margin-right: 20px;" id="cash-value-{{$purchase->id}}" type="number" min="0" step="0.01" name="cash_value" value="">
                                 </div>
-                                <div>
-                                {{__('purchases.cash_from_external_budget')}} <input type="radio" name="payment" value="external">
+                                <div style="margin: 10px;">
+                                {{__('purchases.cash_from_external_budget')}} <input type="radio" id="external-radio-{{$purchase->id}}" name="payment" value="external">
+                                <input style="margin-right: 20px;" id="external-value-{{$purchase->id}}" class="displaynone"  type="number" min="0" step="0.01" name="external_value" value="">
                                 </div>
                               </div>
                               <div class="modal-footer">
                                 <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
-                                <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                                @if($purchase->status == 'later')
+                                <button type="submit" name="action" value="pay_later" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                                @elseif($purchase->status == 'pending')
+                                <button type="submit" name="action" value="pay_pending" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                                @endif
                               </form>
                             </div>
                               </div>
                             </div>
                             @endcan
-
                           </div>
                         </div>
                       </td>
-                    </tr>
-                    
+                    </tr>           
                     @endforeach
                     @else
                     <tr>
@@ -339,6 +394,20 @@ i:hover{
         .format( this.getAttribute("data-date-format") )
     )
 }).trigger("change");
+</script>
+<script>
+$('[id^=external-radio-]').on('click',function(){
+  var id = $(this).attr('id').slice(15);
+    $('#external-value-'+id).removeClass('displaynone');
+    $('#cash-value-'+id).addClass('displaynone');
+    $('#cash-value-'+id).val(null);
+  })
+  $('[id^=cash-radio-]').on('click',function(){
+    var id = $(this).attr('id').slice(11);
+    $('#cash-value-'+id).removeClass('displaynone');
+    $('#external-value-'+id).addClass('displaynone');
+    $('#external-value-'+id).val(null);
+  })
 </script>
 @endsection
 

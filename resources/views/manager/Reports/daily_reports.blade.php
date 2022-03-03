@@ -106,7 +106,7 @@ i:hover{
                       <td>
                         <?php $purchasesVal = 0 ?>
                           @foreach($purchases as $purchase)
-                          @if($purchase->status == 'done')
+                          @if($purchase->status != 'retrieved')
                           <?php $purchasesVal += $purchase->total_price ?>
                           @endif
                           @endforeach
@@ -155,7 +155,7 @@ i:hover{
                         <td>
                           <?php $purchasesVal = 0 ?>
                             @foreach($report->purchases as $purchase)
-                            @if($purchase->status == 'done')
+                            @if($purchase->status != 'retrieved')
                             @if($purchase->dailyReports()->count()==1)
                             <?php $purchasesVal += $purchase->total_price; ?>
                             @elseif($purchase->dailyReports()->count()>1)

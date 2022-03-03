@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\MonthlyReport;
 use App\Product;
 use App\Purchase;
+use App\PurchaseProcess;
 use App\PurchaseProduct;
 use App\PurchaseRecord;
 use App\Record;
@@ -190,28 +191,45 @@ class PurchaseController extends Controller
         $actual_records = 0;
         $repository = Repository::find($id);
         $statistic = $repository->statistic;
-        if($request->pay=='later')
-            $payment = 'later';
+        $pay_amount = 0 ;
+        if($request->pay=='later'){
+            $payment = 'later' ;
+            $status = 'later' ;
+        }
         else // cash has two options
             {
                 if($request->cash_option=='cashier'){
-                    // check if box < total_price so we cancel the process
-                    if($repository->balance < $request->sum){
-                        return back()->with('fail',__('purchases.amount_in_cashier_not_enough'));
+                    if($request->cash_value > $repository->balance)
+                        return back()->with('fail','المبلغ المدفوع اكبر من المتوفر في الصندوق');
+                    if($request->cash_value > $request->sum){
+                        return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
                     }
                     $payment = 'cashier';
+                    if($request->cash_value < $request->sum)
+                        $status = 'pending';
+                    else
+                        $status = 'done';
                     $repository->update([
-                    'balance' => $repository->balance - $request->sum,
+                    'balance' => $repository->balance - $request->cash_value,
                     ]);
                     $statistic->update([
-                        'd_out_cashier' => $statistic->d_out_cashier + $request->sum,
+                        'd_out_cashier' => $statistic->d_out_cashier + $request->cash_value,
                     ]);
+                    $pay_amount = $request->cash_value;
                 }
                 else{
                     $payment = 'external';
+                    if($request->external_value > $request->sum){
+                        return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
+                    }
+                    if($request->external_value < $request->sum)
+                        $status = 'pending';
+                    else
+                        $status = 'done';
                     $statistic->update([
-                        'd_out_external' => $statistic->d_out_external + $request->sum,
+                        'd_out_external' => $statistic->d_out_external + $request->external_value,
                     ]);
+                    $pay_amount = $request->external_value;
                     }
             }
         $purchase = Purchase::create([
@@ -221,8 +239,10 @@ class PurchaseController extends Controller
             'supplier_id' => $request->supplier_id,
             'code' => $request->code,
             'supplier_invoice_num' => $request->supplier_invoice_num,
+            'pay_amount' => $pay_amount,
             'total_price' => $request->sum,
             'payment' =>  $payment,
+            'status' =>  $status,
             'daily_report_check' => false,
             'monthly_report_check' => false,
         ]);
@@ -494,7 +514,8 @@ class PurchaseController extends Controller
         //$purchase = Purchase::find($id);
         $purchase = Purchase::where('uuid',$uuid)->first();
         $repository = Repository::find(Session::get('repo_id'));
-        return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase,'repository'=>$repository]);
+        $purchase_processes = $purchase->purchaseProcesses;
+        return view('manager.Purchases.purchase_details')->with(['purchase'=>$purchase,'repository'=>$repository,'purchase_processes'=>$purchase_processes]);
     }
 
     // post for activity log
@@ -588,65 +609,223 @@ class PurchaseController extends Controller
     public function payLaterPurchase(Request $request , $id){
         $purchase = Purchase::find($id);
         $repository = $purchase->repository;
-        // check if purchase payment is later to continue
-        if($purchase->payment != 'later')
-            return back();
         $statistic = $repository->statistic;
-        if($request->payment=='cashier'){
-            // check first if cashier has this amount of money
-            if($repository->balance >= $purchase->total_price){
-                $payment = 'cashier';
-                $repository->update([
-                    'balance' => $repository->balance - $purchase->total_price,
-                ]);
-            $statistic->update([
-                'd_out_cashier' => $statistic->d_out_cashier + $purchase->total_price,
-            ]);
-            }
-            else
-                return back()->with('fail',__('alerts.money_in_cashier_less_than_total_fail'));
-        }
-        else{
-            $payment = 'external';
-            $statistic->update([
-                'd_out_external' => $statistic->d_out_external + $purchase->total_price,
-            ]);
-        }
-        $purchase->update([
-            'payment' => $payment,
-            'daily_report_check' => false,
-            'monthly_report_check' => false,
-        ]);
+        switch ($request->input('action')) {
+            case 'pay_later':    // دفع فاتورة آجلة
+                    // check if purchase payment is later to continue
+                    if($purchase->payment != 'later')
+                        return back();
+                    $pay_amount = 0 ;
+                    if($request->payment=='cashier'){
+                        if($request->cash_value > $repository->balance)
+                            return back()->with('fail','المبلغ المدفوع اكبر من المتوفر في الصندوق');
+                        if($request->cash_value > $purchase->total_price)
+                            return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
+                        if($request->cash_value < $purchase->total_price)
+                            $status = 'pending' ;
+                        else
+                            $status = 'done' ;
+                            $payment = 'cashier' ;
+                            $repository->update([
+                                'balance' => $repository->balance - $request->cash_value,
+                            ]);
+                        $statistic->update([
+                            'd_out_cashier' => $statistic->d_out_cashier + $request->cash_value,
+                        ]);
+                        $pay_amount = $request->cash_value;
+                    }
+                    else{
+                        if($request->external_value > $purchase->total_price)
+                            return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
+                        $payment = 'external';
+                        if($request->external_value < $purchase->total_price)
+                            $status = 'pending' ;
+                        else
+                            $status = 'done' ;
+                        $statistic->update([
+                            'd_out_external' => $statistic->d_out_external + $request->external_value,
+                        ]);
+                        $pay_amount = $request->external_value;
+                    }
+                    /*
+                    $purchase->update([
+                        'payment' => $payment,
+                        'daily_report_check' => false,
+                        'monthly_report_check' => false,
+                    ]);
+                    */
+                    PurchaseProcess::create([
+                                        'repository_id' => $repository->id ,
+                                        'purchase_id' => $purchase->id ,
+                                        'user_id' => $purchase->user_id ,
+                                        'pay_amount' => $purchase->pay_amount ,
+                                        'total_price' => $purchase->total_price ,
+                                        'payment' => $purchase->payment ,
+                                        'status' => $purchase->status ,
+                                        'daily_report_check' => $purchase->daily_report_check ,
+                                        'monthly_report_check' => $purchase->monthly_report_check ,
+                                        'created_at' => $purchase->created_at,   // and in pay_pending we take updated_at
+                                        'transfered_at' => now(),
+                    ]);
 
-        // register record of this process
-        $action = Action::where('name_ar','دفع فاتورة مورد')->first();
-        $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
-        Record::create([
-            'repository_id' => $repository->id,
-            'user_id' => Auth::user()->id,
-            'action_id' => $action->id,
-            'note' => serialize($info),
-        ]);
-        //return redirect(route('purchases.index'))->with('success',__('alerts.purchase_payed_success'));
-        return back()->with('success',__('alerts.purchase_payed_success'));
-        //return redirect(route('show.later.purchases',$repository->id))->with('success',__('alerts.purchase_payed_success'));
-    }
+                    $purchase->update([
+                        'user_id' => Auth::user()->id ,
+                        'pay_amount' => $pay_amount ,
+                        'payment' => $payment ,
+                        'status' => $status ,
+                        'daily_report_check' => false ,
+                        'monthly_report_check' => false ,
+                    ]);
+
+                    // register record of this process
+                    $action = Action::where('name_ar','دفع فاتورة مورد')->first();
+                    $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
+                    Record::create([
+                        'repository_id' => $repository->id,
+                        'user_id' => Auth::user()->id,
+                        'action_id' => $action->id,
+                        'note' => serialize($info),
+                    ]);
+                    //return redirect(route('purchases.index'))->with('success',__('alerts.purchase_payed_success'));
+                    return back()->with('success',__('alerts.purchase_payed_success'));
+                    break;
+
+                    case 'pay_pending':     // استكمال فاتورة مورد
+                        // check if purchase payment is later to continue
+                        if($purchase->status != 'pending')
+                            return back();
+                        $pay_amount = 0 ;
+                        $all_processes_payments = 0;
+                            foreach($purchase->purchaseProcesses as $process){
+                                $all_processes_payments += $process->pay_amount;
+                            }
+                        $all_processes_payments += $purchase->pay_amount;
+                        if($request->payment=='cashier'){
+                            if($request->cash_value > $repository->balance)
+                                return back()->with('fail','المبلغ المدفوع اكبر من المتوفر في الصندوق');
+                            if($request->cash_value > ($purchase->total_price - $all_processes_payments))
+                                return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
+                            if($request->cash_value < ($purchase->total_price - $all_processes_payments) )
+                                $status = 'pending' ;
+                            else
+                                $status = 'done' ;
+                                $payment = 'cashier' ;
+                                $repository->update([
+                                    'balance' => $repository->balance - $request->cash_value,
+                                ]);
+                            $statistic->update([
+                                'd_out_cashier' => $statistic->d_out_cashier + $request->cash_value,
+                            ]);
+                            $pay_amount = $request->cash_value;
+                        }
+                        else{
+                            if($request->external_value > ($purchase->total_price - $all_processes_payments))
+                                return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
+                            $payment = 'external';
+                            if($request->external_value < ($purchase->total_price - $all_processes_payments))
+                                $status = 'pending' ;
+                            else
+                                $status = 'done' ;
+                            $statistic->update([
+                                'd_out_external' => $statistic->d_out_external + $request->external_value,
+                            ]);
+                            $pay_amount = $request->external_value;
+                        }
+                        /*
+                        $purchase->update([
+                            'payment' => $payment,
+                            'daily_report_check' => false,
+                            'monthly_report_check' => false,
+                        ]);
+                        */
+                        PurchaseProcess::create([
+                                            'repository_id' => $repository->id ,
+                                            'purchase_id' => $purchase->id ,
+                                            'user_id' => $purchase->user_id ,
+                                            'pay_amount' => $purchase->pay_amount ,
+                                            'total_price' => $purchase->total_price ,
+                                            'payment' => $purchase->payment ,
+                                            'status' => $purchase->status ,
+                                            'daily_report_check' => $purchase->daily_report_check ,
+                                            'monthly_report_check' => $purchase->monthly_report_check ,
+                                            'created_at' => $purchase->updated_at,
+                                            'transfered_at' => now(),
+                        ]);
+
+                        $purchase->update([
+                            'user_id' => Auth::user()->id ,
+                            'pay_amount' => $pay_amount ,
+                            'payment' => $payment ,
+                            'status' => $status ,
+                            'daily_report_check' => false ,
+                            'monthly_report_check' => false ,
+                        ]);
+
+                        // register record of this process
+                        $action = Action::where('name_ar','دفع فاتورة مورد')->first();
+                        $info = array('target'=>'purchase','id'=>$purchase->id,'code'=>$purchase->code);
+                        Record::create([
+                            'repository_id' => $repository->id,
+                            'user_id' => Auth::user()->id,
+                            'action_id' => $action->id,
+                            'note' => serialize($info),
+                        ]);
+                        //return redirect(route('purchases.index'))->with('success',__('alerts.purchase_payed_success'));
+                        return back()->with('success',__('alerts.purchase_payed_success'));
+                        break;
+                }
+        }   
 
    
     public function retrieve($id){
         $purchase = Purchase::find($id);
         $repository = $purchase->repository;
+
+        PurchaseProcess::create([
+            'repository_id' => $repository->id ,
+            'purchase_id' => $purchase->id ,
+            'user_id' => $purchase->user_id ,
+            'pay_amount' => $purchase->pay_amount ,
+            'total_price' => $purchase->total_price ,
+            'payment' => $purchase->payment ,
+            'status' => $purchase->status ,
+            'daily_report_check' => $purchase->daily_report_check ,
+            'monthly_report_check' => $purchase->monthly_report_check ,
+            'created_at' => $purchase->updated_at,
+            'transfered_at' => now(),
+        ]);
         $purchase->update([
             'user_id' => Auth::user()->id,
+            'pay_amount' => 0 ,
             'status' => 'retrieved',
             'daily_report_check' => false,
             'monthly_report_check' => false,
         ]);
         //retrieve money if payment was by cashier
+        /*
         if($purchase->payment == 'cashier')
         $repository->update([
             'balance' => $repository->balance + $purchase->total_price,
         ]);
+        */
+        if($purchase->purchaseProcesses->count() > 0){
+                foreach($purchase->purchaseProcesses as $process){
+                    if($process->payment == 'cashier')
+                        $repository->update([
+                            'balance' => $repository->balance + $process->pay_amount,
+                        ]);
+                }
+                if($purchase->payment == 'cashier')
+                        $repository->update([
+                            'balance' => $repository->balance + $purchase->pay_amount,
+                        ]);
+        }
+        else{
+                if($purchase->payment == 'cashier')
+                        $repository->update([
+                            'balance' => $repository->balance + $purchase->pay_amount,
+                        ]);
+        }
 
         // register record of this process
         $action = Action::where('name_ar','استرجاع فاتورة مشتريات')->first();
@@ -781,6 +960,7 @@ class PurchaseController extends Controller
         $total_value = 0;
         $payed = 0 ;
         $unpayed = 0;
+        /*
         foreach($purchases_with_no_paginate as $purchase){
             if($purchase->status == 'done')
                 $total_value+=$purchase->total_price;
@@ -788,6 +968,33 @@ class PurchaseController extends Controller
                 $payed += $purchase->total_price;
             if($purchase->status == 'done' && $purchase->payment == 'later')
                 $unpayed += $purchase->total_price;
+        }
+        */
+        foreach($purchases_with_no_paginate as $purchase){
+            if($purchase->status != 'retrieved')
+                $total_value+=$purchase->total_price;
+            if($purchase->status == 'done' || $purchase->status == 'pending'){
+                if($purchase->purchaseProcesses()->count() > 0){
+                    foreach($purchase->purchaseProcesses as $process)
+                        $payed += $process->pay_amount;
+                    $payed += $purchase->pay_amount ;
+                }
+                else
+                    $payed += $purchase->pay_amount ;
+            }
+            if($purchase->status == 'later' || $purchase->status == 'pending'){
+                if($purchase->purchaseProcesses()->count() > 0){
+                    $temp = 0 ;
+                    foreach($purchase->purchaseProcesses as $proc){
+                        $temp += $proc->pay_amount ;
+                    }
+                    $temp += $proc->pay_amount ;
+                    $unpayed += $purchase->total_price - $temp ;
+                }
+                else
+                    $unpayed += $purchase->total_price - $purchase->pay_amount ;
+            }
+                //$unpayed += $purchase->total_price;
         }
         return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,'suppliers'=>$suppliers,
         'supplier' => $supplier,
@@ -822,12 +1029,11 @@ class PurchaseController extends Controller
         }
         elseif($request->payment_method == 'payed'){
             $purchases = Purchase::where('repository_id',$request->repo_id)
-            ->where('supplier_id',$supplier->id)->where('status','!=','retrieved')
-            ->where('payment','!=','later')
+            ->where('supplier_id',$supplier->id)->where('status','done')
             ->orderBy('updated_at','DESC')->paginate(10);
              $purchases_with_no_paginate = Purchase::where('repository_id',$request->repo_id)    // all purchases for this supplier for display statistics
-             ->where('supplier_id',$supplier->id)->where('status','!=','retrieved')
-             ->where('payment','!=','later')
+             ->where('supplier_id',$supplier->id)
+             ->where('status','done')
              ->orderBy('updated_at','DESC')->get();
                 foreach($purchases_with_no_paginate as $purchase){
                         $total_value+=$purchase->total_price;
@@ -838,12 +1044,14 @@ class PurchaseController extends Controller
         }
         elseif($request->payment_method == 'notpayed'){
             $purchases = Purchase::where('repository_id',$request->repo_id)
-            ->where('supplier_id',$supplier->id)->where('status','!=','retrieved')
-            ->where('payment','later')
+            ->where('supplier_id',$supplier->id)->where(function ($query) use ($request){
+                $query->where('status','pending')
+                      ->orWhere('status','later'); })
             ->orderBy('updated_at','DESC')->paginate(10);
              $purchases_with_no_paginate = Purchase::where('repository_id',$request->repo_id)    // all purchases for this supplier for display statistics
-             ->where('supplier_id',$supplier->id)->where('status','!=','retrieved')
-             ->where('payment','later')
+             ->where('supplier_id',$supplier->id)->where(function ($query) use ($request){
+                $query->where('status','pending')
+                      ->orWhere('status','later'); })
              ->orderBy('updated_at','DESC')->get();
                 foreach($purchases_with_no_paginate as $purchase){
                     $total_value+=$purchase->total_price;

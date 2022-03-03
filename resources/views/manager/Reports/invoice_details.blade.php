@@ -133,7 +133,7 @@
                         <td>
                           {{__('sales.note')}}  
                         </td>
-                    </tr>
+                    </tr> 
                     <?php $rec = unserialize($invoice->recipe) ?>
                     @if(isset($invoice_processes) && $invoice_processes->count()>0)  {{-- because mabye invoice will not has any old processes --}}
                     <?php $index = 0 ; ?>

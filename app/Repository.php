@@ -59,6 +59,10 @@ class Repository extends Model
         return $this->hasMany(Purchase::class);
     }
 
+    public function purchaseProcesses(){
+        return $this->hasMany(PurchaseProcess::class);
+    }
+
     public function suppliers(){
         return $this->belongsToMany(Supplier::class);
     }
@@ -531,6 +535,7 @@ class Repository extends Model
         return $payed;
     }*/
 
+    /*
     public function todayPayedMoney(){ // الاموال المدفوعة اليوم
         $payed = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('payment','!=','later')->where('daily_report_check',false)->get();
@@ -539,7 +544,15 @@ class Repository extends Model
         }
         return $payed;
     }
+    */
+    public function todayPayedMoney(){ // الاموال المدفوعة اليوم
+        $payed = 0 ;
+        $statistic = $this->statistic;
+        $payed = $statistic->d_out_cashier + $statistic->d_out_external ;
+        return $payed;
+    }
 
+    /*
     public function pendingPayedMoney(){ // الاموال المعلقة الاجمالية  
         $payed = 0 ;
         $purchases_invoices = $this->purchases()->where('status','!=','retrieved')->where('payment','later')->get();
@@ -548,7 +561,25 @@ class Repository extends Model
         }
         return $payed;
     }
+    */
+    public function pendingPayedMoney(){ // الاموال المعلقة الاجمالية  
+        $unpayed = 0 ;
+        $purchases_invoices = $this->purchases()->where(function ($query){
+            $query->where('status','later')
+                  ->orWhere('status','pending'); })->get();
+        foreach($purchases_invoices as $inv){
+            $temp = 0 ;
+            if($inv->purchaseProcesses()->count() > 0){
+                foreach($inv->purchaseProcesses as $process)
+                    $temp += $process->pay_amount;
+            }
+            $temp += $inv->pay_amount;
+            $unpayed += $inv->total_price - $temp ;
+        }
+        return $unpayed;
+    }
 
+    /*
     public function mostFiveSupplierShouldPay(){  // أكثر 5 موردين يجب الدفع لهم
         $purchases = Purchase::query()
         ->join('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')  // relationship
@@ -556,6 +587,23 @@ class Repository extends Model
         ->where('repository_id',$this->id)
         ->where('purchases.payment','later')
         ->where('purchases.status','!=','retrieved')
+        ->groupBy('supplier_id','suppliers.name')
+        ->orderBy('sum','DESC')
+        ->take(5)
+        ->get();  // get the total_price and supplier_id and suppliers.name grouped by supplier_id && suppliers.name
+        
+        return $purchases;
+    }
+    */
+
+    public function mostFiveSupplierShouldPay(){  // أكثر 5 موردين يجب الدفع لهم
+        $purchases = Purchase::query()
+        ->join('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')  // relationship
+        ->selectRaw('sum(purchases.total_price) as sum , supplier_id , suppliers.name')
+        ->where('repository_id',$this->id)
+        ->where(function ($query){
+            $query->where('status','later')
+                  ->orWhere('status','pending'); })
         ->groupBy('supplier_id','suppliers.name')
         ->orderBy('sum','DESC')
         ->take(5)

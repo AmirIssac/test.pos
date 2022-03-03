@@ -59,6 +59,9 @@ class User extends Authenticatable
     public function purchases(){
         return $this->hasMany(Purchase::class);
     }
+    public function purchaseProcesses(){
+        return $this->hasMany(PurchaseProcess::class);
+    }
     public function invoiceProcesses(){
         return $this->hasMany(InvoiceProcess::class);
     }

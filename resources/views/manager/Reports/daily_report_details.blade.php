@@ -116,7 +116,7 @@ input[type=number] {
 
                             {{-- حساب المشتريات --}}
                             @foreach($report->purchases as $purchase)
-                            @if($purchase->status == 'done')
+                            @if($purchase->status != 'retrieved')
                             @if($purchase->dailyReports()->count()==1)
                             <?php $total_sum_purchases += $purchase->total_price; ?>
                             @elseif($purchase->dailyReports()->count()>1)

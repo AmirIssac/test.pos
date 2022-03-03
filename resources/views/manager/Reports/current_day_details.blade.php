@@ -102,7 +102,7 @@ input[type=number] {
                       @endforeach
 
                       @foreach($purchases as $purchase)
-                            @if($purchase->status == 'done' && $purchase->dailyReports()->count()==0)
+                            @if($purchase->status != 'retrieved' && $purchase->dailyReports()->count()==0)
                             <?php $total_sum_purchases += $purchase->total_price; ?>
                             @endif
                       @endforeach

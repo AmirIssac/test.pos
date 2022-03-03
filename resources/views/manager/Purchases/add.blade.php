@@ -28,6 +28,19 @@ form #tooltip:hover{
 .failed:focus{
   background-color: #f14000;
 }
+ /* Chrome, Safari, Edge, Opera */
+ input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+input[name="external_value"] , input[name="cash_value"]{
+  border: 1px solid #001bb7 !important;
+  font-weight: bold;
+}
 </style>
 @endsection
 @section('body')
@@ -266,7 +279,10 @@ form #tooltip:hover{
                   @else
                   <tr id="cashoption1" class="displaynone">
                   @endif
-                    <td>   {{__('purchases.cash_from_cashier')}} ({{__('purchases.cashier_balance')}}  {{$repository->balance}})</td>
+                    <td>   {{__('purchases.cash_from_cashier')}} :  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                          <input type="number" min="0" step="0.01" name="cash_value" value=""> &nbsp;
+                          ({{__('purchases.cashier_balance')}}  {{$repository->balance}})
+                    </td>
                     <input type="hidden" id="cash_balance" value="{{$repository->balance}}">
                     <td>
                       <input type="radio" id="cashrad" value="cashier" name="cash_option" checked>
@@ -277,7 +293,9 @@ form #tooltip:hover{
                     @else
                     <tr id="cashoption2" class="displaynone">
                     @endif
-                    <td>{{__('purchases.cash_from_external_budget')}}</td>
+                    <td>{{__('purchases.cash_from_external_budget')}} :  &nbsp;
+                      <input type="number" min="0" step="0.01" name="external_value" value="">
+                    </td>
                     <td>
                       @if(old('cash_option')=='external')
                       <input type="radio" value="external" name="cash_option" checked>

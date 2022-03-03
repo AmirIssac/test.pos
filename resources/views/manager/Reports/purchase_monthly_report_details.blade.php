@@ -99,7 +99,7 @@ input[type=number] {
                       </td>
                       
                             @foreach($report->purchases as $purchase)
-                            @if($purchase->status == 'done')
+                            @if($purchase->status != 'retrieved')
                             @if($purchase->monthlyReports()->count()==1)
                             <?php $total_sum_invoices += $purchase->total_price; ?>
                             @elseif($purchase->monthlyReports()->count()>1)
@@ -165,16 +165,23 @@ input[type=number] {
                       <td>
                           {{$purchase->code}}
                       </td>
-                        @if($purchase->status=='done')
-                        <td>
-                          {{__('purchases.done')}}
-                        </td>
-                        @elseif($purchase->status=="retrieved")
-                        <td>
-                          {{__('purchases.retrieve_inv')}}
-                        </td>
-                        
-                        @endif
+                      @if($purchase->status=='done')
+                      <td>
+                        {{__('purchases.done')}}
+                      </td>
+                      @elseif($purchase->status == 'pending')
+                      <td>
+                        معلقة
+                      </td>
+                      @elseif($purchase->status == 'later')
+                      <td>
+                        دفع لاحق
+                      </td>
+                      @elseif($purchase->status=="retrieved")
+                      <td>
+                        {{__('purchases.retrieve_inv')}}
+                      </td>
+                      @endif
                       <td>
                         {{$purchase->user->name}}
                       </td>
@@ -186,6 +193,11 @@ input[type=number] {
                       </td>
                       <td>
                         {{$purchase->total_price}}
+                      </td>
+                      <td>
+                        <a style="color: #03a4ec" href="{{route('show.purchase.details',$purchase->uuid)}}"> <i class="material-icons">
+                          visibility
+                        </i> </a>
                       </td>
                     </tr>
                     @endif
@@ -244,17 +256,23 @@ input[type=number] {
                     <td>
                       {{$purchase->code}}
                   </td>
-
-                    @if($purchase->status=='done')
-                    <td>
-                      {{__('purchases.done')}} 
-                    </td>
-                    @elseif($purchase->status=="retrieved")
-                    <td>
-                      {{__('purchases.retrieve_inv')}}
-                    </td>
-                    
-                    @endif
+                  @if($purchase->status=='done')
+                  <td>
+                    {{__('purchases.done')}}
+                  </td>
+                  @elseif($purchase->status == 'pending')
+                  <td>
+                    معلقة
+                  </td>
+                  @elseif($purchase->status == 'later')
+                  <td>
+                    دفع لاحق
+                  </td>
+                  @elseif($purchase->status=="retrieved")
+                  <td>
+                    {{__('purchases.retrieve_inv')}}
+                  </td>
+                  @endif
                   <td>
                     {{$purchase->user->name}}
                   </td>
@@ -267,6 +285,11 @@ input[type=number] {
                   </td>
                   <td>
                     {{$purchase->total_price}}
+                  </td>
+                  <td>
+                    <a style="color: #03a4ec" href="{{route('show.purchase.details',$purchase->uuid)}}"> <i class="material-icons">
+                      visibility
+                    </i> </a>
                   </td>
                   @endif
                   @endforeach

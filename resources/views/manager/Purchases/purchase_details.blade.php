@@ -24,6 +24,36 @@
   .eye:hover{
     cursor: pointer;
   }
+  /* Chrome, Safari, Edge, Opera */
+ input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+input[name="external_value"] , input[name="cash_value"]{
+  border: 2px solid #001bb7 !important;
+  font-weight: bold;
+  width: 200px;
+}
+
+.done{
+    background-color: #99a6ee;
+    font-weight: bold;
+    color: black;
+  }
+  .pending{
+    background-color: #f4c721;
+  }
+  .retrieved{
+    background-color: #9b9ea0;
+  }
+  .later{
+    background-color: #001BB7;
+    color: white;
+  }
 </style>
 @endsection
 @section('body')
@@ -44,11 +74,6 @@
             
               <div class="card-header card-header-primary">
               <h4 class="card-title"> </h4>
-              @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
-                <h4 class="card-title"> {{$purchase->created_at}} ==> {{$purchase->updated_at}}</h4>
-                @else
-              <h4 class="card-title"> {{$purchase->created_at}}</h4>
-              @endif
                  <h4><span class="badge badge-success">{{$purchase->code}}</span></h4>
               {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
@@ -99,6 +124,13 @@
                           {{__('purchases.total_price')}} 
                         </td>
                         <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        {{--
+                        <td>
                           {{__('purchases.payment_proccess')}}
                         </td>
                         <td>
@@ -107,6 +139,7 @@
                         <td>
                           {{__('purchases.employee')}}   
                         </td>
+                        --}}
                     </tr>
                     <tr>
                         <td>
@@ -119,11 +152,18 @@
                         {{__('purchases.none')}} 
                         @endif
                        </td>
-                       <td>
+                       <td style="color: #c73333; font-weight: bold;">
                         {{$purchase->total_price}}
                        </td>
                        <td>
-                        @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                       {{--
+                       <td>
+                        @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed 
                             @if($purchase->payment=='later')
                             {{__('purchases.later')}} => {{__('purchases.later')}}
                             @elseif($purchase->payment=='cashier')
@@ -151,20 +191,104 @@
                        <td>
                            {{$purchase->user->name}}
                        </td>
+                       --}}
+                    <tr>
+                      <th>
+                        المبلغ المدفوع
+                      </th>
+                      <th>
+                        طريقة الدفع 
+                      </th>
+                      <th>
+                        الحالة
+                      </th>
+                      <th>
+                        التاريخ
+                      </th>
+                      <th>
+                        الموظف
+                      </th>
+                    </tr>
+                    </tr>
+                    @if(isset($purchase_processes) && $purchase_processes->count() > 0)
+                    @foreach($purchase_processes as $purchase_process)
+                    @if($purchase_process->status == 'later')
+                    <tr class="later">
+                    @elseif($purchase_process->status == 'pending')
+                    <tr class="pending">
+                    @elseif($purchase_process->status == 'done')
+                    <tr class="done">
+                    @elseif($purchase_process->status == 'retrieved')
+                    <tr class="retrieved">
+                    @endif
+                    <td>
+                      {{$purchase_process->pay_amount}}
+                    </td>
+                    <td>
+                      {{$purchase_process->payment}}
+                    </td>
+                    <td>
+                      {{$purchase_process->status}}
+                    </td>
+                    <td>
+                      {{$purchase_process->created_at}}
+                    </td>
+                    <td>
+                      {{$purchase_process->user->name}}
+                    </td>
+                    </tr>
+                    @endforeach
+                    @endif
+                    {{-- latest version of invoice in invoices table --}}
+                    @if($purchase->status == 'later')
+                    <tr class="later">
+                    @elseif($purchase->status == 'pending')
+                    <tr class="pending">
+                    @elseif($purchase->status == 'done')
+                    <tr class="done">
+                    @elseif($purchase->status == 'retrieved')
+                    <tr class="retrieved">
+                    @endif
+                    <td>
+                      {{$purchase->pay_amount}}
+                    </td>
+                    <td>
+                      {{$purchase->payment}}
+                    </td>
+                    <td>
+                      {{$purchase->status}}
+                    </td>
+                    <td>
+                      {{$purchase->updated_at}}
+                    </td>
+                    <td>
+                      {{$purchase->user->name}}
+                    </td>
                     </tr>
                   </tbody>
                 </table>
                 @can('دفع فاتورة مورد')
-                @if($purchase->payment == 'later' && $purchase->status != 'retrieved')
+                @if($purchase->status == 'later' || $purchase->status == 'pending')
                 <form action="{{route('pay.later.purchase',$purchase->id)}}" method="POST">
                   @csrf
                   <div style="display: flex; flex-direction: column">
-                    <div>
-                      {{__('purchases.cash_from_cashier')}} <input type="radio" name="payment" value="cashier" checked> &nbsp; &nbsp;
-                  {{__('purchases.cash_from_external_budget')}} <input type="radio" name="payment" value="external">
+                    <div style="margin: 10px;">
+                      {{__('purchases.cash_from_cashier')}} <input type="radio" id="cash-radio" name="payment" value="cashier" checked> &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp;
+                      <input type="number" id="cash-value" min="0" step="0.01" name="cash_value" value="">
+                    </div>
+                    <div style="margin: 10px;">
+                      {{__('purchases.cash_from_external_budget')}} <input type="radio" id="external-radio" name="payment" value="external"> &nbsp; &nbsp;
+                      <input type="number" id="external-value" class="displaynone" min="0" step="0.01" name="external_value" value="">
                     </div>
                     <div>
+                      @if($purchase->status == 'later')
+                      <button type="submit" name="action" value="pay_later" class="btn btn-primary">{{__('purchases.pay')}}</button>
+                      @elseif($purchase->status == 'pending')
+                      <button type="submit" name="action" value="pay_pending" class="btn btn-primary">{{__('purchases.pay')}}</button>
+                      @endif
+                      {{--
                   <button type="submit" class="btn btn-primary"> {{__('purchases.pay')}} </button>
+                  --}}
                     </div> 
                   </div>
                 </form>
@@ -210,5 +334,19 @@
      
     </div>
 </div>
+@section('scripts')
+<script>
+  $('#external-radio').on('click',function(){
+    $('#external-value').removeClass('displaynone');
+    $('#cash-value').addClass('displaynone');
+    $('#cash-value').val(null);
+  })
+  $('#cash-radio').on('click',function(){
+    $('#cash-value').removeClass('displaynone');
+    $('#external-value').addClass('displaynone');
+    $('#external-value').val(null);
+  })
+</script>
+@endsection
 @endsection
 

@@ -8,7 +8,7 @@ class Purchase extends Model
 {
     //
     protected $fillable = [
-        'uuid','repository_id','user_id','supplier_id','code','supplier_invoice_num','total_price','payment','status','daily_report_check','monthly_report_check',
+        'uuid','repository_id','user_id','supplier_id','code','supplier_invoice_num','pay_amount','total_price','payment','status','daily_report_check','monthly_report_check',
     ];
     /*
     public function setCreatedAt($value)
@@ -48,5 +48,8 @@ class Purchase extends Model
     }
     public function monthlyReports(){
         return $this->belongsToMany(MonthlyReport::class,'monthly_report_purchase');
+    }
+    public function purchaseProcesses(){
+        return $this->hasMany(PurchaseProcess::class);
     }
 }

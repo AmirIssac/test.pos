@@ -134,12 +134,8 @@
                         <td>
                             {{$purchase->total_price}}
                         </td>
-                        
                         <td>
-                            
                           {{__('purchases.later')}}
-                            
-                           
                         </td>
                     </tr>
                     <tr>
