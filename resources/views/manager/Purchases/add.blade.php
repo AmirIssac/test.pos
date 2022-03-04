@@ -314,7 +314,7 @@ input[name="external_value"] , input[name="cash_value"]{
     </div>
   </div>
 </div>
-     
+
                              <!-- Modal for confirming -->
                              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog" role="document">
@@ -562,4 +562,17 @@ input[name="external_value"] , input[name="cash_value"]{
               $('#bar'+gold).removeClass('failed').removeClass('success');
     });
   </script>
+
+<script>
+  $('#external-radio').on('click',function(){
+    $('#external-value').removeClass('displaynone');
+    $('#cash-value').addClass('displaynone');
+    $('#cash-value').val(null);
+  })
+  $('#cash-radio').on('click',function(){
+    $('#cash-value').removeClass('displaynone');
+    $('#external-value').addClass('displaynone');
+    $('#external-value').val(null);
+  })
+</script>
 @endsection

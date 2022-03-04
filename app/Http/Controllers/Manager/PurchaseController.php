@@ -594,7 +594,6 @@ class PurchaseController extends Controller
         else
         return response('no_data');
     }
-
     /*public function showLaterPurchases($id){
         $repository = Repository::find($id);
         $purchases = $repository->purchases()->where('payment','later')->orderBy('created_at','DESC')->paginate(10);
@@ -602,7 +601,10 @@ class PurchaseController extends Controller
     }*/
     public function showLaterPurchases($id){
         $repository = Repository::find($id);
-        $purchases = $repository->purchases()->where('status', '!=' , 'retrieved')->where('payment','later')->orderBy('created_at','DESC')->paginate(10);
+        $purchases = $repository->purchases()->where(function($query){
+            $query->where('status','pending')
+                  ->orWhere('status','later');
+        })->orderBy('created_at','DESC')->paginate(10);
         return view('manager.Purchases.show_purchases')->with(['repository'=>$repository,'purchases'=>$purchases]);
     }
 
@@ -946,7 +948,11 @@ class PurchaseController extends Controller
         }
         if($request->later){  // for search by highest suppliers we should pay in the dashboard and should not be retrieved
             $purchases = Purchase::where('repository_id',$repository->id)
-            ->where('supplier_id',$supplier->id)->where('payment','later')->where('status','!=','retrieved')->orderBy('updated_at','DESC')->paginate(10);
+            ->where('supplier_id',$supplier->id)->where(function($query){
+                $query->where('status','pending')
+                        ->orWhere('status','later');
+            })
+            ->orderBy('updated_at','DESC')->paginate(10);
             return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,'suppliers'=>$suppliers,
             'supplier' => $supplier,
             ]);

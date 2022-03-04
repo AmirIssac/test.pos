@@ -15,13 +15,13 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <!-- Icofont -->
-    <link rel="stylesheet" href="{{asset('css/icofont.min.css')}}">
+    <link rel="stylesheet" href="{{asset('public/css/icofont.min.css')}}">
     <!-- material icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
     <!-- Main Style -->
-    <link rel="stylesheet" href="{{asset('css/main.css')}}">
-    <link rel="stylesheet" href="{{asset('css/responsive.css')}}">
+    <link rel="stylesheet" href="{{asset('public/css/main.css')}}">
+    <link rel="stylesheet" href="{{asset('public/css/responsive.css')}}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- Global site tag (gtag.js) - Google Ads: 10845715257 -->
@@ -94,7 +94,7 @@
                         <?php $auther = Auth::user() ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link text-secondary dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{asset('images/person1.jpg')}}" width="40" class="rounded-circle" alt="">
+                                <img src="{{asset('public/images/person1.jpg')}}" width="40" class="rounded-circle" alt="">
                                 {{$auther->name}}     
                             </a>
                             <ul class="dropdown-menu text-end" aria-labelledby="navbarDropdown">
@@ -123,7 +123,7 @@
             <i class="bi bi-layout-text-sidebar"></i>
         </div>
         <div class="logo">
-            <img src="{{asset('images/logo.png')}}" alt="rofood_logo">
+            <img src="{{asset('public/images/logo.png')}}" alt="rofood_logo">
         </div>
         <ul class="menu">
             @can('لوحة التحكم')
@@ -226,7 +226,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     {{--
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>--}} {{-- use it in specific page only --}}
-    <script src="{{asset('js/main.js')}}"></script>
+    <script src="{{asset('public/js/main.js')}}"></script>
     @yield('scripts')
 
 </body>
