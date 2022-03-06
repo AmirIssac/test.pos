@@ -40,7 +40,7 @@ input[name="external_value"] , input[name="cash_value"]{
 }
 
 .done{
-    background-color: #99a6ee;
+    background-color: #93cb52;
     font-weight: bold;
     color: black;
   }
@@ -48,12 +48,12 @@ input[name="external_value"] , input[name="cash_value"]{
     background-color: #f4c721;
   }
   .retrieved{
-    background-color: #9b9ea0;
+    background-color: #ff4454;
   }
   .later{
-    background-color: #001BB7;
+    background-color: #9b9ea0;
     color: white;
-  }
+  } 
 </style>
 @endsection
 @section('body')
@@ -121,11 +121,13 @@ input[name="external_value"] , input[name="cash_value"]{
                           {{__('purchases.supplier_invoice_num')}}  
                         </td>
                         <td>
+                          المدفوع
+                        </td>
+                        <td>
+                          المتبقي للدفع
+                        </td>
+                        <td>
                           {{__('purchases.total_price')}} 
-                        </td>
-                        <td>
-                        </td>
-                        <td>
                         </td>
                         <td>
                         </td>
@@ -152,7 +154,31 @@ input[name="external_value"] , input[name="cash_value"]{
                         {{__('purchases.none')}} 
                         @endif
                        </td>
-                       <td style="color: #c73333; font-weight: bold;">
+                       <td style="color: #1ec92f">
+                       @if($purchase->purchaseProcesses()->count() > 0)
+                       <?php $pay_amount = 0 ; 
+                            ?>
+                            @foreach($purchase->purchaseProcesses as $process)
+                              <?php $pay_amount += $process->pay_amount ; ?>
+                            @endforeach
+                            <?php $pay_amount += $purchase->pay_amount ; ?>
+                            <b style="color: #1ec92f">
+                            {{$pay_amount}}
+                            </b>
+                       @else    {{-- no purchase processes --}}
+                       <b style="color: #1ec92f">
+                        {{$purchase->pay_amount}}
+                       </b>
+                       @endif
+                       </td>
+                       <td style="color: #f14000; font-weight:bold">
+                        @if($purchase->purchaseProcesses()->count() > 0)
+                        {{$purchase->total_price - $pay_amount}}
+                        @else
+                        {{$purchase->total_price - $purchase->pay_amount}}
+                        @endif
+                      </td>
+                       <td style="font-weight: bold;">
                         {{$purchase->total_price}}
                        </td>
                        <td>

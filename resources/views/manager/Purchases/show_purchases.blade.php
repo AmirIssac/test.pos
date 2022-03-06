@@ -185,6 +185,9 @@ input[name="external_value"] , input[name="cash_value"]{
                       المدفوع   
                     </th> 
                     <th>
+                      المتبقي   
+                    </th> 
+                    <th>
                       {{__('purchases.total_price')}}   
                     </th> 
                   <th>
@@ -211,7 +214,8 @@ input[name="external_value"] , input[name="cash_value"]{
 
                         <td>
                           @if($purchase->purchaseProcesses()->count() > 0)
-                            <?php $pay_amount = 0 ; ?>
+                            <?php $pay_amount = 0 ; 
+                            ?>
                             @foreach($purchase->purchaseProcesses as $process)
                               <?php $pay_amount += $process->pay_amount ; ?>
                             @endforeach
@@ -225,8 +229,14 @@ input[name="external_value"] , input[name="cash_value"]{
                           </b>
                           @endif
                         </td>
-                       
-                        <td style="color: #f14000; font-weight:bold">
+                       <td style="color: #f14000; font-weight:bold">
+                         @if($purchase->purchaseProcesses()->count() > 0)
+                         {{$purchase->total_price - $pay_amount}}
+                         @else
+                         {{$purchase->total_price - $purchase->pay_amount}}
+                         @endif
+                       </td>
+                        <td style="font-weight:bold">
                             {{$purchase->total_price}}
                         </td>
                       <td>
