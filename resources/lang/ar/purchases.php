@@ -53,4 +53,7 @@ return [
     'no' => 'لا',
     'payed_from_cashier_purchases' => 'مشتريات مدفوعة من الصندوق',
     'payed_from_external_money_purchases' => 'مشتريات مدفوعة من ميزانية خارجية',
+    'external' => 'ميزانية خارجية' ,
+    'payed' => 'المدفوع' ,
+    'unpayed' => 'متبقي' ,
 ];

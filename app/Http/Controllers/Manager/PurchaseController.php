@@ -1105,6 +1105,7 @@ class PurchaseController extends Controller
         return back()->with('success',__('alerts.edit_success'));
     }
 
+    /*
     public function showSupplierPayment(Request $request,$id){
         $supplier = Supplier::find($id);
         $repository = Repository::find(Session::get('repo_id'));
@@ -1129,6 +1130,80 @@ class PurchaseController extends Controller
                     $payed += $purchase->total_price;
                 elseif($purchase->status != 'retrieved' && $purchase->payment == 'later')
                     $unpayed += $purchase->total_price;
+            }
+        }
+        return view('manager.Purchases.supplier_payments')->with(['supplier'=>$supplier,'repository'=>$repository,'payed'=>$payed,'unpayed'=>$unpayed]);
+    }
+    */
+
+    public function showSupplierPayment(Request $request,$id){
+        $supplier = Supplier::find($id);
+        $repository = Repository::find(Session::get('repo_id'));
+        $payed = 0 ;
+        $unpayed = 0;
+        if(count($request->all()) == 0){  // no filter (we get all the payments of this supplier)
+            $purchases = $supplier->purchases;
+            foreach($purchases as $purchase){
+                // calc the payed
+                if($purchase->status != 'later' && $purchase->status != 'retrieved'){
+                    if($purchase->purchaseProcesses()->count() > 0){
+                        foreach($purchase->purchaseProcesses as $process){
+                            $payed += $process->pay_amount;
+                        }
+                        $payed += $purchase->pay_amount;
+                    }
+                    else{   // just one life cycle
+                        $payed += $purchase->pay_amount;
+                    }
+                }
+                // calc the unpayed
+                if($purchase->status != 'retrieved'){
+                    $one_payed = 0 ;
+                    if($purchase->purchaseProcesses()->count() > 0){
+                        foreach($purchase->purchaseProcesses as $process){
+                            $one_payed += $process->pay_amount;
+                        }
+                        $one_payed += $purchase->pay_amount;
+                    }
+                    else{   // just one life cycle
+                        $one_payed += $purchase->pay_amount;
+                    }
+                    $unpayed += $purchase->total_price - $one_payed ;
+                }
+            }
+        }
+        else{   // filter
+            // first we check if from date is truly smaller than to date
+            if($request->fromDate > $request->toDate)
+                return back()->with('fail','خطأ في الادخال');
+            $purchases = $supplier->purchases()->whereBetween('updated_at', [$request->fromDate, $request->toDate])->get();
+            foreach($purchases as $purchase){
+                // calc the payed
+                if($purchase->status != 'later' && $purchase->status != 'retrieved'){
+                    if($purchase->purchaseProcesses()->count() > 0){
+                        foreach($purchase->purchaseProcesses as $process){
+                            $payed += $process->pay_amount;
+                        }
+                        $payed += $purchase->pay_amount;
+                    }
+                    else{   // just one life cycle
+                        $payed += $purchase->pay_amount;
+                    }
+                }
+                // calc the unpayed
+                if($purchase->status != 'retrieved'){
+                    $one_payed = 0 ;
+                    if($purchase->purchaseProcesses()->count() > 0){
+                        foreach($purchase->purchaseProcesses as $process){
+                            $one_payed += $process->pay_amount;
+                        }
+                        $one_payed += $purchase->pay_amount;
+                    }
+                    else{   // just one life cycle
+                        $one_payed += $purchase->pay_amount;
+                    }
+                    $unpayed += $purchase->total_price - $one_payed ;
+                }
             }
         }
         return view('manager.Purchases.supplier_payments')->with(['supplier'=>$supplier,'repository'=>$repository,'payed'=>$payed,'unpayed'=>$unpayed]);

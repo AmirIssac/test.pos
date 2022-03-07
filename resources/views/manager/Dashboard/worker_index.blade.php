@@ -47,7 +47,6 @@
                           @endif
                           @endfor
                       </select>
-                      <h6 style="color: #001bb7">this feature in upgrade mode</h6>
                       <canvas id="myChart" style="max-height: 100%;"></canvas>
                   </div>
             </form>
@@ -349,7 +348,7 @@
 <input type="hidden" id="sales-{{$report->created_at->month}}" value="{{$total_sum_invoices}}">
 <?php $total_sum_purchases = 0 ?>
 @foreach($report->purchases as $purchase)
-@if($purchase->status == 'done')
+@if($purchase->status != 'retrieved')
 @if($purchase->monthlyReports()->count()==1)
 <?php $total_sum_purchases += $purchase->total_price; ?>
 @elseif($purchase->monthlyReports()->count()>1)
@@ -368,7 +367,7 @@
 <input type="hidden" id="current-year" value="{{now()->year}}">
 <!-- JavaScript Bundle with Popper -->
 
-<script src="{{asset('js/jquery-3.6.0.min.js')}}"></script>
+<script src="{{asset('public/js/jquery-3.6.0.min.js')}}"></script>
 {{--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>--}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {{--<script src="js/main.js"></script>--}}

@@ -53,4 +53,7 @@ return [
     'no' => 'no',
     'payed_from_cashier_purchases' => 'Purchases payed from cashier',
     'payed_from_external_money_purchases' => 'Purchases Payed from external money',
+    'external' => 'external' ,
+    'payed' => 'payed' ,
+    'unpayed' => 'unpayed' ,
 ];

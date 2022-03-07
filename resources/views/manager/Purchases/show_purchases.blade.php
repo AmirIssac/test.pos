@@ -89,11 +89,31 @@ input[name="external_value"] , input[name="cash_value"]{
   border: 1px solid #001bb7 !important;
   font-weight: bold;
 }
+.done{
+    background-color: #93cb52;
+    font-weight: bold;
+    color: black;
+  }
+  .pending{
+    background-color: #f4c721;
+  }
+  .retrieved{
+    background-color: #ff4454;
+  }
+  .later{
+    background-color: #9b9ea0;
+    color: white;
+  } 
+  #purchases-table span{
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 0px 2px ;
+  }
 </style>
 @endsection
 @section('body')
 <div class="main-panel">
-  
 <div class="content">
   @if ($message = Session::get('fail'))
   <div class="alert alert-danger alert-block">
@@ -157,16 +177,12 @@ input[name="external_value"] , input[name="cash_value"]{
   @endif
     @endif
     <div class="container-fluid">
-      <div class="row">
+      <div class="row" id="purchases-table">
         <div class="col-md-12">
-          
           <div class="card">
-            
               <div class="card-header card-header-primary">
-                
               <h4 class="card-title"> </h4>
               <h4> {{__('reports.invoices')}} <span class="badge badge-success"></span></h4>
-              
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -182,13 +198,13 @@ input[name="external_value"] , input[name="cash_value"]{
                       {{__('purchases.supplier')}}   
                     </th>
                     <th>
-                      المدفوع   
-                    </th> 
-                    <th>
-                      المتبقي   
-                    </th> 
-                    <th>
                       {{__('purchases.total_price')}}   
+                    </th> 
+                    <th>
+                      {{__('purchases.payed')}}   
+                    </th> 
+                    <th>
+                      {{__('purchases.unpayed')}}   
                     </th> 
                   <th>
                     {{__('reports.actions')}}
@@ -202,16 +218,59 @@ input[name="external_value"] , input[name="cash_value"]{
                             {{$purchase->code}}
                         </td>
                         <td>
-                          @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed --}}
+                          {{--
+                          @if($purchase->created_at!=$purchase->updated_at)  {{-- it was later and then payed 
                             <span class="badge-secondary"> {{$purchase->created_at}} </span>   <span class="badge-success"> {{$purchase->updated_at}} </span>
                             @else
                             <span class="badge-success"> {{$purchase->created_at}} </span>
+                            @endif
+                            --}}
+                            @if($purchase->purchaseProcesses()->count() > 0)
+                              @foreach($purchase->purchaseProcesses as $process)
+                                @if($process->status == 'later')
+                                  <span class="later">
+                                @elseif($process->status == 'pending')
+                                  <span class="pending">
+                                @elseif($process->status == 'done')
+                                  <span class="done">
+                                @elseif($process->status == 'retrieved')
+                                  <span class="retrieved">
+                                @endif
+                                 {{$process->created_at->format('y m d')}}
+                                </span>
+                              @endforeach
+                                {{-- last life cycle --}}
+                                @if($purchase->status == 'later')
+                                <span class="later">
+                                @elseif($purchase->status == 'pending')
+                                <span class="pending">
+                                @elseif($purchase->status == 'done')
+                                <span class="done">
+                                @elseif($purchase->status == 'retrieved')
+                                <span class="retrieved">
+                                @endif
+                                 {{$purchase->updated_at->format('y m d')}}
+                                </span>
+                            @else   {{-- just one life --}}
+                                @if($purchase->status == 'later')
+                                <span class="later">
+                                @elseif($purchase->status == 'pending')
+                                <span class="pending">
+                                @elseif($purchase->status == 'done')
+                                <span class="done">
+                                @elseif($purchase->status == 'retrieved')
+                                <span class="retrieved">
+                                @endif
+                                 {{$purchase->created_at->format('y m d')}}
+                              </span>
                             @endif
                         </td>
                         <td>
                             {{$purchase->supplier->name}}
                         </td>
-
+                        <td style="font-weight:bold">
+                          {{$purchase->total_price}}
+                        </td>
                         <td>
                           @if($purchase->purchaseProcesses()->count() > 0)
                             <?php $pay_amount = 0 ; 
@@ -236,9 +295,7 @@ input[name="external_value"] , input[name="cash_value"]{
                          {{$purchase->total_price - $purchase->pay_amount}}
                          @endif
                        </td>
-                        <td style="font-weight:bold">
-                            {{$purchase->total_price}}
-                        </td>
+                        
                       <td>
                        
                      <a style="color: #03a4ec" href="{{route('show.purchase.details',$purchase->uuid)}}"> <i class="material-icons eye">
@@ -281,20 +338,7 @@ input[name="external_value"] , input[name="cash_value"]{
                           </div>
                         </div>
                         @endcan
-                        {{--
-                        .
-                        @if($purchase->status == 'pending' || $purchase->status == 'later')
-                        <a style="color: #f4c721" href="" class="active-a"> <i class="material-icons">
-                          incomplete_circle
-                        </i> </a>
-                        @else
-                        <a style="color: #344b5e" class="disabled-a">  <i class="material-icons">
-                          incomplete_circle
-                        </i> </a>
-                        @endif
-                        --}}
-
-
+                   
                           @can('دفع فاتورة مورد')
                           .
                           @if($purchase->status == 'pending' || $purchase->status == 'later')

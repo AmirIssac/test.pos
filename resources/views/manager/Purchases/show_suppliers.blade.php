@@ -55,14 +55,16 @@ i:hover{
                      <td>{{$supplier->phone}}</td>
                      <td>{{$supplier->account_num}}</td>
                      <td>
-                       {{--
+                       
                       <a style="color: #007bff" href="{{route('show.supplier.payments',$supplier->id)}}" class="active-a"> <i class="material-icons">
                         paid
                       </i> </a>
-                      --}}
+                      
+                      {{--
                        <i style="color: #262d35" class="material-icons">
                         paid
                       </i> 
+                      --}}
                       .
                       <form action="{{route('edit.supplier')}}" method="POST">
                         @csrf
