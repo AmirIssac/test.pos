@@ -56,4 +56,8 @@ return [
     'external' => 'ميزانية خارجية' ,
     'payed' => 'المدفوع' ,
     'unpayed' => 'متبقي' ,
+    'complete_payment_process_by' => 'أكمل عملية الدفع عن طريق',
+    'status' => 'الحالة',
+    'date' => 'التاريخ',
+    'employee' => 'الموظف',
 ];

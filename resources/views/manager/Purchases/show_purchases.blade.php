@@ -363,14 +363,16 @@ input[name="external_value"] , input[name="cash_value"]{
                                 </button>
                               </div>
                               <div class="modal-body">
-                               <h6> اجمالي الفاتورة <b style="color: #f14000"> {{$purchase->total_price}} </b> </h6>
-                               <h6> المدفوع منها  <b style="color: #48a44c"> {{$purchase->pay_amount}} </b> </h6>
-                               <h6>أكمل عملية الدفع عن طريق : </h6>
+                               <h6>  {{__('purchases.total')}} <b> {{$purchase->total_price}} </b> </h6>
+                               <h6>  {{__('purchases.payed')}}  <b style="color: #48a44c"> {{$purchase->pay_amount}} </b> </h6>
+                               <h6>  {{__('purchases.unpayed')}}  <b style="color: #f14000"> {{$purchase->total_price - $purchase->pay_amount}} </b> </h6>
+                               <h6> {{__('purchases.complete_payment_process_by')}} : </h6>
                               </div>
                               <div style="display: flex; flex-direction: column; margin-top: -20px;" class="modal-body">
                                 <div style="margin: 10px;">
                                 {{__('purchases.cash_from_cashier')}} <input type="radio" id="cash-radio-{{$purchase->id}}" name="payment" value="cashier" checked> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                 <input style="margin-right: 20px;" id="cash-value-{{$purchase->id}}" type="number" min="0" step="0.01" name="cash_value" value="">
+                                ({{__('purchases.cashier_balance')}}  {{$repository->balance}})
                                 </div>
                                 <div style="margin: 10px;">
                                 {{__('purchases.cash_from_external_budget')}} <input type="radio" id="external-radio-{{$purchase->id}}" name="payment" value="external">

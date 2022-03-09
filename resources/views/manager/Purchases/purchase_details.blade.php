@@ -121,10 +121,10 @@ input[name="external_value"] , input[name="cash_value"]{
                           {{__('purchases.supplier_invoice_num')}}  
                         </td>
                         <td>
-                          المدفوع
+                          {{__('purchases.payed')}}
                         </td>
                         <td>
-                          المتبقي للدفع
+                          {{__('purchases.unpayed')}}
                         </td>
                         <td>
                           {{__('purchases.total_price')}} 
@@ -220,19 +220,19 @@ input[name="external_value"] , input[name="cash_value"]{
                        --}}
                     <tr>
                       <th>
-                        المبلغ المدفوع
+                        {{__('purchases.payed')}}
                       </th>
                       <th>
-                        طريقة الدفع 
+                        {{__('purchases.payment_process')}}
                       </th>
                       <th>
-                        الحالة
+                        {{__('purchases.status')}}
                       </th>
                       <th>
-                        التاريخ
+                        {{__('purchases.date')}}
                       </th>
                       <th>
-                        الموظف
+                        {{__('purchases.employee')}}
                       </th>
                     </tr>
                     </tr>
@@ -301,6 +301,7 @@ input[name="external_value"] , input[name="cash_value"]{
                     <div style="margin: 10px;">
                       {{__('purchases.cash_from_cashier')}} <input type="radio" id="cash-radio" name="payment" value="cashier" checked> &nbsp; &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp;
                       <input type="number" id="cash-value" min="0" step="0.01" name="cash_value" value="">
+                      ({{__('purchases.cashier_balance')}}  {{$repository->balance}})
                     </div>
                     <div style="margin: 10px;">
                       {{__('purchases.cash_from_external_budget')}} <input type="radio" id="external-radio" name="payment" value="external"> &nbsp; &nbsp;

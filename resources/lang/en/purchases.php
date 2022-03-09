@@ -56,4 +56,8 @@ return [
     'external' => 'external' ,
     'payed' => 'payed' ,
     'unpayed' => 'unpayed' ,
+    'complete_payment_process_by' => 'complete payment process by',
+    'status' => 'status',
+    'date' => 'date',
+    'employee' => 'employee',
 ];

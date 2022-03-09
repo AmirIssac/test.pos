@@ -36,6 +36,7 @@ class PurchaseController extends Controller
   
 
     public function add(Request $request,$id){
+        Session::put('lock_process','start');
         $repository = Repository::find($id);
         // code generate
         do{
@@ -300,15 +301,13 @@ class PurchaseController extends Controller
             'action_id' => $action->id,
             'note' => serialize($info),
         ]);
+        session()->forget('lock_process');
 
         return back()->with('success',__('alerts.create_new_purchase_success'));
     }  
 
     public function storeOldPurchase(Request $request , $id){
 
-        /*$validated = $request->validate([
-            'supplier_id' => 'required',
-        ]);*/
         $rules = [
             'supplier_id' => 'required',
             'date' => 'required',
@@ -324,6 +323,7 @@ class PurchaseController extends Controller
         $actual_records = 0;
         $repository = Repository::find($id);
         $statistic = $repository->statistic;
+        $pay_amount = 0 ;
         // cant input future invoices or today invoices
         $my_date = Carbon::parse($request->date);
         if($my_date->year > now()->year || ($my_date->year == now()->year && $my_date->month > now()->month) || ($my_date->year == now()->year && $my_date->month == now()->month && $my_date->day >= now()->day)){
@@ -340,28 +340,45 @@ class PurchaseController extends Controller
                 $daily_report_check = false;
         }
         
-        if($request->pay=='later')
+        if($request->pay=='later'){
             $payment = 'later';
+            $status = 'later' ;
+        }
         else // cash has two options
             {
                 if($request->cash_option=='cashier'){
+                    $pay_amount = $request->cash_value;
+                    if($request->cash_value > $request->sum){
+                        return back()->with('fail','المبلغ المدفوع اكبر من قيمة الفاتورة');
+                    }
                     $payment = 'cashier';
+                    if($request->cash_value < $request->sum)
+                    $status = 'pending';
+                    else
+                    $status = 'done';
                     if(!$daily_report_check){
+                        if($request->cash_value > $repository->balance)
+                            return back()->with('fail','المبلغ المدفوع اكبر من المتوفر في الصندوق');
                         $repository->update([
-                        'balance' => $repository->balance - $request->sum,
-                        ]);
-                        $statistic->update([
-                            'd_out_cashier' => $statistic->d_out_cashier + $request->sum,
-                        ]);
+                            'balance' => $repository->balance - $request->cash_value,
+                            ]);
+                            $statistic->update([
+                                'd_out_cashier' => $statistic->d_out_cashier + $request->cash_value,
+                            ]);
                     }
                 }
                 else{
+                    $pay_amount = $request->external_value;
                     $payment = 'external';
+                    if($request->external_value < $request->sum)
+                        $status = 'pending';
+                    else
+                        $status = 'done';
                     if(!$daily_report_check)
-                        $statistic->update([
-                            'd_out_external' => $statistic->d_out_external + $request->sum,
-                        ]);
-                    }
+                            $statistic->update([
+                                'd_out_external' => $statistic->d_out_external + $request->external_value,
+                            ]);
+                }
             }
 
             $purchase = new Purchase();
@@ -374,6 +391,8 @@ class PurchaseController extends Controller
             $purchase->supplier_invoice_num = $request->supplier_invoice_num;
             $purchase->total_price = $request->sum;
             $purchase->payment = $payment;
+            $purchase->status = $status;
+            $purchase->pay_amount = $pay_amount;
             $purchase->daily_report_check = $daily_report_check;
             $purchase->monthly_report_check = $monthly_report_check;
             $purchase->created_at = $request->date;
@@ -391,11 +410,11 @@ class PurchaseController extends Controller
                 if($report){
                     if($purchase->payment == 'cashier')
                         $report->update([
-                            'out_cashier' => $report->out_cashier + $purchase->total_price,
+                            'out_cashier' => $report->out_cashier + $purchase->pay_amount,
                         ]);
                     elseif($purchase->payment == 'external')
                         $report->update([
-                            'out_external' => $report->out_external + $purchase->total_price,
+                            'out_external' => $report->out_external + $purchase->pay_amount,
                         ]);
                 $report->purchases()->attach($purchase->id);
                 }
@@ -413,12 +432,12 @@ class PurchaseController extends Controller
                     $rep->card_balance = 0;
                     $rep->stc_balance = 0;
                     if($purchase->payment == 'cashier'){
-                        $rep->out_cashier = $purchase->total_price;
+                        $rep->out_cashier = $purchase->pay_amount;
                         $rep->out_external = 0;
                     }
                     elseif($purchase->payment == 'external'){
                         $rep->out_cashier = 0;
-                        $rep->out_external = $purchase->total_price;
+                        $rep->out_external = $purchase->pay_amount;
                     }
                     else{ // later
                         $rep->out_cashier = 0;
@@ -461,8 +480,18 @@ class PurchaseController extends Controller
                     $rep->cash_plus = 0;
                     $rep->card_plus = 0;
                     $rep->stc_plus = 0;
-                    $rep->out_cashier = 0;
-                    $rep->out_external = 0;
+                    if($purchase->payment == 'cashier'){
+                        $rep->out_cashier = $purchase->pay_amount;
+                        $rep->out_external = 0;
+                    }
+                    elseif($purchase->payment == 'external'){
+                        $rep->out_cashier = 0;
+                        $rep->out_external = $purchase->pay_amount;
+                    }
+                    else{ // later
+                        $rep->out_cashier = 0;
+                        $rep->out_external = 0;
+                    }
                     $rep->box_balance = 0;
                     $rep->created_at = $report_date;
                     $rep->updated_at = $report_date;
@@ -497,6 +526,7 @@ class PurchaseController extends Controller
             'action_id' => $action->id,
             'note' => serialize($info),
         ]);
+        session()->forget('lock_process');
 
         return back()->with('success',__('alerts.create_new_purchase_success'));
     }

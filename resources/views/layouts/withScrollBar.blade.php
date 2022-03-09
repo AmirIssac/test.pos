@@ -377,8 +377,6 @@
   <script src="{{asset('public/js/plugins/bootstrap-notify.js')}}"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{asset('public/js/material-dashboard.min.js?v=2.1.2')}}" type="text/javascript"></script>
-  
- 
  @yield('scripts')
     </body>
  </html>

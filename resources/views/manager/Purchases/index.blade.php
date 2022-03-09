@@ -201,9 +201,7 @@
             <form action="{{route('purchase.add',$repository->id)}}" method="GET">
               @csrf
               <input type="hidden" name="old" value="yes">
-        {{--    <div  onClick="javascript:this.parentNode.submit();" class="box blue">  --}}
-              <div class="box blue">
-              <h6>this feature in maitanance mode</h6>
+            <div  onClick="javascript:this.parentNode.submit();" class="box blue">
               <i class="material-icons">pending_actions</i>
                  <h4>{{__('sales.register_invoice')}}</h4>
                  <h6>{{__('sales.by_specific_date')}}</h6>
@@ -213,10 +211,7 @@
           @endcan
 
           
-
-
            </div>
-         
            </div>
  </body>
  @endsection

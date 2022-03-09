@@ -137,7 +137,7 @@ Route::get('/add/purchase/{repository_id}','Manager\PurchaseController@add')->na
 Route::get('/add/supplier/form/{repository_id}','Manager\PurchaseController@addSupplier')->name('add.supplier');
 Route::post('/store/supplier/{repository_id}','Manager\PurchaseController@storeSupplier')->name('store.supplier');
 Route::get('/show/suppliers/{repository_id}','Manager\PurchaseController@showSuppliers')->name('show.suppliers');
-Route::post('/store/purchase/{repository_id}','Manager\PurchaseController@storePurchase')->name('store.purchase');
+Route::post('/store/purchase/{repository_id}','Manager\PurchaseController@storePurchase')->name('store.purchase')->middleware('lock_process');
 Route::post('edit/supplier','Manager\PurchaseController@editSupplierForm')->name('edit.supplier'); // we use form input hidden to use id and not passing it into url
 Route::post('update/supplier','Manager\PurchaseController@updateSupplier')->name('update.supplier'); // we use form input hidden to use id and not passing it into url
 Route::post('delete/supplier','Manager\PurchaseController@deleteSupplier')->name('delete.supplier'); // we use form input hidden to use id and not passing it into url
@@ -160,7 +160,7 @@ Route::get('/show/purchase/products/{repository_id}','Manager\PurchaseController
 Route::get('edit/purchase/product/{product_id}','Manager\PurchaseController@editProductForm')->name('edit.purchase.product');
 Route::post('update/purchase/product/{product_id}','Manager\PurchaseController@updateProduct')->name('update.purchase.product');
 Route::get('/filter/purchases/byPaymentMethod/supplier/{supplier_id}','Manager\PurchaseController@filterByPaymentMethodSupplier')->name('filter.purchases.byPaymentMethod.supplier');
-Route::post('/store/old/purchase/{repository_id}','Manager\PurchaseController@storeOldPurchase')->name('store.old.purchase');
+Route::post('/store/old/purchase/{repository_id}','Manager\PurchaseController@storeOldPurchase')->name('store.old.purchase')->middleware('lock_process');
 Route::get('show/supplier/payments/{supplier_id}','Manager\PurchaseController@showSupplierPayment')->name('show.supplier.payments');
 
 
