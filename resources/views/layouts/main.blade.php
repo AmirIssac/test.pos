@@ -185,7 +185,9 @@
             @endif
             @endif
             @can('الاعدادات')
+            @if(isset($repository))
             <li><a href="{{route('manager.settings.index',$repository->id)}}" class="{{ request()->is('manager/settings/*')||request()->is('en/manager/settings/*')? 'active' : ''}}"><span class="icon"><i class="fa fa-cog"></i></span>{{__('menu.settings')}}</a></li>
+            @endif
             @endcan
             @can('المخزون')
             <li><a href="#"><span class="icon"><i class="bi bi-shield-check"></i></span>{{__('menu.tech_support')}}</a></li>

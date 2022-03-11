@@ -37,6 +37,7 @@ class GuestController extends Controller
             'email' => $request->owneremail,
             'password' => Hash::make($request->ownerpassword),
             'phone' => $request->ownerphone,
+            'is_email_verified' => true ,  // auto verified
         ]);
         //$user->assignRole('مالك-مخزن');
         $token = Str::random(64);

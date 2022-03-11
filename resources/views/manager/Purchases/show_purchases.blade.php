@@ -158,8 +158,9 @@ input[name="external_value"] , input[name="cash_value"]{
       @endif
     </div>
     @endif {{--  request check --}}
+    {{--
     @if(request()->is('search/purchases/bySupplier/*') || request()->is('en/search/purchases/bySupplier/*'))
-    @if(request()->get('supplier') != 'all')  {{-- not displaying the payment filter if we search by all suppliers --}}
+    @if(request()->get('supplier') != 'all')  {{-- not displaying the payment filter if we search by all suppliers 
   <div style="display: flex;width: 300px; margin-right: 20px;">
     <form action="{{route('filter.purchases.byPaymentMethod.supplier',$supplier->id)}}" method="GET">
       @csrf
@@ -176,6 +177,7 @@ input[name="external_value"] , input[name="cash_value"]{
   </div>
   @endif
     @endif
+    --}}
     <div class="container-fluid">
       <div class="row" id="purchases-table">
         <div class="col-md-12">
@@ -338,10 +340,10 @@ input[name="external_value"] , input[name="cash_value"]{
                           </div>
                         </div>
                         @endcan
-                   
+                  
                           @can('دفع فاتورة مورد')
                           .
-                          @if($purchase->status == 'pending' || $purchase->status == 'later')
+                          @if($purchase->status == 'pending' || $purchase->status == 'later' || $purchase->payment == 'later')   {{-- third condition segment is for the old version --}}
                           <a style="color: #1ec92f" data-toggle="modal" data-target="#exampleModale{{$purchase->id}}" id="modalicon" class="active-a"">  <i class="material-icons">
                             payment
                           </i> </a>

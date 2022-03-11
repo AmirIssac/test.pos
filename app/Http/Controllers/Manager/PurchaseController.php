@@ -1009,7 +1009,7 @@ class PurchaseController extends Controller
         foreach($purchases_with_no_paginate as $purchase){
             if($purchase->status != 'retrieved')
                 $total_value+=$purchase->total_price;
-            if($purchase->status == 'done' || $purchase->status == 'pending'){
+            if(($purchase->status == 'done' || $purchase->status == 'pending') && $purchase->payment != 'later'){
                 if($purchase->purchaseProcesses()->count() > 0){
                     foreach($purchase->purchaseProcesses as $process)
                         $payed += $process->pay_amount;
@@ -1018,13 +1018,13 @@ class PurchaseController extends Controller
                 else
                     $payed += $purchase->pay_amount ;
             }
-            if($purchase->status == 'later' || $purchase->status == 'pending'){
+            if($purchase->status == 'later' || $purchase->status == 'pending' || $purchase->payment == 'later'){
                 if($purchase->purchaseProcesses()->count() > 0){
                     $temp = 0 ;
                     foreach($purchase->purchaseProcesses as $proc){
                         $temp += $proc->pay_amount ;
                     }
-                    $temp += $proc->pay_amount ;
+                    $temp += $purchase->pay_amount ;
                     $unpayed += $purchase->total_price - $temp ;
                 }
                 else
