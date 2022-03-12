@@ -308,7 +308,7 @@ input[name="external_value"] , input[name="cash_value"]{
                       <input type="number" id="external-value" class="displaynone" min="0" step="0.01" name="external_value" value="">
                     </div>
                     <div>
-                      @if($purchase->status == 'later')
+                      @if($purchase->status == 'later' || $purchase->payment == 'later')
                       <button type="submit" name="action" value="pay_later" class="btn btn-primary">{{__('purchases.pay')}}</button>
                       @elseif($purchase->status == 'pending')
                       <button type="submit" name="action" value="pay_pending" class="btn btn-primary">{{__('purchases.pay')}}</button>

@@ -383,7 +383,7 @@ input[name="external_value"] , input[name="cash_value"]{
                               </div>
                               <div class="modal-footer">
                                 <a class="btn btn-danger" data-dismiss="modal">{{__('buttons.cancel')}}</a>
-                                @if($purchase->status == 'later')
+                                @if($purchase->status == 'later' || $purchase->payment == 'later')
                                 <button type="submit" name="action" value="pay_later" class="btn btn-primary">{{__('buttons.confirm')}}</button>
                                 @elseif($purchase->status == 'pending')
                                 <button type="submit" name="action" value="pay_pending" class="btn btn-primary">{{__('buttons.confirm')}}</button>
