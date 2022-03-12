@@ -595,7 +595,7 @@ class Repository extends Model
         return $purchases;
     }
     */
-
+    
     public function mostFiveSupplierShouldPay(){  // أكثر 5 موردين يجب الدفع لهم
         $purchases = Purchase::query()
         ->join('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')  // relationship
@@ -611,6 +611,27 @@ class Repository extends Model
         
         return $purchases;
     }
+    
+
+    /*
+    public function mostFiveSupplierShouldPay(){  // أكثر 5 موردين يجب الدفع لهم
+        $purchases = Purchase::query()
+        ->join('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')  // relationship
+        ->selectRaw('sum(purchases.total_price) as sum , supplier_id , suppliers.name')
+        ->where('repository_id',$this->id)
+        ->where(function ($query){
+            $query->where('status','later')
+                  ->orWhere('status','pending'); })
+        ->groupBy('supplier_id','suppliers.name')
+        ->orderBy('sum','DESC')
+        ->get();  // get the total_price and supplier_id and suppliers.name grouped by supplier_id && suppliers.name
+        
+        foreach($purchases as $purchase){
+            
+        }
+       // return $purchases;
+    }
+    */
 
    /* public function mostFivePendingInvoices(){    // اكثر 5 فواتير معلقة حسب المبلغ المتبقي للدفع
         $invoices = Invoice::where('repository_id',$this->id)->where('status','pending')

@@ -410,10 +410,12 @@ input[name="external_value"] , input[name="cash_value"]{
                     @if(isset($total_value) && isset($payed) && isset($unpayed))
                     <tr>
                      <td> <h5 style="font-weight: bold; color:#9229ac">{{__('purchases.sum')}}  {{$total_value}}</h5> </td>
-                     <td></td>
                      <td> <h5 style="font-weight: bold; color:#48a44c">{{__('sales.payed')}} {{$payed}}</h5> </td>
-                     <td></td>
                      <td> <h5 style="font-weight: bold; color:#f14000">{{__('sales.not_payed')}}  {{$unpayed}}</h5> </td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
                     </tr>
                     @elseif(isset($total_value))
                     <tr>

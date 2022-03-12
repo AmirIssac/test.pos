@@ -976,17 +976,44 @@ class PurchaseController extends Controller
         else{ // filter to specific supplier
         $supplier = $repository->suppliers()->where('supplier_id',$request->supplier)->first();
         }
+
         if($request->later){  // for search by highest suppliers we should pay in the dashboard and should not be retrieved
+            $pay = 0 ;
+            $unpay = 0 ;
+            $total = 0 ;
             $purchases = Purchase::where('repository_id',$repository->id)
             ->where('supplier_id',$supplier->id)->where(function($query){
                 $query->where('status','pending')
-                        ->orWhere('status','later');
+                        ->orWhere('status','later')
+                        ->orWhere('payment','later');
             })
             ->orderBy('updated_at','DESC')->paginate(10);
+            foreach($purchases as $purchase){
+                if($purchase->purchaseProcesses()->count() > 0){
+                    foreach($purchase->purchaseProcesses as $process)
+                        $pay += $process->pay_amount;
+                    $pay+= $purchase->pay_amount;
+                }
+                else
+                    $pay+= $purchase->pay_amount;
+                $total += $purchase->total_price;
+            }
+            foreach($purchases as $purchase){
+                $temp = 0 ;
+                if($purchase->purchaseProcesses()->count() > 0){
+                    foreach($purchase->purchaseProcesses as $process)
+                        $temp += $process->pay_amount;
+                    $temp+= $purchase->pay_amount;
+                    $unpay += $purchase->total_price - $temp;
+                }
+                else
+                    $unpay += $purchase->total_price - $purchase->pay_amount;
+            }
             return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,'suppliers'=>$suppliers,
-            'supplier' => $supplier,
+            'supplier' => $supplier,'payed' => $pay , 'unpayed' => $unpay , 'total_value' => $total,
             ]);
         }
+
         else{    // purchases for specific supplier
         $purchases = Purchase::where('repository_id',$repository->id)
                   ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
@@ -1039,6 +1066,7 @@ class PurchaseController extends Controller
                 }
     }
 
+    /*
     public function filterByPaymentMethodSupplier(Request $request,$id){
         $supplier = Supplier::find($id);
         $repository = Repository::find($request->repo_id);
@@ -1095,9 +1123,67 @@ class PurchaseController extends Controller
                 return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,
                 'total_value' => $total_value,
                 ]);
+        }  
+    }
+    */
+    
+    public function filterByPaymentMethodSupplier(Request $request,$id){
+        $supplier = Supplier::find($id);
+        $repository = Repository::find($request->repo_id);
+        $arr = array('repo_id'=>$request->repo_id,'payment_method'=>$request->payment_method);
+        $total_value = 0;
+        $payed = 0 ;
+        $unpayed = 0;
+        if($request->payment_method == 'all'){
+        $purchases = Purchase::where('repository_id',$request->repo_id)
+        ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->paginate(10);
+        $purchases_with_no_paginate = Purchase::where('repository_id',$request->repo_id)    // all purchases for this supplier for display statistics
+        ->where('supplier_id',$supplier->id)->orderBy('updated_at','DESC')->get();
+            foreach($purchases_with_no_paginate as $purchase){
+                if($purchase->status == 'done')
+                    $total_value+=$purchase->total_price;
+                if($purchase->status == 'done' && $purchase->payment != 'later')
+                    $payed += $purchase->total_price;
+                if($purchase->status == 'done' && $purchase->payment == 'later')
+                    $unpayed += $purchase->total_price;
+            }
+            return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,
+            'total_value' => $total_value, 'payed' => $payed, 'unpayed' => $unpayed,
+            ]);
         }
-
-        
+        elseif($request->payment_method == 'payed'){
+            $purchases = Purchase::where('repository_id',$request->repo_id)
+            ->where('supplier_id',$supplier->id)->where('status','done')
+            ->orderBy('updated_at','DESC')->paginate(10);
+             $purchases_with_no_paginate = Purchase::where('repository_id',$request->repo_id)    // all purchases for this supplier for display statistics
+             ->where('supplier_id',$supplier->id)
+             ->where('status','done')
+             ->orderBy('updated_at','DESC')->get();
+                foreach($purchases_with_no_paginate as $purchase){
+                        $total_value+=$purchase->total_price;
+                }
+                return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,
+                'total_value' => $total_value,
+                 ]);
+        }
+        elseif($request->payment_method == 'notpayed'){
+            $purchases = Purchase::where('repository_id',$request->repo_id)
+            ->where('supplier_id',$supplier->id)->where(function ($query) use ($request){
+                $query->where('status','pending')
+                      ->orWhere('status','later'); })
+            ->orderBy('updated_at','DESC')->paginate(10);
+             $purchases_with_no_paginate = Purchase::where('repository_id',$request->repo_id)    // all purchases for this supplier for display statistics
+             ->where('supplier_id',$supplier->id)->where(function ($query) use ($request){
+                $query->where('status','pending')
+                      ->orWhere('status','later'); })
+             ->orderBy('updated_at','DESC')->get();
+                foreach($purchases_with_no_paginate as $purchase){
+                    $total_value+=$purchase->total_price;
+                }
+                return view('manager.Purchases.show_purchases')->with(['purchases'=>$purchases->appends($arr),'repository'=>$repository,
+                'total_value' => $total_value,
+                ]);
+        }  
     }
 
     public function showProducts($id){
