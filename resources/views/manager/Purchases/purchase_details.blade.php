@@ -294,7 +294,7 @@ input[name="external_value"] , input[name="cash_value"]{
                   </tbody>
                 </table>
                 @can('دفع فاتورة مورد')
-                @if($purchase->status == 'later' || $purchase->status == 'pending')
+                @if(($purchase->status == 'later' || $purchase->status == 'pending') && $purchase->status != 'retrieved')
                 <form action="{{route('pay.later.purchase',$purchase->id)}}" method="POST">
                   @csrf
                   <div style="display: flex; flex-direction: column">

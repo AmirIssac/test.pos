@@ -343,7 +343,7 @@ input[name="external_value"] , input[name="cash_value"]{
                   
                           @can('دفع فاتورة مورد')
                           .
-                          @if($purchase->status == 'pending' || $purchase->status == 'later' || $purchase->payment == 'later')   {{-- third condition segment is for the old version --}}
+                          @if(($purchase->status == 'pending' || $purchase->status == 'later' || $purchase->payment == 'later') && $purchase->status != 'retrieved')   {{-- third condition segment is for the old version --}}
                           <a style="color: #1ec92f" data-toggle="modal" data-target="#exampleModale{{$purchase->id}}" id="modalicon" class="active-a"">  <i class="material-icons">
                             payment
                           </i> </a>

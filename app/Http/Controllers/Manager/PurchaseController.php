@@ -981,6 +981,13 @@ class PurchaseController extends Controller
             $pay = 0 ;
             $unpay = 0 ;
             $total = 0 ;
+            // getting statistics for this supplier
+            $purchases_with_no_paginate = Purchase::where('repository_id',$repository->id)    // all purchases for this supplier for display statistics
+            ->where('supplier_id',$supplier->id)->where(function($query){
+                $query->where('status','pending')
+                        ->orWhere('status','later')
+                        ->orWhere('payment','later');
+            })->orderBy('updated_at','DESC')->get();
             $purchases = Purchase::where('repository_id',$repository->id)
             ->where('supplier_id',$supplier->id)->where(function($query){
                 $query->where('status','pending')
@@ -988,7 +995,7 @@ class PurchaseController extends Controller
                         ->orWhere('payment','later');
             })
             ->orderBy('updated_at','DESC')->paginate(10);
-            foreach($purchases as $purchase){
+            foreach($purchases_with_no_paginate as $purchase){
                 if($purchase->purchaseProcesses()->count() > 0){
                     foreach($purchase->purchaseProcesses as $process)
                         $pay += $process->pay_amount;
@@ -998,7 +1005,7 @@ class PurchaseController extends Controller
                     $pay+= $purchase->pay_amount;
                 $total += $purchase->total_price;
             }
-            foreach($purchases as $purchase){
+            foreach($purchases_with_no_paginate as $purchase){
                 $temp = 0 ;
                 if($purchase->purchaseProcesses()->count() > 0){
                     foreach($purchase->purchaseProcesses as $process)
