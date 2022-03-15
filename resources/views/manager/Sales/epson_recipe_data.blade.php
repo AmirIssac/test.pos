@@ -325,7 +325,6 @@
 
       {{QrCode::encoding('UTF-8')->size(150)->generate($qrcode)}}
 
-
       {{--
       @if($invoice->status == 'retrieved')
       {{QrCode::encoding('UTF-8')->size(150)->generate('[فاتورة مسترجعة] , [اسم المورد : '.$repository->name.'] , [الطابع الزمني : '.$invoice->created_at.'] , [الرقم الضريبي : '.$repository->tax_code.'] [الضريبة : '.$invoice->tax.'] , [اجمالي الفاتورة : '.-$invoice->total_price.']')}}

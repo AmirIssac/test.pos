@@ -155,11 +155,13 @@ class RepositoryController extends Controller
         $repository = Repository::find($id);
         //$products = $repository->productsAsc()->paginate(15);
         $products = $repository->products()->orderBy('updated_at','DESC')->paginate(15);
-        return view('manager.Repository.show_products')->with(['products'=>$products,'repository'=>$repository]);
+        $types = Type::all();
+        return view('manager.Repository.show_products')->with(['products'=>$products,'repository'=>$repository,'types'=>$types]);
     }
 
     public function filterProducts(Request $request,$id){
         $repository = Repository::find($id);
+        $types = Type::all();
         $arr = array('isStored'=>$request->isStored);
         $stored = 'unknown';
         $isStored = true;
@@ -169,22 +171,66 @@ class RepositoryController extends Controller
             $stored = 'all';
         if($stored == 'all'){
             $products = $repository->products()->orderBy('updated_at','DESC')->paginate(15);
-            return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository]);
+            return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository,'types'=>$types]);
         }
         else{
             $products = $repository->products()->where('stored',$isStored)->orderBy('updated_at','DESC')->paginate(15);
-            return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository]);
+            return view('manager.Repository.show_products')->with(['products'=>$products->appends($arr),'repository'=>$repository,'types'=>$types]);
         }
+    }
+
+    public function filterProductsByType(Request $request,$id){
+        $repository = Repository::find($id);
+        $types = Type::all();
+        $products = $repository->products()->where('type_id',$request->type_id)->orderBy('updated_at','DESC')->paginate(15);
+        return view('manager.Repository.show_products')->with(['products'=>$products->withQueryString(),'repository'=>$repository,'types'=>$types]);
+    }
+
+    public function filterProductsByPriceRange(Request $request,$id){
+        $repository = Repository::find($id);
+        $types = Type::all();
+        if($request->price_start && $request->price_end){
+            $products = $repository->products()->whereBetween('price',[$request->price_start,$request->price_end])->orderBy('created_at','DESC')->paginate(15)->withQueryString();
+        }
+        elseif($request->price_start){
+            $products = $repository->products()->whereBetween('price',[$request->price_start,99999999999])->orderBy('created_at','DESC')->paginate(15)->withQueryString();
+        }
+        else{
+            $products = $repository->products()->orderBy('created_at','DESC')->paginate(15)->withQueryString();
+        }
+        return view('manager.Repository.show_products')->with(['products'=>$products->withQueryString(),'repository'=>$repository,'types'=>$types]);
+    }
+
+
+    public function filterProductsByOrder(Request $request,$id){
+        $repository = Repository::find($id);
+        $types = Type::all();
+        switch($request->order_with){
+            case 'quantity' :
+                $products = $repository->products()->orderBy('quantity',$request->order_by == 'asc' ? 'ASC' : 'DESC' )->paginate(15)->withQueryString();
+                break ;
+            case 'price' :
+                    $products = $repository->products()->orderBy('price',$request->order_by == 'asc' ? 'ASC' : 'DESC' )->paginate(15)->withQueryString();
+                    break ;
+            case 'created_at' :
+                    $products = $repository->products()->orderBy('created_at',$request->order_by == 'asc' ? 'ASC' : 'DESC' )->paginate(15)->withQueryString();
+                    break ;
+            case 'updated_at' :
+                    $products = $repository->products()->orderBy('updated_at',$request->order_by == 'asc' ? 'ASC' : 'DESC' )->paginate(15)->withQueryString();
+                    break ;
+        }
+        return view('manager.Repository.show_products')->with(['products'=>$products->withQueryString(),'repository'=>$repository,'types'=>$types]);
     }
 
     public function searchProducts(Request $request , $id){
         $repository = Repository::find($id);
+        $types = Type::all();
         $products = $repository->products()->where(function($q) use ($request) {
             $q->where('barcode', 'like' , '%'.$request->search.'%')
               ->orWhere('name_ar', 'like' , '%'.$request->search.'%')
               ->orWhere('name_en', 'like' , '%'.$request->search.'%');
         })->paginate(15)->withQueryString();
-        return view('manager.Repository.show_products')->with(['products'=>$products , 'repository'=>$repository]);
+        return view('manager.Repository.show_products')->with(['products'=>$products , 'repository'=>$repository,'types'=>$types]);
     }
 
     public function importExcelForm($id){

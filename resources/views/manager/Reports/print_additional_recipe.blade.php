@@ -67,6 +67,12 @@
     </style>
     <body>
         <button id="manual-print" onclick="manualPrint()" class="btn btn-warning">طباعة</button>
+        @if($repository->logo)
+        <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
+        @endif
+        <h1>فاتورة ورشة</h1>
+        <h2>{{$repository->name}}</h2>
+        <h3>{{$repository->address}}</h3>
         <h3>{{$invoice->created_at}}</h3>
         <h3>Invoice number : {{$invoice->code}}</h3>
         <div class="bordred">
@@ -74,7 +80,6 @@
             <thead class="head">
               <th style="width: 100px">Barcode</th>
               <th style="width: 250px" class="big-padding">Name</th> 
-              <th style="width: 30px">Price</th>
               <th style="width: 30px">Quantity</th>
               @if(isset($complete_invoice))
               <th style="width: 30px"> to be delivered </th>
@@ -95,9 +100,6 @@
                     @endif
                   </td>
                   <td style="width: 30px">
-                      {{$records[$i]['price']}}
-                  </td>
-                  <td style="width: 30px">
                       {{$records[$i]['quantity']}}
                   </td>
                   @if(isset($complete_invoice))
@@ -112,12 +114,12 @@
                       No
                       @endif
                   </td>
-            </tr>
+              </tr>
             @endfor
           </table>
           </div>
           <br>
-  
+
         @if($repository->isSpecial())
         @if($repository->setting->print_prescription == true)
         @if(isset($recipe) && $recipe) 

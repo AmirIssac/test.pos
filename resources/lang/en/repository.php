@@ -38,5 +38,14 @@ return [
     'buy_from_market' => 'Bought from market',
     'booked_will_be_ignored' => 'booked (will be ignored)',
     'barcode_or_name' => 'Barcode | Name',
+    'price' => 'price' ,
+    'from' => 'from' ,
+    'to' => 'to' ,
+    'progressive' => 'Progressive' ,
+    'descending' => 'descending' ,
+    'according_quantity' => 'according to quantity',
+    'according_price' => 'according to price',
+    'according_created' => 'according to created date',
+    'according_updated' => 'according to updated date',
 ];
 ?>

@@ -24,6 +24,10 @@ i{
 i:hover{
   transform: scale(1.3);
 }
+input[type="number"]{
+  border: 1px solid #001bb7 !important;
+  border-radius: 3px;
+}
 </style>
 @endsection
 @section('body')
@@ -81,12 +85,65 @@ i:hover{
         <i class="material-icons">search</i>
       </button>
     </form>
+
+
+    @if($repository->isSpecial() || $repository->isStorehouse())  {{-- محل خاص --}}
+      <form action="{{route('filter.products.byType',$repository->id)}}" method="GET">
+        @csrf
+        <select class="select" name="type_id">
+              @foreach($types as $type)
+                @if(request()->query('type_id') == $type->id)
+                  <option value="{{$type->id}}" selected>{{$type->name_ar}}</option>
+                @else
+                  <option value="{{$type->id}}">{{$type->name_ar}}</option>
+                @endif
+              @endforeach
+        </select>
+        <button type="submit" class="search-btn">
+          <i class="material-icons">search</i>
+        </button>
+      </form>
+    @endif
+
+  
+    <form action="{{route('filter.products.byOrder',$repository->id)}}" method="GET">
+      @csrf
+      <select class="select" name="order_with">
+            <option value="quantity">{{__('repository.according_quantity')}}</option>
+            <option value="price">{{__('repository.according_price')}}</option>
+            <option value="created_at">{{__('repository.according_created')}}</option>
+            <option value="updated_at">{{__('repository.according_updated')}}</option>
+      </select>
+      {{__('repository.progressive')}}
+      <input type="radio" name="order_by" value="asc">
+      {{__('repository.descending')}}
+      <input type="radio" name="order_by" class="desc" checked>
+      <button type="submit" class="search-btn">
+        <i class="material-icons">search</i>
+      </button>
+    </form>
+
+
+
+    {{-- price range --}}
+    <form style="margin-right: 50px;" action="{{route('filter.products.byPriceRange',$repository->id)}}" method="GET">
+      @csrf
+      السعر
+      <input type="number" name="price_start" placeholder="{{__('repository.from')}}">
+      <input type="number" name="price_end" placeholder=" {{__('repository.to')}}">
+      <button type="submit" class="search-btn">
+        <i class="material-icons">search</i>
+      </button>
+    </form>
+
+
+
     </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table">
-                  <thead class=" text-primary">
+                  <thead class="text-primary">
                     <th>
                       Barcode  
                     </th>

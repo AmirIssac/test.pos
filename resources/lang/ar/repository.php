@@ -38,5 +38,14 @@ return [
     'buy_from_market' => 'مشترى من السوق',
     'booked_will_be_ignored' => 'محجوز (سيتم تجاهله)',
     'barcode_or_name' => 'الباركود | الاسم',
+    'price' => 'السعر' ,
+    'from' => 'من' ,
+    'to' => 'الى' ,
+    'progressive' => 'تصاعدي' ,
+    'descending' => 'تنازلي' ,
+    'according_quantity' => 'تبعا للكمية',
+    'according_price' => 'تبعا للسعر',
+    'according_created' => 'تبعا لتاريخ الانشاء',
+    'according_updated' => 'تبعا لتاريخ التعديل',
 ];
 ?>

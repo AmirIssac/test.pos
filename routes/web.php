@@ -129,6 +129,9 @@ Route::group(['middleware' => ['permission:المخزون']], function () {
         Route::get('/show/products/{repository_id}','Manager\RepositoryController@showProducts')->name('show.products');
         Route::get('/filter/products/{repository_id}','Manager\RepositoryController@filterProducts')->name('filter.products');
         Route::get('/search/products/{repository_id}','Manager\RepositoryController@searchProducts')->name('search.products');
+        Route::get('/filter/products/byType/{repository_id}','Manager\RepositoryController@filterProductsByType')->name('filter.products.byType');
+        Route::get('/filter/products/byPriceRange/{repository_id}','Manager\RepositoryController@filterProductsByPriceRange')->name('filter.products.byPriceRange');
+        Route::get('/filter/products/byOrder/{repository_id}','Manager\RepositoryController@filterProductsByOrder')->name('filter.products.byOrder');
     });
 });
 
