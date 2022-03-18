@@ -39,7 +39,7 @@ input[type="number"]{
       <div class="row">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header card-header-primary">
+            <div style="padding: 20px;" class="card-header card-header-primary">
               @if(request()->query('isStored')=='all')
               <h4 class="card-title">{{__('repository.all_products')}}</h4>
               @elseif(request()->query('isStored')=='no')
@@ -47,7 +47,9 @@ input[type="number"]{
               @elseif(request()->query('isStored')=='yes')
               <h4 class="card-title">{{__('repository.available_in_stock')}}</h4>
               @else
-              <h4 class="card-title">{{__('repository.all_products')}}</h4>
+              <h4 class="card-title">{{__('repository.all_products')}}
+                <a href="{{route('export.products',$repository->id)}}"><img src="{{asset('images/png/microsoft-excel.png')}}" height="35px"></a>
+              </h4>
               @endif
               {{-- filter --}}
     <div style="display:flex">

@@ -52,7 +52,9 @@ i:hover{
           </form>
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title"> {{__('sales.customers')}} </h4>
+              <h4 class="card-title"> {{__('sales.customers')}}
+                <a href="{{route('export.customers',$repository->id)}}"><img src="{{asset('images/png/microsoft-excel.png')}}" height="35px"></a>
+              </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">

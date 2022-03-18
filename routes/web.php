@@ -132,6 +132,7 @@ Route::group(['middleware' => ['permission:المخزون']], function () {
         Route::get('/filter/products/byType/{repository_id}','Manager\RepositoryController@filterProductsByType')->name('filter.products.byType');
         Route::get('/filter/products/byPriceRange/{repository_id}','Manager\RepositoryController@filterProductsByPriceRange')->name('filter.products.byPriceRange');
         Route::get('/filter/products/byOrder/{repository_id}','Manager\RepositoryController@filterProductsByOrder')->name('filter.products.byOrder');
+        Route::get('export/products/{repository_id}', 'Manager\RepositoryController@exportProducts')->name('export.products');
     });
 });
 
@@ -255,6 +256,7 @@ Route::group(['middleware'=>['permission:الكاشير']], function () {
 Route::get('/clients/{repository_id}','Manager\SettingsController@clients')->name('clients')->middleware('check_user')->middleware('is_repository_active');
 Route::get('/client/edit/{client_id}','Manager\SettingsController@editClient')->name('edit.client');
 Route::post('/client/update/{client_id}','Manager\SettingsController@updateClient')->name('update.client');
+Route::get('export/customers/{repository_id}', 'Manager\RepositoryController@exportCustomers')->name('export.customers');
 
 
 Route::post('edit/product','Manager\RepositoryController@editProductForm')->name('edit.product'); // we use form input hidden to use id and not passing it into url

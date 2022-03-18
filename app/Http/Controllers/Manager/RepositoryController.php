@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Action;
+use App\Exports\CustomersExport;
+use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Imports\ProductsImport;
@@ -153,7 +155,6 @@ class RepositoryController extends Controller
 
     public function showProducts($id){
         $repository = Repository::find($id);
-        //$products = $repository->productsAsc()->paginate(15);
         $products = $repository->products()->orderBy('updated_at','DESC')->paginate(15);
         $types = Type::all();
         return view('manager.Repository.show_products')->with(['products'=>$products,'repository'=>$repository,'types'=>$types]);
@@ -376,70 +377,6 @@ class RepositoryController extends Controller
         return view('manager.Repository.status')->with(['repository'=>$repository,'user'=>$user]);
     }
 
-    public function sendSMS(){
-        
-        $username = "karma";		    // اسم المستخدم الخاص بك في الموقع 
-        $password = "abdabd@@!!7953048"; 		// كلمة المرور الخاصة بك 
-        $destinations = "966509016572"; //الارقام المرسل لها  ,, يتم وضع فاصلة بين الارقام المراد الارسال لها 
-        $message = "test";      // محتوى الرسالة 
-        $sender = "OTP-SMS";         // اسم المرسل الخاص بك المفعل  في الموقع 
-        /*
-        $url = "http://www.jawalbsms.ws/api.php/sendsms?user=".$username."&pass=".$password."&to=".$destinations."&message=".$message."&sender=".$sender;
-
-        $ch = curl_init($url); // init the curl with jawalb API url
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);   
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        $data = curl_exec($ch);  //run curl api call, on success curl call, $data will contain the API call response
-        curl_close($ch);
-        return "<br/>//<b>Data Returned from Server</b>:<br/>".$data;  //show response from server
-        */
-        //$API_URL = "http://www.jawalbsms.ws/api.php/sendsms";
-        /*$client = new Client();
-        $headers = ['headers' => []];
-        $additionalParams = [];
-        $data =  $client->get($API_URL,['query' =>
-            [
-              'user' => "karma",
-              'pass' => "abdabd@@!!7953048",
-              'to'   => "966509016572",
-              //'unicode' => 'u',
-              'message' => "test",
-              'sender' => "OTP-SMS"
-            ]
-         ]);*/
-
-
-         /*
-         $response = Http::get('http://www.jawalbsms.ws/api.php/sendsms', [
-              'user' => $username,
-              'pass' => $password,
-              'to'   => $destinations,
-              //'unicode' => 'u',
-              'message' => $message,
-              'sender' => $sender,
-        ]);
-        //return    $response->successful();
-         // return $response->throw();
-         return $response;
-         */
-
-
-            // using curl in laravel
-            $endpoint = "http://www.jawalbsms.ws/api.php/sendsms";
-            $client = new Client();
-            $response = $client->request('GET', $endpoint, ['query' => [
-                'user' => $username,
-                'pass' => $password,
-                'to'   => $destinations,
-                //'unicode' => 'u',
-                'message' => $message,
-                'sender' => $sender,
-            ]]);
-            $statusCode = $response->getStatusCode();
-            $content = $response->getBody();
-            return $content;
-        }
-
         
         public function getYearChart($id,Request $request){
             $repository = Repository::find($id);
@@ -453,29 +390,15 @@ class RepositoryController extends Controller
                 return view('manager.Dashboard.worker_index')->with(['repository'=>$repository,'chart_info'=>$chart_info,'chart_year'=>$chart_year]);
         }
 
-        public function sendSMSForInvoiceReady(Request $request , $id){
-            $invoice = Invoice::findOrFail($id);
-            $customer_phone = $invoice->customer->phone;
-            $username = "karma";		    // اسم المستخدم الخاص بك في الموقع 
-            $password = "abdabd@@!!7953048"; 		// كلمة المرور الخاصة بك 
-            $destinations = $customer_phone; //الارقام المرسل لها  ,, يتم وضع فاصلة بين الارقام المراد الارسال لها 
-            $message = $request->smstext;      // محتوى الرسالة 
-            //$message = "test";
-            $sender = "OTP-SMS";         // اسم المرسل الخاص بك المفعل  في الموقع 
-             // using curl in laravel
-             $endpoint = "http://www.jawalbsms.ws/api.php/sendsms";
-             $client = new Client();
-             $response = $client->request('GET', $endpoint, ['query' => [
-                 'user' => $username,
-                 'pass' => $password,
-                 'to'   => $destinations,
-                 //'unicode' => 'u',
-                 'message' => $message,
-                 'sender' => $sender,
-             ]]);
-             //$statusCode = $response->getStatusCode();
-             //$content = $response->getBody();
-             return back()->with('success','تم ارسال الرسالة بنجاح');
+       
+        public function exportProducts($id){
+            $repository = Repository::find($id);
+            return Excel::download(new ProductsExport($id) , $repository->name.'-stock.xlsx');
+        }
+
+        public function exportCustomers($id){
+            $repository = Repository::find($id);
+            return Excel::download(new CustomersExport($id) , $repository->name.'-customers.xlsx');
         }
        
 }
