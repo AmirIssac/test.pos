@@ -48,7 +48,7 @@ input[type="number"]{
               <h4 class="card-title">{{__('repository.available_in_stock')}}</h4>
               @else
               <h4 class="card-title">{{__('repository.all_products')}}
-                <a href="{{route('export.products',$repository->id)}}"><img src="{{asset('images/png/microsoft-excel.png')}}" height="35px"></a>
+                <a href="{{route('export.products',$repository->id)}}"><img src="{{asset('public/images/png/microsoft-excel.png')}}" height="35px"></a>
               </h4>
               @endif
               {{-- filter --}}
