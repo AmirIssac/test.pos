@@ -81,5 +81,6 @@ return [
     'prescription_source' => 'مصدر الوصفة الطبية',
     'ipd_source' => 'ipd مصدر',
     'customer' => 'الزبون',
+    'in_stock' => 'في المخزون',
 ];
 ?>

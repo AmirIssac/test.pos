@@ -28,6 +28,9 @@ input[type="number"]{
   border: 1px solid #001bb7 !important;
   border-radius: 3px;
 }
+#modaltrigger:hover{
+  cursor: pointer;
+}
 </style>
 @endsection
 @section('body')
@@ -48,7 +51,7 @@ input[type="number"]{
               <h4 class="card-title">{{__('repository.available_in_stock')}}</h4>
               @else
               <h4 class="card-title">{{__('repository.all_products')}}
-                <a href="{{route('export.products',$repository->id)}}"><img src="{{asset('public/images/png/microsoft-excel.png')}}" height="35px"></a>
+              
               </h4>
               @endif
               {{-- filter --}}
@@ -299,6 +302,22 @@ input[type="number"]{
                 </table>
                 {{ $products->links() }}
               </div>
+              <a data-toggle="modal" data-target="#exampleModal" id="modaltrigger"><img src="{{asset('public/images/png/microsoft-excel.png')}}" height="35px"></a>
+                              <!-- Modal for export excel -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">تصدير ملف اكسل</h5>
+                    </div>
+                    <div class="modal-body">
+                      هل أنت متأكد أنك تريد تصدير المخزون كملف اكسل
+                    </div>
+                    <div class="modal-footer">
+                      <a href="{{route('export.products',$repository->id)}}" class="btn btn-primary">{{__('buttons.confirm')}}</a>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </div>

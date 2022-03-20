@@ -286,6 +286,9 @@ input:read-only{
                   <th style="width: 10%">
                     {{__('sales.quantity')}} 
                   </th>
+                  <th style="width: 10%">
+                    {{__('sales.in_stock')}}
+                  </th>
                   <th style="width: 10%" id="del" class="">
                     {{__('sales.delivered')}}   
                   </th>
@@ -338,6 +341,9 @@ input:read-only{
                         @endif
                     </td>
                     <td>
+                      <input type="text" id="ava0" name="availability[]" value=""  class="form-control availability" readonly>
+                    </td>
+                    <td>
                       <input type="checkbox" name="del[]" id="d0"  class="delivered hidden yesNo" value="0" checked>  {{-- need it just in hanging invoices --}}
                       <input type="hidden" id="accept_min0">
                   </td>
@@ -384,6 +390,9 @@ input:read-only{
                         @else
                         <input type="number" id="quantity{{$count}}" min="1" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
                         @endif
+                    </td>
+                    <td>
+                      <input type="text" id="ava{{$count}}" name="availability[]" value=""  class="form-control availability" readonly>
                     </td>
                     <td>
                         <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="delivered hidden yesNo" checked>  {{-- need it just in hanging invoices --}}
@@ -567,6 +576,10 @@ input:read-only{
               $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
+              if(value.stored == true)
+                $('#ava'+gold+'').val(value.quantity);
+              else
+                $('#ava'+gold+'').val('/');
               //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
@@ -2267,6 +2280,10 @@ window.onload=function(){
               $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
               $('#price'+gold+'').val(value.price);
+              if(value.stored == true)
+                $('#ava'+gold+'').val(value.quantity);
+              else
+                $('#ava'+gold+'').val('/');
               //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');

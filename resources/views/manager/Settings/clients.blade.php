@@ -31,6 +31,9 @@ i{
 i:hover{
   transform: scale(1.3);
 }
+#modaltrigger:hover{
+  cursor: pointer;
+}
 </style>
 @endsection
 @section('body')
@@ -53,7 +56,6 @@ i:hover{
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title"> {{__('sales.customers')}}
-                <a href="{{route('export.customers',$repository->id)}}"><img src="{{asset('public/images/png/microsoft-excel.png')}}" height="35px"></a>
               </h4>
             </div>
             <div class="card-body">
@@ -100,6 +102,26 @@ i:hover{
                       @endif
                   </tbody>
                 </table>
+                <a href="{{route('export.customers',$repository->id)}}"></a>
+                <a data-toggle="modal" data-target="#exampleModal" id="modaltrigger"><img src="{{asset('public/images/png/microsoft-excel.png')}}" height="35px"></a>
+                <!-- Modal for export excel -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">تصدير ملف اكسل</h5>
+                  </div>
+                  <div class="modal-body">
+                  هل أنت متأكد أنك تريد تصدير كافة العملاء كملف اكسل
+                  </div>
+                  <div class="modal-footer">
+                  <a href="{{route('export.customers',$repository->id)}}" class="btn btn-primary">{{__('buttons.confirm')}}</a>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+
 
               </div>
               </div>
@@ -109,8 +131,8 @@ i:hover{
         </div>
         {{ $customers->links() }}
 
+        
       </div>
      
-    </div>
 </div>
 @endsection

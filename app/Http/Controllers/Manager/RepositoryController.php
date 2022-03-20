@@ -393,12 +393,12 @@ class RepositoryController extends Controller
        
         public function exportProducts($id){
             $repository = Repository::find($id);
-            return Excel::download(new ProductsExport($id) , $repository->name.'-stock.xlsx');
+            return Excel::download(new ProductsExport($id) , $repository->name.now()->format('y-m-d').'-stock.xlsx');
         }
 
         public function exportCustomers($id){
             $repository = Repository::find($id);
-            return Excel::download(new CustomersExport($id) , $repository->name.'-customers.xlsx');
+            return Excel::download(new CustomersExport($id) , $repository->name.now()->format('y-m-d').'-customers.xlsx');
         }
        
 }

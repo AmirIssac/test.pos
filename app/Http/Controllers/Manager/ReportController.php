@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Customer;
 use App\DailyReport;
 use App\Encoding\Encode;
+use App\Exports\DailyReportExport;
 use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\MonthlyReport;
@@ -12,6 +13,7 @@ use App\Repository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -449,5 +451,11 @@ class ReportController extends Controller
         //$barcode = base64_encode($generator->getBarcode($customer->phone, $generator::TYPE_CODE_128));
 
         return view('manager.Reports.print_additional_recipe')->with(['repository'=>$repository,'invoice'=>$invoice,'records'=>$records,'recipe'=>$re,'customer'=>$customer]);
+    }
+
+    public function exportDailyReport($id){
+        $report = DailyReport::find($id);
+        $repository = $report->repository;
+        return Excel::download(new DailyReportExport($id) , $repository->name.'-daily-report.xlsx');
     }
 }

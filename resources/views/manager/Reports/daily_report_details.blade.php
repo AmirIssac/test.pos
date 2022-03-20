@@ -393,6 +393,9 @@ input[type=number] {
                     </tr>
                   </tbody>
                 </table>
+                {{--
+                <a href="{{route('export.daily.report',$report->id)}}"><img src="{{asset('images/png/microsoft-excel.png')}}" height="35px"></a>
+                --}}
               </div>
               </div>
               </div>

@@ -81,5 +81,6 @@ return [
     'prescription_source' => 'prescription source',
     'ipd_source' => 'ipd source',
     'customer' => 'customer',
+    'in_stock' => 'in stock',
 ];
 ?>

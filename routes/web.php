@@ -203,9 +203,10 @@ Route::get('/print/monthly/report/details/{report_id}','Manager\ReportController
 Route::get('/print/purchase/current/monthly/report/details/{repository_id}','Manager\ReportController@purchaseReportDetailsCurrentMonth')->name('print.purchase.current.monthly.report.details');
 Route::get('/print/purchase/monthly/report/details/{report_id}','Manager\ReportController@monthlyPurchaseReportDetails')->name('print.purchase.monthly.report.details');
 
-
 // print additional recipe
 Route::get('/print/additional/recipe/{invoice_id}','Manager\ReportController@printAdditionalRecipe')->name('print.additional.recipe');
+
+Route::get('export/daily-report/{report_id}', 'Manager\ReportController@exportDailyReport')->name('export.daily.report');
 });
 
 
