@@ -90,6 +90,9 @@
                             <th>
                               الكمية 
                             </th>
+                            <th>
+                              المجموع 
+                            </th>
                             <th id="del" class="">
                               تم تسليمها  
                             </th>
@@ -116,6 +119,9 @@
                                 <td>
                                   <input type="number" name="quantity[]" value="{{$records[$i]['quantity']}}" id="quantity{{$i}}" class="form-control quantity" readonly>
                               </td>
+                              <td>
+                                <input type="number" name="sum-row[]" value="{{$records[$i]['quantity'] * $records[$i]['price']}}" id="sum-row{{$i}}" class="form-control" readonly>
+                            </td>
                               <td>
                                   @if($records[$i]['delivered'] != 0)
                                   <input type="text" name="del[]" value="نعم" class="form-control delivered" readonly>

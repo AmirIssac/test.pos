@@ -1406,6 +1406,9 @@ input[id^=recipe_name]::-ms-input-placeholder{
                     {{__('sales.delivered')}}   
                   </th>
                   <th style="width: 10%">
+                    {{__('sales.total_price')}}
+                  </th>
+                  <th style="width: 10%">
                   </th>
                 </thead>
 
@@ -1461,6 +1464,9 @@ input[id^=recipe_name]::-ms-input-placeholder{
                       <input type="hidden" id="accept_min0">
                   </td>
                   <td>
+                    <input type="number" id="sum-row0" name="sum-row[]" value=""  class="form-control" readonly>
+                  </td>
+                  <td>
                     <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
                 </td>
                 </tr>
@@ -1508,6 +1514,9 @@ input[id^=recipe_name]::-ms-input-placeholder{
                     </td>
                     <td>
                         <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="delivered hidden yesNo" checked>  {{-- need it just in hanging invoices --}}
+                    </td>
+                    <td>
+                      <input type="number" id="sum-row{{$count}}" name="sum-row[]" value=""  class="form-control" readonly>
                     </td>
                     <td>
                       <a id="delete{{$count}}" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
@@ -1703,6 +1712,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 $('#ava'+gold+'').val(value.quantity);
               else
                 $('#ava'+gold+'').val('/');
+              $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
               //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
@@ -2140,6 +2150,7 @@ $('#sell-form').keypress(function(e) {
                   if(!$('#price'+i+'').val().length == 0){
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
+                $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
                 } // end for loop
                 $('#total_price').val(s);
                 for(var i=0;i<=25;i++){   // number of records
@@ -3491,6 +3502,7 @@ window.onload=function(){
                 $('#ava'+gold+'').val(value.quantity);
               else
                 $('#ava'+gold+'').val('/');
+              $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
               //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');

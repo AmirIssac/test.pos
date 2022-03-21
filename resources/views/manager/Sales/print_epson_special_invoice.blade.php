@@ -97,6 +97,7 @@
             <th style="width: 250px" class="big-padding">الاسم</th> 
             <th style="width: 30px">السعر</th>
             <th style="width: 30px">الكمية</th>
+            <th style="width: 30px">المجموع</th>
             @if(isset($complete_invoice))
             <th style="width: 30px"> الواجب تسليمها </th>
             @endif
@@ -117,6 +118,9 @@
                 <td style="width: 30px">
                     {{$records[$i]['quantity']}}
                 </td>
+                <td style="width: 30px">
+                  {{$records[$i]['quantity'] * $records[$i]['price']}}
+              </td>
                 @if(isset($complete_invoice))
                 <td style="width: 30px">
                     {{$records[$i]['must_del']}}

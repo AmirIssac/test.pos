@@ -124,6 +124,9 @@
                             <th>
                               الكمية 
                             </th>
+                            <th>
+                              المجموع 
+                            </th>
                             @if(isset($complete_invoice))
                             <th>
                               الواجب تسليمها 
@@ -154,6 +157,9 @@
                                 </td>
                                 <td>
                                   <input type="number" name="quantity[]" value="{{$records[$i]['quantity']}}" class="form-control quantity" readonly>
+                              </td>
+                              <td>
+                                <input type="number" name="sum-row[]" value="{{$records[$i]['quantity'] * $records[$i]['price']}}" class="form-control" readonly>
                               </td>
                               @if(isset($complete_invoice))
                               <td>

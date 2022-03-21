@@ -103,6 +103,7 @@
             <th style="width: 250px" class="big-padding">الاسم</th> 
             <th style="width: 30px">السعر</th>
             <th style="width: 30px">الكمية</th>
+            <th style="width: 30px">المجموع</th>
             <th style="width: 30px">تم تسليمها </th> 
           </thead>
           <?php $records = unserialize($invoice->details) ?>
@@ -126,6 +127,11 @@
                 <td style="width: 30px">
                   <p id="quantity{{$i}}">
                     {{$records[$i]['quantity']}}
+                  </p>
+                </td>
+                <td style="width: 30px">
+                  <p id="sum-row{{$i}}">
+                    {{$records[$i]['quantity'] * $records[$i]['price']}}
                   </p>
                 </td>
               <td style="width: 30px">

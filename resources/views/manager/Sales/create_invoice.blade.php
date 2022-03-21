@@ -293,6 +293,9 @@ input:read-only{
                     {{__('sales.delivered')}}   
                   </th>
                   <th style="width: 10%">
+                    {{__('sales.total_price')}}
+                  </th>
+                  <th style="width: 10%">
                   </th>
                 </thead>
 
@@ -348,6 +351,9 @@ input:read-only{
                       <input type="hidden" id="accept_min0">
                   </td>
                   <td>
+                    <input type="number" id="sum-row0" name="sum-row[]" value=""  class="form-control" readonly>
+                  </td>
+                  <td>
                     <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
                 </td>
                 </tr>
@@ -396,6 +402,9 @@ input:read-only{
                     </td>
                     <td>
                         <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="delivered hidden yesNo" checked>  {{-- need it just in hanging invoices --}}
+                    </td>
+                    <td>
+                      <input type="number" id="sum-row{{$count}}" name="sum-row[]" value=""  class="form-control" readonly>
                     </td>
                     <td>
                       <a id="delete{{$count}}" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
@@ -580,6 +589,7 @@ input:read-only{
                 $('#ava'+gold+'').val(value.quantity);
               else
                 $('#ava'+gold+'').val('/');
+              $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
               //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
@@ -965,6 +975,7 @@ $('#sell-form').keypress(function(e) {
                     console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
+                  $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
                 } // end for loop
                 $('#total_price_acc').val(s1);  // hidden
                 for(var i=0;i<=25;i++){   // number of records
@@ -2284,6 +2295,7 @@ window.onload=function(){
                 $('#ava'+gold+'').val(value.quantity);
               else
                 $('#ava'+gold+'').val('/');
+              $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
               //$('#price'+gold+'').prop('max',value.price);  // for manuall discount
               //$('#price'+gold+'').addClass('ajaxSuccess');
               $('#d'+gold+'').removeClass('hidden').addClass('visible');
