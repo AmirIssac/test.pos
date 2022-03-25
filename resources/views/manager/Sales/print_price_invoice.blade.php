@@ -134,9 +134,7 @@
             @endif
             
             <p>
-            <p class="p-inline">المبلغ الإجمالي
-                {{$total_price}}
-            </p>
+           
             </p>
             <p>
             <p class="p-inline">المبلغ الإجمالي
