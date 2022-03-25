@@ -10,6 +10,7 @@ use App\Export;
 use App\ExportRecord;
 use App\Http\Controllers\Controller;
 use App\Invoice;
+use App\PriceInvoice;
 use App\InvoiceProcess;
 use App\MonthlyReport;
 use App\Product;
@@ -3442,6 +3443,70 @@ class SellController extends Controller
         ]);
 
         return back()->with('success','تم استرجاع البضاعة للمخزون');
+    }
+
+
+    
+
+    public function createPriceInvoice($id){
+        $repository = Repository::find($id);
+        return view('manager.Sales.priceInvoiceForm',['repository'=>$repository]);
+    }
+
+    public function storePriceInvoice(Request $request,$id){
+        $repository = Repository::find($id);
+        $count = count($request->barcode);
+        // store invoice in DB
+        // store details as array of arrays
+        $details = array(array());    // each array store details for one record (one product)
+        for($i=0;$i<$count;$i++)
+              if($request->barcode[$i] && $request->name[$i]){
+                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i]);
+                $details[]=$record;
+              }
+        $details = serialize($details);
+        $discounting = $request->discountVal + $request->discount_by_value;
+        // create code
+        do{
+            $characters = '0123456789';
+            $charactersLength = strlen($characters);
+            $code = '';
+            for ($i = 0; $i < 8; $i++)
+            $code .= $characters[rand(0, $charactersLength - 1)];
+            // check if code exist before
+            $inv = PriceInvoice::whereHas("repository", function($q) use ($repository){ $q->where("repositories.id",$repository->id ); })->where('code',$code)->first();
+        }
+        while($inv);   // if the code exists before for this repo we generate new code
+        $invoice = PriceInvoice::create(
+            [
+                'uuid' => Uuid::generate(4),
+                'repository_id' => $repository->id,
+                'user_id' => Auth::user()->id,
+                'code' => $code,
+                'details' => $details,
+                'total_price' => $request->total_price,
+                'discount' => $discounting,
+                'tax' => $request->taxprint,
+                'tax_code' => $repository->tax_code,
+                'phone' => $request->customer_phone,
+                'note' => $request->note,
+            ]
+            );
+            // prepare data to print
+            $records = array(array());
+               for($i=0;$i<count($request->barcode);$i++){   
+                if($request->barcode[$i] && $request->price[$i]){
+                $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i]);
+                }
+              }
+              $employee = User::find(Auth::user()->id);
+            return view('manager.Sales.print_price_invoice')->with([
+              'records'=>$records,'num'=>count($records),'sum'=>$request->sum,'tax'=>$request->taxprint,'total_price'=>$request->total_price,
+              'repo_id'=>$repository->id,
+              'discount' => $discounting,'phone' => $request->customer_phone,
+              'date'=>$invoice->created_at,'repository' => $repository,
+              'employee'=>$employee,'note'=>$request->note,'invoice'=>$invoice,
+            ]);   
     }
 
    

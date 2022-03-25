@@ -57,5 +57,6 @@ return [
     'thisday_gained_money_sales' => 'الاموال المحصلة لمبيعات هذا اليوم',
     'money_in_box' => 'المبلغ المتوفر في الصندوق',
     'print_workshop_invoice' => 'طباعة فاتورة الورشة',
+    'price_invoices' => 'فواتير اسعار',
 ];
 ?>

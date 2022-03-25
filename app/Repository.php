@@ -30,6 +30,9 @@ class Repository extends Model
     public function invoices(){
         return $this->hasMany(Invoice::class);
     }
+    public function priceInvoices(){
+        return $this->hasMany(PriceInvoice::class);
+    }
     public function invoiceProcesses(){
         return $this->hasMany(InvoiceProcess::class);
     }

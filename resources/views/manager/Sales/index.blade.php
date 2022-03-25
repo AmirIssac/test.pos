@@ -163,7 +163,6 @@
              </div>
              @endif
              @endcan
-             
 
               @can('عرض العملاء')
 
@@ -178,6 +177,17 @@
              </div>
             @endcan
             @endif
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('create.price.invoice',$repository->id)}}">
+              <div class="box blue">
+                <span class="badge badge-danger">NEW
+                <i class="material-icons">add_circle_outline</i></span>
+                   <h4>فاتورة اسعار</h4>
+                   <h6>{{__('sales.create')}}</h6>
+              </div>
+            </a>
+             </div>
 
 
             

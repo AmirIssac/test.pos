@@ -69,6 +69,18 @@
               </div>
             </a>
              </div>
+
+             <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="{{route('show.price.invoices',$repository->id)}}">
+              <div class="box blue">
+                <span class="badge badge-danger">NEW
+                <i class="material-icons">receipt</i>
+                </span>
+                   <h4>{{__('reports.price_invoices')}}</h4>
+                   <h6>{{__('reports.view')}}</h6>
+              </div>
+            </a>
+             </div>
              @endcan
              @can('عرض التقارير اليومية')
 

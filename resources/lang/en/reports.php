@@ -57,5 +57,6 @@ return [
     'thisday_gained_money_sales' => 'Gained money for this day sales',
     'money_in_box' => 'Money in box',
     'print_workshop_invoice' => 'print workshop invoice',
+    'price_invoices' => 'Price invoices',
 ];
 ?>

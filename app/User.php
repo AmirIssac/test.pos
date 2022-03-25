@@ -47,6 +47,9 @@ class User extends Authenticatable
     public function invoices(){
         return $this->hasMany(Invoice::class);
     }
+    public function priceInvoices(){
+        return $this->hasMany(PriceInvoice::class);
+    }
     public function dailyReports(){
         return $this->hasMany(DailyReport::class);
     }

@@ -93,6 +93,8 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     Route::group(['middleware' => ['check_user','is_repository_active']], function () {
         Route::get('/create/invoice/form/{repository_id}','Manager\SellController@createInvoiceForm')->name('create.invoice');
         Route::get('/create/special/invoice/form/{repository_id}','Manager\SellController@createSpecialInvoiceForm')->name('create.special.invoice'); // 2
+        Route::get('/create/price/invoice/{repository_id}','Manager\SellController@createPriceInvoice')->name('create.price.invoice');
+        Route::post('/store/price/invoice/{repository_id}','Manager\SellController@storePriceInvoice')->name('store.price.invoice');
         Route::post('/sell/{repository_id}','Manager\SellController@sell')->name('make.sell')->middleware('lock_process');
         Route::get('/show/pending/invoices/{repository_id}','Manager\SellController@showPending')->name('show.pending');
         Route::get('/search/pending/{repository_id}','Manager\ReportController@searchPending')->name('search.pending');
@@ -172,6 +174,7 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/reports/{repository_id}','Manager\ReportController@index')->name('reports.index')->middleware('check_user')->middleware('is_repository_active');
     Route::group(['middleware' => ['check_user','is_repository_active']], function () {
         Route::get('/show/invoices/{repository_id}','Manager\ReportController@showInvoices')->name('show.invoices');
+        Route::get('/show/price/invoices/{repository_id}','Manager\ReportController@showPriceInvoices')->name('show.price.invoices');
         Route::get('/show/today/invoices/{repository_id}','Manager\ReportController@showTodayInvoices')->name('show.today.invoices');
         Route::get('/show/monthly/invoices/{repository_id}','Manager\ReportController@showMonthInvoices')->name('show.monthly.invoices');
         Route::get('/search/invoices/{repository_id}','Manager\ReportController@searchInvoicesByDate')->name('search.invoices');
@@ -187,6 +190,7 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/print/purchase/current/daily/report/details/{repository_id}','Manager\ReportController@reportPurchaseDetailsCurrentDay')->name('print.purchase.current.daily.report.details');
     Route::get('print/purchase/daily/report/details/{report_id}','Manager\ReportController@dailyPurchaseReportDetails')->name('print.purchase.daily.report.details');
     Route::get('/invoice/details/{invoice_uuid}','Manager\ReportController@invoiceDetails')->name('invoice.details');
+    Route::get('/price/invoice/details/{invoice_uuid}','Manager\ReportController@priceInvoiceDetails')->name('price.invoice.details');
     // id for activity_log
     Route::post('/invoice/details/by/log','Manager\ReportController@invoiceDetailsByLog')->name('invoice.details.by.log');
     Route::get('/print/invoice/{invoice_uuid}','Manager\ReportController@printInvoice')->name('print.invoice');

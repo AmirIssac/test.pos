@@ -9,6 +9,7 @@ use App\Exports\DailyReportExport;
 use App\Http\Controllers\Controller;
 use App\Invoice;
 use App\MonthlyReport;
+use App\PriceInvoice;
 use App\Repository;
 use App\User;
 use Illuminate\Http\Request;
@@ -457,5 +458,17 @@ class ReportController extends Controller
         $report = DailyReport::find($id);
         $repository = $report->repository;
         return Excel::download(new DailyReportExport($id) , $repository->name.'-daily-report.xlsx');
+    }
+
+    public function showPriceInvoices($id){
+        $repository = Repository::find($id);
+        $invoices = $repository->priceInvoices()->orderBy('created_at','DESC')->paginate(15);
+        return view('manager.Reports.price_invoices',['repository'=>$repository,'invoices'=>$invoices]);
+    }
+
+    public function priceInvoiceDetails($id){
+        $invoice = PriceInvoice::where('uuid',$id)->first();
+        $repository = $invoice->repository;
+        return view('manager.Reports.price_invoice_details')->with(['repository'=>$repository,'invoice'=>$invoice]);
     }
 }
