@@ -217,12 +217,12 @@
 
           // prepare onafterprint event for all explorers
           var completeInvoiceAfterPrint = function() {
-              window.location.href = "/show/pending/invoices/"+repo_id;
+              window.location.href = "/sales/"+repo_id;
           };
           var afterPrint = function() {
             if($('#old-invoice').val()=='false'){
                   if(repo_type == 'special' && print_additional_recipe == 'yes'){
-                  window.location.href = "/print/additional/recipe/"+invoice_id;
+                  window.location.href = "/sales/"+repo_id;
                   }
                   if(repo_type == 'special' && print_additional_recipe != 'yes'){
                     window.location.href = "/sales/"+repo_id;
