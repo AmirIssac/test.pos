@@ -76,7 +76,7 @@
                 <span class="badge badge-danger">NEW
                 <i class="material-icons">receipt</i>
                 </span>
-                   <h4>{{__('reports.price_invoices')}}</h4>
+                   <h4>{{__('sales.view_price_invoice')}}</h4>
                    <h6>{{__('reports.view')}}</h6>
               </div>
             </a>

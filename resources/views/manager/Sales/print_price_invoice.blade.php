@@ -85,6 +85,7 @@
       @if($repository->logo)
       <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
       @endif
+    <h2>فاتورة عرض سعر</h2>
     <h2>{{$repository->name}}</h2>
     <h3>{{$repository->address}}</h3>
     <h4>رقم الفاتورة {{$invoice->code}}</h4>

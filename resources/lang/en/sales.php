@@ -82,5 +82,8 @@ return [
     'ipd_source' => 'ipd source',
     'customer' => 'customer',
     'in_stock' => 'in stock',
+    'customer_tax_code' => 'customer tax code',
+    'customer_tax_address' => 'customer_tax_address',
+    'view_price_invoice' => 'view price invoice',
 ];
 ?>

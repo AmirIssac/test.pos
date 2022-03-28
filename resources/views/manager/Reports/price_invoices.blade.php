@@ -92,7 +92,7 @@ i:hover{
               <div class="card-header card-header-primary">
                 
               <h4 class="card-title"> </h4>
-              <h4> {{__('reports.price_invoices')}} <span class="badge badge-success"></span></h4>
+              <h4> {{__('sales.view_price_invoice')}} <span class="badge badge-success"></span></h4>
               {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
               </i>--}}

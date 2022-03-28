@@ -83,5 +83,6 @@
         'month' => 'month',
         'customer_number_or_customer_name' => 'Customer Name | Customer Phone',
         'print_additional_invoice' => 'Print additional invoice for workshop',
+        'register_customer_data' => 'register customer data',
     ];
     ?>

@@ -82,5 +82,8 @@ return [
     'ipd_source' => 'ipd مصدر',
     'customer' => 'الزبون',
     'in_stock' => 'في المخزون',
+    'customer_tax_code' => 'الرقم الضريبي للعميل',
+    'customer_tax_address' => 'العنوان الضريبي للعميل',
+    'view_price_invoice' => 'فاتورة عرض سعر',
 ];
 ?>

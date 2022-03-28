@@ -253,22 +253,95 @@ input:read-only{
           <strong>{{ session('fail') }}</strong>
   </div>
   @endif
-  <form id="sell-form" action="{{route('make.sell',$repository->id)}}" method="POST">
-    @csrf
+  
   <div  class="container-fluid">
     <div class="row">
       <div class="col-md-12">
         <div class="card" id="data-invoice">
-          <div class="card-header">
-            @if(isset($date) && $date == 'custom')
-            <h4>{{__('sales.plz_input_date_invoice')}}</h4>
-            <input type="datetime-local" name="date" class="form-control">
-            @else
-            <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
-            @endif
+          @if($setting->customer_data)
+          <form method="GET" action="{{route('create.invoice',$repository->id)}}">
+            @csrf
+                    @if(isset($new))
+                    @if($new)
+                    <span class="badge badge-info">{{__('sales.new_customer')}}</span>
+                    @else
+                    <span class="badge badge-success">{{__('sales.exist_customer')}}</span>
+                    @endif
+                    @else
+                    {{__('sales.search')}}
+                    @endif
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead class="text-primary">
+                          <th>
+                            {{__('sales.phone')}}  
+                          </th>
+                          @if(!request()->query('phone'))
+                          <th class="hidden">
+                            {{__('sales.name')}}  
+                          </th>
+                          @else
+                          <th>
+                            {{__('sales.name')}}  
+                          </th>
+                          @endif
+                          <th>
+                            {{__('sales.search/add')}}  
+                          </th>
+                        </thead>
+                        <tbody>
+                      <tr>
+                        <td>
+                          <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="{{__('sales.type_here_input_new_cust')}}" required autofocus>
+                        </td>
+                        @if(!request()->query('phone'))
+                        <td>
+                          <input type="text" name="name" id="customerName" value="{{isset($customer_name)?$customer_name:''}}" class="form-control displaynone">
+                          <div>
+                        @else
+                        <td>
+                          <input type="text" name="name" id="customerName" value="{{isset($customer_name)?$customer_name:''}}" class="form-control">
+                          <div>
+                        @endif
+                          @if(isset($name_generated))
+                            @if($name_generated)
+                            <span class="badge badge-warning">{{__('sales.generated_name')}}</span>
+                            @endif
+                            @endif
+                          </div>
+                        </td>
+                        <td>
+                          <button type="submit" class="btn btn-primary"> {{__('sales.search/add')}} </button>
+                        </td>
+                      </tr>
+                      
+                </tbody>
+              </table>
+               </div>
+          </form>
+          
+          @else
+              <div class="card-header">
+                @if(isset($date) && $date == 'custom')
+                <h4>{{__('sales.plz_input_date_invoice')}}</h4>
+                <input type="datetime-local" name="date" class="form-control">
+                @else
+                <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
+                @endif
+                <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
+                <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
+              </div>
+          @endif
+          <form id="sell-form" action="{{route('make.sell',$repository->id)}}" method="POST">
+            @csrf
             <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
-            <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
-          </div>
+                <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
+                @if(request()->query('phone'))
+                <label>{{__('sales.customer_tax_code')}}</label>
+                          <input type="text" name="customer_tax_code" value="{{isset($customer_tax_code) ? $customer_tax_code : ''}}" style="border-radius: 3px; padding:5px; marging:0 5px;">
+                <label>{{__('sales.customer_tax_address')}}</label>
+                          <input type="text" name="customer_tax_address" value="{{isset($customer_tax_address) ? $customer_tax_address : ''}}" style="border-radius: 3px; padding:5px; marging:0 5px;">
+                @endif
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-c">
@@ -414,7 +487,6 @@ input:read-only{
             @endfor
          </tbody>
        </table>
-       
        <div id="cash-info">
          <div style="display: flex;">
         <div>
@@ -512,8 +584,10 @@ input:read-only{
           <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="stcVal" id="stcVal" value="" placeholder="{{__('settings.input_stc_here')}}" class="hidden">
           </div>
           </div>
+          @if(!$setting->customer_data)
           <h4>جوال العميل</h4>
           <input type="text" name="customer_phone" id="phone">
+          @endif
           <h4>{{__('sales.note')}}</h4>
           <input type="text" name="note" placeholder="{{__('sales.type_note')}}" class="form-control">
           @if(isset($date) && $date == 'custom')
@@ -523,12 +597,17 @@ input:read-only{
           <div>
             <div style="margin-top: 10px;" class="col-12">
               <div class="form-group text-end">
-                  <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
+                @if($setting->customer_data)
+                      <button id="submit" type="submit" name="action" value="sell-with-customer-data" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
+                @else
+                      <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
+                @endif
                   <a href="{{route('create.invoice',$repository->id)}}" style="color: white;" class="btn btn-red">{{__('buttons.cancel')}}</a>
               </div>
           </div>
           </div>
           </div>
+        </form>
        </div>
    </div>
 </div>
@@ -536,7 +615,6 @@ input:read-only{
 </div>
 </div>
 </div>
-</form>
 <input type="hidden" id="error-audio" value="{{asset('public/audio/error.wav')}}">
 
 @endsection

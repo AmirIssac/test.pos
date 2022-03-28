@@ -133,10 +133,18 @@ class SettingsController extends Controller
 
     public function generalSettings(Request $request , $id){
         $repository = Repository::find($id);
+        $setting = $repository->setting;
         $repository->update([
             'name' => $request->repo_name,
             'name_en' =>$request->repo_name_en,
             'address' => $request->address,
+        ]);
+        if($request->customer_data)
+            $customer_data = true;
+        else
+            $customer_data = false;
+        $setting->update([
+            'customer_data' => $customer_data ,
         ]);
         return back()->with('success',__('alerts.general_settings_chaanged_success'));
     }

@@ -71,6 +71,14 @@ i:hover{
                     <th>
                       {{__('sales.points')}}  
                     </th>
+                    @if($repository->isBasic())
+                    <th>
+                      {{__('sales.customer_tax_code')}}
+                    </th>
+                    <th>
+                      {{__('sales.customer_tax_address')}}
+                    </th>
+                    @endif
                     <th>
                       {{__('sales.edit')}}  
                     </th>
@@ -88,6 +96,14 @@ i:hover{
                           <td>
                             {{$customer->points}}
                           </td>
+                          @if($repository->isBasic())
+                          <td>
+                            {{isset($customer->tax_code) ? $customer->tax_code : '/'}}
+                          </td>
+                          <td>
+                            {{isset($customer->tax_address) ? $customer->tax_address : '/'}}
+                          </td>
+                          @endif
                           <td>
                             @can('تعديل عميل')
                             <a href="{{route('edit.client',$customer->id)}}" class="btn btn-info"> {{__('buttons.edit')}} </a>

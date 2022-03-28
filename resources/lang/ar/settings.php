@@ -83,5 +83,6 @@
         'month' => 'شهر',
         'customer_number_or_customer_name' => 'اسم الزبون | رقم الجوال',
         'print_additional_invoice' => 'طباعة فاتورة اضافية للورشة',
+        'register_customer_data' => 'تسجيل بيانات العميل',
     ];
     ?>

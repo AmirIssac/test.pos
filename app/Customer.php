@@ -8,7 +8,7 @@ class Customer extends Model
 {
     //
     protected $fillable = [
-        'name', 'phone','points'
+        'name', 'phone','points','tax_code','tax_address',
     ];
 
     public function repositories(){
