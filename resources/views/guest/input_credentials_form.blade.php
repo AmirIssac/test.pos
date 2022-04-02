@@ -6,16 +6,16 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
   function gtag_report_conversion(url) {
     var callback = function () {
       if (typeof(url) != 'undefined') {
-        //window.location = url;
+        window.location = url;
       }
     };
     gtag('event', 'conversion', {
-        'send_to': 'AW-10845715257/aFDPCLT35pQDELn20bMo',
+        'send_to': 'AW-10867249101/KdvWCNrBpqoDEM2f9L0o',
         'event_callback': callback
     });
     return false;
   }
-</script>
+  </script>
 <style>
 .hidden{
   visibility: hidden;

@@ -3536,7 +3536,7 @@ class SellController extends Controller
                         ]
                         );
                         $employee = $invoice->user;
-                        // add money to repository safe
+                        // add money to repository safe 
                         $repository->update(
                             [
                                 'cash_balance' => $repository->cash_balance + $request->cashVal,
