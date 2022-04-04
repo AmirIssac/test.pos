@@ -6,7 +6,7 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
   function gtag_report_conversion(url) {
     var callback = function () {
       if (typeof(url) != 'undefined') {
-        window.location = url;
+        //window.location = url;
       }
     };
     gtag('event', 'conversion', {
@@ -118,9 +118,8 @@ label{
                               <input type="password" name="ownerpassword" class="form-control" placeholder="كلمة المرور" required>
                               <label>رقم الجوال</label>
                               <input type="text" name="ownerphone" class="form-control" placeholder="رقم الجوال" required>
-                              <button style="margin-top:10px;" onclick="gtag_report_conversion('/waitFor/verify');" class="btn btn-primary"> التالي </button>
+                              <button style="margin-top:10px;" onclick="gtag_report_conversion('/');" class="btn btn-primary"> التالي </button>
                             </div>
-
                             </div>
                           </div>
                  </form>

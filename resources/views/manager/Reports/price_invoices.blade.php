@@ -137,7 +137,7 @@ i:hover{
                             visibility
                           </i> </a>
                           .
-                          <a style="color: #060706" href="#"> <i id="{{$i}}" class="material-icons eye">
+                          <a style="color: #0b9c0b" href="{{route('print.price.invoice',$invoice->uuid)}}"> <i id="{{$i}}" class="material-icons eye">
                             print
                           </i> </a>
                       </td>

@@ -191,6 +191,7 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('print/purchase/daily/report/details/{report_id}','Manager\ReportController@dailyPurchaseReportDetails')->name('print.purchase.daily.report.details');
     Route::get('/invoice/details/{invoice_uuid}','Manager\ReportController@invoiceDetails')->name('invoice.details');
     Route::get('/price/invoice/details/{invoice_uuid}','Manager\ReportController@priceInvoiceDetails')->name('price.invoice.details');
+    Route::get('/print/price/invoice/{invoice_uuid}','Manager\ReportController@printPriceInvoice')->name('print.price.invoice');
     // id for activity_log
     Route::post('/invoice/details/by/log','Manager\ReportController@invoiceDetailsByLog')->name('invoice.details.by.log');
     Route::get('/print/invoice/{invoice_uuid}','Manager\ReportController@printInvoice')->name('print.invoice');

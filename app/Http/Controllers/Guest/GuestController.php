@@ -40,25 +40,30 @@ class GuestController extends Controller
             'is_email_verified' => true ,  // auto verified
         ]);
         //$user->assignRole('مالك-مخزن');
+
+        /*
         $token = Str::random(64);
   
         UserVerify::create([
               'user_id' => $user->id, 
               'token' => $token
             ]);
+            */
         /*
         Mail::send('Mail.emailVerificationEmail', ['token' => $token], function($message) use($request){
               $message->to($request->owneremail);
               $message->subject('Email Verification Mail');
           });
           */
+          /*
           Mail::to($request->owneremail)->send(new VerifyMail($token));
-
+          
           Session::put('register_email',$request->owneremail);
           Session::put('owner_name',$request->ownerName);
+          */
 
-          return redirect()->route('wait.for.verify')->withSuccess('تم ادخال البيانات بنجاح');
-        //return redirect("/enter/credentials")->withSuccess('Great! You have Successfully loggedin');
+          //return redirect()->route('wait.for.verify')->withSuccess('تم ادخال البيانات بنجاح');
+          return redirect('/')->withSuccess('تم تسجيل حسابك بنجاح قم بالدخول الآن');
     }
 
     public function waitForVerify(){

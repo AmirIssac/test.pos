@@ -2842,7 +2842,11 @@ class SellController extends Controller
             'action_id' => $action->id,
             'note' => serialize($info),
         ]);
-
+        // transfer money to balance
+        if($request->transfer_to_box == 'yes')
+            $repository->update([
+                'balance' => $repository->balance + $request->cashVal ,
+            ]);
         $saving_old_invoice = true;
         if($repository->setting->standard_printer) 
       return view('manager.Sales.print_special_invoice')->with([

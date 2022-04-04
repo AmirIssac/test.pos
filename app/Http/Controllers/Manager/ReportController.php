@@ -471,4 +471,10 @@ class ReportController extends Controller
         $repository = $invoice->repository;
         return view('manager.Reports.price_invoice_details')->with(['repository'=>$repository,'invoice'=>$invoice]);
     }
+
+    public function printPriceInvoice($id){
+        $invoice = PriceInvoice::where('uuid',$id)->first();
+        $repository = $invoice->repository;
+        return view('manager.Reports.print_price_invoice')->with(['repository'=>$repository,'invoice'=>$invoice]);
+    }
 }

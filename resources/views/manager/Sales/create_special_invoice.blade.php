@@ -1546,7 +1546,6 @@ input[id^=recipe_name]::-ms-input-placeholder{
          </div>
        </div>
 
-
        <div>
         <h5>{{__('sales.discount')}}</h5>
        <div style="display: flex; flex-direction: column; margin-top: 3px;">
@@ -1630,15 +1629,17 @@ input[id^=recipe_name]::-ms-input-placeholder{
           <h4>{{__('sales.note')}}</h4>
           <input type="text" name="note" placeholder="{{__('sales.type_note')}}" class="form-control">
           @if(isset($date) && $date == 'custom')
+          <div style="margin:25px">
+            <h4> {{__('sales.do_you_want_transfer_money_to_cashier')}} 
+            <input type="checkbox" name="transfer_to_box" value="yes">
+            </h4>
+          </div>
           <div style="display:none">
           <h4>{{__('sales.inv_not_belong_to_todays_invoices')}}</h4>
           <input type="checkbox" name="old_invoice" value="yes" checked>
           </div>
           @endif
           <div>
-
-
-         
             <div style="margin-top: 10px;" class="col-12">
               <div class="form-group text-end">
                   <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
