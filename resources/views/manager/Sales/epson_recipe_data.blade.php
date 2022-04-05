@@ -88,11 +88,12 @@
      @if($repository->logo)
     <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
     @endif
-    <h2>{{$repository->name}}</h2>
-    <h3>{{$repository->address}}</h3>
-    @if($invoice->status == 'retrieved')
-    <h3>فاتورة مسترجعة</h3>
+    @if($invoice->status != 'retrieved')
+    <h2>فاتورة ضريبية مبسطة </h2>
+    @else
+    <h2>فاتورة ضريبية مبسطة / مسترجعة</h2>
     @endif
+    <h2>{{$repository->name}} / {{$repository->address}}</h2>
     <h4>رقم الفاتورة {{$invoice->code}}</h4>
     <h4>التاريخ {{$invoice->created_at}}</h4>
     <h4>الرقم الضريبي {{$repository->tax_code}}</h4>

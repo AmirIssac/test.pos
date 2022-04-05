@@ -71,8 +71,7 @@
         <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
         @endif
         <h1>فاتورة ورشة</h1>
-        <h2>{{$repository->name}}</h2>
-        <h3>{{$repository->address}}</h3>
+    <h2>{{$repository->name}} / {{$repository->address}}</h2>
         <h3>{{$invoice->created_at}}</h3>
         <h3>Invoice number : {{$invoice->code}}</h3>
         <div class="bordred">

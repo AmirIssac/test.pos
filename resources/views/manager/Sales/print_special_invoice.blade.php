@@ -100,8 +100,8 @@
                           <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
                           @endif
                           <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
-                          <h4>  {{$repository->name}}</h4>
-                          <h3>{{$repository->address}}</h3>
+                            <h2>فاتورة ضريبية مبسطة</h2>
+                            <h2>{{$repository->name}} / {{$repository->address}}</h2>
                           </div>
                           </div>
                         <div style="display: flex; justify-content: space-between">

@@ -86,8 +86,7 @@
       <img src="{{asset('public/storage/'.$repository->logo)}}" width="50px" height="50px" id="logorep">
       @endif
     <h2>فاتورة عرض سعر</h2>
-    <h2>{{$repository->name}}</h2>
-    <h3>{{$repository->address}}</h3>
+    <h2>{{$repository->name}} / {{$repository->address}}</h2>
     <h4>رقم الفاتورة {{$invoice->code}}</h4>
     <h4>التاريخ {{$invoice->created_at}}</h4>
     <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
