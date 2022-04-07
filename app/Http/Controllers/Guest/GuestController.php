@@ -69,7 +69,8 @@ class GuestController extends Controller
           */
 
           //return redirect()->route('wait.for.verify')->withSuccess('تم ادخال البيانات بنجاح');
-          return redirect('/')->withSuccess('تم تسجيل حسابك بنجاح قم بالدخول الآن');
+          return redirect('/login')->with('message','تم تسجيل حسابك بنجاح قم بالدخول الآن');
+          //return redirect()->action("TreeController@getTree", [$request]);
     }
 
     public function waitForVerify(){
@@ -115,7 +116,6 @@ class GuestController extends Controller
     
             $user = User::find(Auth::user()->id);
             $user->assignRole('مالك-مخزن');
-             
             $branch = Branch::create([
                 'company_code' => $request->company_code,
                 'name' => $request->branch_name,

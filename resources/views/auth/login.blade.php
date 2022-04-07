@@ -41,15 +41,14 @@
             <img src="{{asset('public/images/login-image.png')}}" alt="">
         </div>
         <div class="form">
-            @if ($message = Session::get('success'))
-            <div class="alert alert-success alert-block">
-                <button type="button" class="close" data-dismiss="alert">×</button>	
-                    <strong>{{ $message }}</strong>
-            </div>
-            @endif
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="form-group">
+                    @if(session()->has('message'))
+                            <h4 style="color: rgb(35, 196, 35); font-weight:bold;">
+                                {{ session()->get('message') }}
+                            </h4>
+                    @endif
                     <label for="email">الإيميل</label>
                     <input id="email" type="email" name="email" class="login__input form-control" placeholder="اسم الحساب">
                     @error('email')
