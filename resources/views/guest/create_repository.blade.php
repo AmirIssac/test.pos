@@ -1,5 +1,21 @@
 @extends('layouts.guest')
 @section('links')
+<!-- Event snippet for اشتراك-تم التسجيل بنجاح conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        //window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-10867249101/KdvWCNrBpqoDEM2f9L0o',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
 <style>
 .hidden{
   visibility: hidden;
@@ -108,37 +124,35 @@ label{
                             --}}
                             <div id="credentials">
                               <label>اسم المتجر</label>
-                              <input type="text" name="repositoryName" id="repo_name" class="form-control" placeholder="اكتب الاسم هنا" required>
-                              <label>اسم المتجر بالانجليزية</label>
-                              <input type="text" name="repositoryName_en" class="form-control" placeholder="اكتب الاسم بالانجليزية هنا" required>
+                              <input type="text" name="repositoryName" id="repo_name" class="form-control" value="{{$user->name}}" placeholder="اكتب الاسم هنا" required>
                               <label>العنوان</label>
                               <input type="text" name="address" class="form-control" placeholder="اكتب العنوان هنا" required>
                               <label>نوع المتجر</label>
                               <select class="form-control" name="category_id" required>
                                 @foreach($categories as $category)
-                                @if($category->name == 'محل خاص' || $category->name == 'مخزن')
-                                <option value="{{$category->id}}" selected>{{$category->name}}</option>
-                                @endif
+                                  @if($category->name == 'محل خاص' || $category->name == 'مخزن')
+                                  <option value="{{$category->id}}" selected>
+                                    @if($category->name == 'محل خاص')
+                                        متجر نظارات                                      
+                                    @elseif($category->name == 'مخزن')
+                                    متجر بيع بالتجزئة                                     
+                                    @endif
+                                  </option>
+                                  @endif
                                 @endforeach
                               </select>
                                 <label class="displaynone branchname">
                                 اسم الشعار    
                                 </label>
-                                <input name="branch_name" id="branch-name-input" class="displaynone branchname" required>
+                                <input name="branch_name" id="branch-name-input" value="{{$user->name}}" class="displaynone branchname" required>
                                 <label class="displaynone branchname">
                                    رقم الشعار    
                                 </label>
                                 <input name="company_code" id="company_code" value="{{$code}}" class="displaynone branchname" readonly required>
-                              <button style="margin-top:10px;" onclick="gtag_report_conversion('/waitFor/verify');" class="btn btn-primary"> التالي </button>
+                              <button style="margin-top:10px;" onclick="gtag_report_conversion('/');" class="btn btn-primary"> التالي </button>
                             </div>
-
-
-
-
-
                             </div>
-                        </div>
-                  
+                        </div>        
                  </form>
                 </div>
               </div>

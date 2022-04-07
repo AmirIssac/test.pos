@@ -11,13 +11,15 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Throwable;
 
-class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading , WithStartRow
+class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading , WithStartRow , WithColumnFormatting
 {
     use Importable , SkipsErrors , SkipsFailures;
     /**
@@ -32,39 +34,38 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
     }
     
     
-    public function model(array $row)
-    {   
+    public function model(array $row){
         $product = Product::where('repository_id',$this->repository_id)->where('barcode','=',$row[0])->first();
         if($product)  // found it
         {
-        $new_quantity = $product->quantity + $row[5];
-        $new_cost_price = $row[3];
-        $new_price = $row[4];
-        $new_type = $row[6];
-        $new_acceptmin = $row[7];
-        $new_stored = $row[8];
-        $product->update([
-            'quantity' => $new_quantity,
-            'cost_price' => $new_cost_price,
-            'price' => $new_price,
-            'type_id' => $new_type,
-            'accept_min' => $new_acceptmin,
-            'stored' => $new_stored,
-        ]);
+            $new_quantity = $product->quantity + $row[5];
+            $new_cost_price = $row[3];
+            $new_price = $row[4];
+            $new_type = $row[6];
+            $new_acceptmin = $row[7];
+            $new_stored = $row[8];
+            $product->update([
+                'quantity' => $new_quantity,
+                'cost_price' => $new_cost_price,
+                'price' => $new_price,
+                'type_id' => $new_type,
+                'accept_min' => $new_acceptmin,
+                'stored' => $new_stored,
+            ]);
         }
-    else{
-        return new Product([
-        'repository_id' => $this->repository_id,
-           'barcode' => $row[0],
-           'name_ar'    => $row[1], 
-           'name_en' => $row[2],
-           'cost_price' => $row[3],
-           'price'   => $row[4],
-           'quantity'=> $row[5],
-           'type_id' => $row[6],
-           'accept_min' => $row[7],
-           'stored' => $row[8],
-        ]);
+        else{
+            return new Product([
+            'repository_id' => $this->repository_id,
+            'barcode' => $row[0],
+            'name_ar'    => $row[1], 
+            'name_en' => $row[2],
+            'cost_price' => $row[3],
+            'price'   => $row[4],
+            'quantity'=> $row[5],
+            'type_id' => $row[6],
+            'accept_min' => $row[7],
+            'stored' => $row[8],
+            ]);
         }
     }
     public function onError(Throwable $error){
@@ -105,4 +106,14 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
     {
         return 1000;
     }
+
+    
+    public function columnFormats(): array
+    {
+        return [
+            'باركود' => '@',
+        ];
+    }
+    
+    
 }

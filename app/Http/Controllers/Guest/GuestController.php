@@ -28,6 +28,12 @@ class GuestController extends Controller
     }
 
     public function storeCredentials(Request $request){
+        $validated = $request->validate([
+            'ownerName' => 'required',
+            'owneremail' => 'required|email',
+            'ownerpassword' => 'required',
+            'ownerphone' => 'required',
+        ]);
         // check if user exist before so we dont create user
         $check_if_exist =  User::where('email',$request->owneremail)->first();
         if($check_if_exist)
@@ -95,12 +101,13 @@ class GuestController extends Controller
     public function createRepositoryForm(){
         $categories = RepositoryCategory::all();
         $branches = Branch::all();
+        $user = User::find(Auth::user()->id);
         // generate code for the new company   {{4 cells}}
         $branchesCount = Branch::all()->count();
         $branchesCount++;
         $code = str_pad($branchesCount, 4, '0', STR_PAD_LEFT);
         return view('guest.create_repository')->with(['categories'=>$categories,'branches'=>$branches,
-                    'code' => $code,
+                    'code' => $code,'user'=>$user,
         ]);
     }
 
@@ -116,7 +123,6 @@ class GuestController extends Controller
             $repository = Repository::create([
                     'branch_id' => $branch->id,
                     'name' => $request->repositoryName,
-                    'name_en' => $request->repositoryName_en,
                     'address' => $request->address,
                     'category_id'=>$request->category_id,
                 ]);

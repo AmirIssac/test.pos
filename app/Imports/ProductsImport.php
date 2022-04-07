@@ -11,13 +11,15 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Throwable;
 
-class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading , WithHeadingRow
+class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading , WithHeadingRow , WithColumnFormatting
 {
     use Importable , SkipsErrors , SkipsFailures;
     /**
@@ -90,5 +92,12 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
     public function chunkSize(): int   // for memory usage for big files
     {
         return 1000;
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'باركود' => '@',
+        ];
     }
 }

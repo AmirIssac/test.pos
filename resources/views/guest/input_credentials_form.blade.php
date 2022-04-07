@@ -1,21 +1,6 @@
 @extends('layouts.guest')
 @section('links')
-<!-- Event snippet for اشتراك-تم التسجيل بنجاح conversion page
-In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
-<script>
-  function gtag_report_conversion(url) {
-    var callback = function () {
-      if (typeof(url) != 'undefined') {
-        //window.location = url;
-      }
-    };
-    gtag('event', 'conversion', {
-        'send_to': 'AW-10867249101/KdvWCNrBpqoDEM2f9L0o',
-        'event_callback': callback
-    });
-    return false;
-  }
-  </script>
+
 <style>
 .hidden{
   visibility: hidden;
@@ -118,7 +103,10 @@ label{
                               <input type="password" name="ownerpassword" class="form-control" placeholder="كلمة المرور" required>
                               <label>رقم الجوال</label>
                               <input type="text" name="ownerphone" class="form-control" placeholder="رقم الجوال" required>
+                              {{--
                               <button style="margin-top:10px;" onclick="gtag_report_conversion('/');" class="btn btn-primary"> التالي </button>
+                              --}}
+                              <button style="margin-top:10px;" class="btn btn-primary"> التالي </button>
                             </div>
                             </div>
                           </div>
