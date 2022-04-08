@@ -47,5 +47,7 @@ return [
     'according_price' => 'تبعا للسعر',
     'according_created' => 'تبعا لتاريخ الانشاء',
     'according_updated' => 'تبعا لتاريخ التعديل',
+    'delete_all_products' => 'حذف جميع منتجات المتجر',
+    'are_you_sure_delete_all_products' => 'هل أنت متأكد أنك تريد حذف جميع منتجات المتجر ؟',
 ];
 ?>

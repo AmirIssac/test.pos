@@ -37,7 +37,12 @@ input[type="number"]{
 <div class="main-panel">
 
 <div class="content">
- 
+  @if (session('success'))
+  <div class="alert alert-success alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>	
+          <strong>{{ session('success') }}</strong>
+  </div>
+  @endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -319,6 +324,29 @@ input[type="number"]{
                   </div>
                 </div>
             </div>
+
+            <button style="float: left" data-toggle="modal" data-target="#deleteall" class="btn btn-danger">{{__('repository.delete_all_products')}}</button>
+                              <!-- Modal for export excel -->
+                              <div class="modal fade" id="deleteall" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelall" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabelall">{{__('repository.delete_all_products')}}</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{__('repository.are_you_sure_delete_all_products')}}
+                                    </div>
+                                    <form action="{{route('delete.all.products',$repository->id)}}" method="POST">
+                                      @csrf
+                                      <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">{{__('buttons.confirm')}}</button>
+                                        <a data-dismiss="modal" class="btn btn-danger">{{__('buttons.cancel')}}</a>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                            </div>
+
           </div>
         </div>
       </div>

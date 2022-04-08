@@ -135,6 +135,7 @@ Route::group(['middleware' => ['permission:المخزون']], function () {
         Route::get('/filter/products/byPriceRange/{repository_id}','Manager\RepositoryController@filterProductsByPriceRange')->name('filter.products.byPriceRange');
         Route::get('/filter/products/byOrder/{repository_id}','Manager\RepositoryController@filterProductsByOrder')->name('filter.products.byOrder');
         Route::get('export/products/{repository_id}', 'Manager\RepositoryController@exportProducts')->name('export.products');
+        Route::post('delete/repository/products/{repository_id}','Manager\RepositoryController@deleteAllProducts')->name('delete.all.products');
     });
 });
 

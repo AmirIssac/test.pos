@@ -330,6 +330,12 @@ class RepositoryController extends Controller
         return redirect(route('repository.index',$repository->id))->with('deleteProductSuccess',__('alerts.product_delete_success'));
     }
 
+    public function deleteAllProducts($id){
+        $repository = Repository::findOrFail($id);
+        $repository->products()->delete();
+        return back()->with('success','Deleted all products successfully');
+    }
+
     public function checkBarcodeAjax(Request $request,$id){
         $repository = Repository::find($id);
         // add new product

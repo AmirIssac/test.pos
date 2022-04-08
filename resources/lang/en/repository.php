@@ -47,5 +47,7 @@ return [
     'according_price' => 'according to price',
     'according_created' => 'according to created date',
     'according_updated' => 'according to updated date',
+    'delete_all_products' => 'delete all products',
+    'are_you_sure_delete_all_products' => 'Are you sure you want to delete all products ?',
 ];
 ?>

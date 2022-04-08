@@ -3892,6 +3892,8 @@ class SellController extends Controller
 
     public function retrieveInvoice(Request $request,$id){
         $invoice = Invoice::find($id);
+        if($invoice->status == 'retrieved' || $invoice->status == 'deleted')
+            return back();
         //$repository = Repository::find($request->repo_id);
         $repository = $invoice->repository;
         $cash_retrieved = $invoice->cash_amount + $invoice->card_amount + $invoice->stc_amount;
