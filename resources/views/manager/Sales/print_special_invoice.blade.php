@@ -423,6 +423,14 @@
         @elseif($repository->isBasic())
         <div style="display: flex; justify-content: space-between">
           <h4>جوال العميل {{$phone}}</h4>
+          @if($invoice->customer)  {{-- customer registered --}}
+            @if($invoice->customer->tax_code)
+            <h4> الرقم الضريبي للعميل {{$invoice->customer->tax_code}}</h4>
+            @endif
+            @if($invoice->customer->tax_address)
+            <h4> العنوان الضريبي للعميل {{$invoice->customer->tax_address}}</h4>
+            @endif
+          @endif
         </div>
         @endif
         <div style="display: flex; justify-content: space-between">

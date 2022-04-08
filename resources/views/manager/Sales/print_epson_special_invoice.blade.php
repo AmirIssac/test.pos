@@ -302,6 +302,14 @@
       <h4>جوال العميل {{$customer->phone}}</h4>
       @elseif($repository->isBasic())
       <h4>جوال العميل {{$phone}}</h4>
+        @if($invoice->customer)  {{-- customer registered --}}
+          @if($invoice->customer->tax_code)
+          <h4> الرقم الضريبي للعميل {{$invoice->customer->tax_code}}</h4>
+          @endif
+          @if($invoice->customer->tax_address)
+          <h4> العنوان الضريبي للعميل {{$invoice->customer->tax_address}}</h4>
+          @endif
+        @endif
       @endif
       <h4>موظف البيع {{$employee->name}}</h4>
       @if($note)
