@@ -2043,7 +2043,7 @@ class SellController extends Controller
                     }
                 }
 
-
+                $employee = User::find(Auth::user()->id);
                 // create Encoding QRCode
                 $encode = new Encode();
                 $base64 = $encode->sellerName($repository->name)
@@ -2824,6 +2824,7 @@ class SellController extends Controller
              }
          }
 
+         $employee = User::find(Auth::user()->id);
         // create Encoding QRCode
         $encode = new Encode();
         $base64 = $encode->sellerName($repository->name)

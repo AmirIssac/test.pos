@@ -64,7 +64,7 @@
               <a href="{{route('show.invoices',$repository->id)}}">
               <div class="box blue">
                 <i class="material-icons">receipt</i>
-                   <h4>{{__('reports.invoices')}}</h4>
+                   <h4>{{__('reports.invoices')}}  {{$invoices_count}}</h4>
                    <h6>{{__('reports.view')}}</h6>
               </div>
             </a>

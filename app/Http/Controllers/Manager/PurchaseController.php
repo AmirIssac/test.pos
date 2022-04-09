@@ -30,7 +30,8 @@ class PurchaseController extends Controller
     //
     public function index($id){
         $repository = Repository::find($id);
-        return view('manager.Purchases.index')->with(['repository'=>$repository]);    
+        $purchases_count = $repository->purchases()->count();
+        return view('manager.Purchases.index')->with(['repository'=>$repository,'purchases_count'=>$purchases_count]);    
     }
 
   

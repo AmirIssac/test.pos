@@ -159,7 +159,7 @@
               <a href="{{route('show.purchases',$repository->id)}}">
               <div class="box blue">
                 <i class="material-icons">preview</i>
-                   <h4>{{__('purchases.view_purchases_invoice')}}</h4>
+                   <h4>{{__('purchases.view_purchases_invoice')}} {{$purchases_count}}</h4>
                    <h6>{{__('sales.view')}}</h6>
               </div>
             </a>

@@ -27,7 +27,8 @@ class ReportController extends Controller
 
     public function index($id){
         $repository = Repository::find($id);
-        return view('manager.Reports.index')->with(['repository'=>$repository]);   
+        $invoices_count = $repository->invoices()->count();
+        return view('manager.Reports.index')->with(['repository'=>$repository,'invoices_count'=>$invoices_count]);   
     }
 
     public function showInvoices($id){
