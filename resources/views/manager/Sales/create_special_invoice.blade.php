@@ -664,13 +664,13 @@ input[id^=recipe_name]::-ms-input-placeholder{
               IPD distance
             </td>
             <td>
-              <input type="number" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}" class="form-control" required>
+              <input type="number" step="0.01" min="0" max="100" name="ipdval" value="{{$saved_recipe['ipd']}}" class="form-control" required>
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               IPD near
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipd2val" value="{{isset($saved_recipe['ipd2']) ? $saved_recipe['ipd2'] : 0}}" class="form-control" required>
+              <input type="number" step="0.01" min="0" max="100" name="ipd2val" value="{{isset($saved_recipe['ipd2']) ? $saved_recipe['ipd2'] : 0}}" class="form-control" required>
              </td>
            </tr>
            <tr>
@@ -850,13 +850,13 @@ input[id^=recipe_name]::-ms-input-placeholder{
               IPD distance
             </td>
             <td>
-              <input type="number" min="0" max="100" name="ipdval" value="" class="form-control">
+              <input type="number" step="0.01" min="0" max="100" name="ipdval" value="" class="form-control">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               IPD near
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipd2val" value="" class="form-control">
+              <input type="number" step="0.01" min="0" max="100" name="ipd2val" value="" class="form-control">
              </td>
            </tr>
            <tr>
@@ -1098,13 +1098,13 @@ input[id^=recipe_name]::-ms-input-placeholder{
                 IPD distance
               </td>
               <td>
-                <input type="number" min="0" max="100" name="ipdval_arr[]" value="{{$saved_recipe['ipd']}}" class="form-control" required>
+                <input type="number" step="0.01" min="0" max="100" name="ipdval_arr[]" value="{{$saved_recipe['ipd']}}" class="form-control" required>
               </td>
               <td style="text-align: center; font-weight: bold; font-size: 18px;">
                 IPD near
               </td>
                <td>
-                <input type="number" min="0" max="100" name="ipd2val_arr[]" value="{{isset($saved_recipe['ipd2']) ? $saved_recipe['ipd2'] : 0}}" class="form-control" required>
+                <input type="number" step="0.01" min="0" max="100" name="ipd2val_arr[]" value="{{isset($saved_recipe['ipd2']) ? $saved_recipe['ipd2'] : 0}}" class="form-control" required>
                </td>
              </tr>
              <tr>
@@ -1319,13 +1319,13 @@ input[id^=recipe_name]::-ms-input-placeholder{
               IPD distance
             </td>
             <td>
-              <input type="number" min="0" max="100" name="ipdval_arr[]" value="" class="form-control">
+              <input type="number" step="0.01" min="0" max="100" name="ipdval_arr[]" value="" class="form-control">
             </td>
             <td style="text-align: center; font-weight: bold; font-size: 18px;">
               IPD near
             </td>
              <td>
-              <input type="number" min="0" max="100" name="ipd2val_arr[]" value="" class="form-control">
+              <input type="number" step="0.01" min="0" max="100" name="ipd2val_arr[]" value="" class="form-control">
              </td>
            </tr>
            <tr>
