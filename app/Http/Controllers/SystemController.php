@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\MonthlyReport;
 use App\Repository;
 use App\Setting;
+use App\User;
 use Illuminate\Http\Request;
 
 class SystemController extends Controller
@@ -194,6 +195,13 @@ class SystemController extends Controller
                 'invoices_count_today' => 0 ,
             ]);
         return back()->with('success','تمت اعادة تهيئة عداد الفواتير بنجاح');
-        }
     }
+
+    public function ourClients(){
+        $users = User::orderBy('created_at','DESC')->paginate(20);
+        $count = User::count();
+        return view('dashboard.Repositories.our_clients')->with(['users'=>$users,'count'=>$count]);
+    }
+
+}
 

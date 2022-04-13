@@ -141,6 +141,9 @@
             <li><a class="{{ request()->is('repositories')||request()->is('repositories/create') ||request()->is('en/repositories')? 'active' : ''}}" href="{{route('repositories.index')}}"><span class="icon"><i class="material-icons">storefront</i></span>{{__('menu.repositories')}}</a></li>
             @endcan
             @can('المخازن')
+            <li><a class="{{ request()->is('our-clients')||request()->is('en/our-clients')? 'active' : ''}}" href="{{route('our.clients')}}"><span class="icon"><i class="material-icons">group</i></span>المستخدمون</a></li>
+            @endcan
+            @can('المخازن')
             <li><a class="{{ request()->is('products')||request()->is('en/products')? 'active' : ''}}" href="{{route('products.index')}}"><span class="icon"><i class="material-icons">category</i></span>{{__('menu.products')}}</a></li>
             @endcan
             @can('المخازن')

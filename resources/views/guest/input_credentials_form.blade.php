@@ -16,6 +16,22 @@ label{
   padding: 10px;
 }
 </style>
+<!-- Event snippet for اشتراك-تم التسجيل بنجاح conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        //window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-10867249101/KdvWCNrBpqoDEM2f9L0o',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
 @endsection
 @section('body')
 <div class="main-panel">
@@ -106,7 +122,7 @@ label{
                               {{--
                               <button style="margin-top:10px;" onclick="gtag_report_conversion('/');" class="btn btn-primary"> التالي </button>
                               --}}
-                              <button style="margin-top:10px;" class="btn btn-primary"> التالي </button>
+                              <button style="margin-top:10px;" onclick="gtag_report_conversion('/');" class="btn btn-primary"> التالي </button>
                             </div>
                             </div>
                           </div>

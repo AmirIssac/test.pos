@@ -43,6 +43,7 @@ Route::get('/show/repository/status/{repository_id}','SystemController@showRepos
 Route::post('/edit/repository/status/{repository_id}','SystemController@editRepositoryStatus')->name('edit.repository.status');
 Route::post('/factory/reset/{repository_id}','SystemController@factoryReset')->name('factory.reset');
 Route::post('/reset/invoices-count-today','SystemController@resetInvociesCounter')->name('reset.invoices.counter');
+Route::get('/our-clients','SystemController@ourClients')->name('our.clients')->middleware('auth');
 });
 
 
