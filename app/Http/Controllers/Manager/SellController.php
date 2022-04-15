@@ -1018,7 +1018,6 @@ class SellController extends Controller
                 }
                 }
             }
-            
         }
         // update repository balance
         $repository->update(
@@ -1042,7 +1041,7 @@ class SellController extends Controller
         if($delivered){  // delivered
         for($i=0;$i<$count;$i++){
             if($request->barcode[$i] && $request->name[$i]){
-            $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+            $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"tax_row"=>$request->tax_row[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
             $details[]=$record;
             }
         }
@@ -1053,13 +1052,13 @@ class SellController extends Controller
                 if(in_array($i,$request->del)) // delivered Item
                 {
                 if($request->barcode[$i] && $request->name[$i]){
-                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"tax_row"=>$request->tax_row[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
                 $details[]=$record;
                 }
                 }
                 else{  // hanging Item
                     if($request->barcode[$i] && $request->name[$i]){
-                    $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>0);
+                    $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"tax_row"=>$request->tax_row[$i],"quantity"=>$request->quantity[$i],"delivered"=>0);
                     $details[]=$record;
                     }
                 }
@@ -1163,7 +1162,7 @@ class SellController extends Controller
                 $del = 'نعم';
                 else
                 $del = 'لا';
-        $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
+        $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],"tax_row"=>$request->tax_row[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
         }
       }
 
@@ -1346,7 +1345,7 @@ class SellController extends Controller
           if($delivered){  // delivered
           for($i=0;$i<$count;$i++){
               if($request->barcode[$i] && $request->name[$i]){
-              $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+              $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"tax_row"=>$request->tax_row[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
               $details[]=$record;
               }
           }
@@ -1357,13 +1356,13 @@ class SellController extends Controller
                   if(in_array($i,$request->del)) // delivered Item
                   {
                   if($request->barcode[$i] && $request->name[$i]){
-                  $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
+                  $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"tax_row"=>$request->tax_row[$i],"quantity"=>$request->quantity[$i],"delivered"=>$request->quantity[$i]);
                   $details[]=$record;
                   }
                   }
                   else{  // hanging Item
                       if($request->barcode[$i] && $request->name[$i]){
-                      $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i],"delivered"=>0);
+                      $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"tax_row"=>$request->tax_row[$i],"quantity"=>$request->quantity[$i],"delivered"=>0);
                       $details[]=$record;
                       }
                   }
@@ -1517,7 +1516,7 @@ class SellController extends Controller
                   $del = 'نعم';
                   else
                   $del = 'لا';
-          $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
+          $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],"tax_row"=>$request->tax_row[$i],'quantity'=>$request->quantity[$i],'del'=>$del);
           }
         }
   

@@ -75,6 +75,7 @@
                           <h4>التاريخ {{$invoice->created_at}}</h4>
                           <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
                         </div>
+                        <?php $records = unserialize($invoice->details) ?>
                         <hr>
                         <table class="table">
                           <thead class="text-primary">
@@ -87,6 +88,9 @@
                             <th>
                               السعر  
                             </th>
+                            @if(!$repository->isSpecial() && isset($records[1]['tax_row']))   {{-- Normal repository --}}
+                            <th>الضريبة</th>
+                            @endif
                             <th>
                               الكمية 
                             </th>
@@ -99,7 +103,6 @@
                           </thead>
           
                           <tbody>
-                              <?php $records = unserialize($invoice->details) ?>
                             @for($i=1;$i<count($records);$i++)
                              <div>
                               <tr>
@@ -116,6 +119,11 @@
                                 <td>
                                   <input type="number"   name="price[]" value="{{$records[$i]['price']}}" id="price{{$i}}" class="form-control price blank" readonly>
                                 </td>
+                                @if(!$repository->isSpecial() && isset($records[$i]['tax_row']))   {{-- Normal repository --}}
+                                <td>
+                                  <input type="number"   name="tax_row[]" value="{{$records[$i]['tax_row']}}" id="tax_row{{$i}}" class="form-control price blank" readonly>
+                                </td>
+                                @endif
                                 <td>
                                   <input type="number" name="quantity[]" value="{{$records[$i]['quantity']}}" id="quantity{{$i}}" class="form-control quantity" readonly>
                               </td>

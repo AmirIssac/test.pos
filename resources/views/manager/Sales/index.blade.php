@@ -178,6 +178,7 @@
              </div>
             @endcan
 
+            @if($repository->isSpecial())
             <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('create.price.invoice',$repository->id)}}">
               <div class="box blue">
@@ -187,7 +188,19 @@
                    <h6>{{__('sales.create')}}</h6>
               </div>
             </a>
-             </div>
+            </div>
+            @else
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <a href="#">
+              <div class="box blue">
+                <span class="badge badge-secondary">maintanance
+                <i class="material-icons">add_circle_outline</i></span>
+                   <h4>{{__('sales.view_price_invoice')}}</h4>
+                   <h6>{{__('sales.create')}}</h6>
+              </div>
+            </a>
+            </div>
+            @endif
 
 
             

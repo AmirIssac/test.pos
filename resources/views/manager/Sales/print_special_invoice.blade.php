@@ -118,9 +118,12 @@
                             <th>
                               الاسم  
                             </th>
-                            <th>
+                            <th> 
                               السعر  
                             </th>
+                            @if(!$repository->isSpecial())   {{-- Normal repository --}}
+                            <th>الضريبة</th>
+                            @endif
                             <th>
                               الكمية 
                             </th>
@@ -155,6 +158,11 @@
                                 <td>
                                   <input type="number"   name="price[]" value="{{$records[$i]['price']}}" class="form-control price blank" readonly>
                                 </td>
+                                @if(!$repository->isSpecial())   {{-- Normal repository --}}
+                                <td>
+                                  <input type="number"   name="tax_row[]" value="{{$records[$i]['tax_row']}}" class="form-control price blank" readonly>
+                                </td>
+                                @endif
                                 <td>
                                   <input type="number" name="quantity[]" value="{{$records[$i]['quantity']}}" class="form-control quantity" readonly>
                               </td>
