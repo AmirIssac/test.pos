@@ -4313,7 +4313,7 @@ class SellController extends Controller
         $details = array(array());    // each array store details for one record (one product)
         for($i=0;$i<$count;$i++)
               if($request->barcode[$i] && $request->name[$i]){
-                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],"quantity"=>$request->quantity[$i]);
+                $record = array("barcode"=>$request->barcode[$i],"name_ar"=>$request->name[$i],"name_en"=>$request->details[$i],"cost_price"=>$request->cost_price[$i],"price"=>$request->price[$i],'tax_row'=>$request->tax_row[$i],"quantity"=>$request->quantity[$i]);
                 $details[]=$record;
               }
         $details = serialize($details);
@@ -4348,7 +4348,7 @@ class SellController extends Controller
             $records = array(array());
                for($i=0;$i<count($request->barcode);$i++){   
                 if($request->barcode[$i] && $request->price[$i]){
-                $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'quantity'=>$request->quantity[$i]);
+                $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name[$i],'name_en'=>$request->details[$i],'cost_price'=>$request->cost_price[$i],'price'=>$request->price[$i],'tax_row'=>$request->tax_row[$i],'quantity'=>$request->quantity[$i]);
                 }
               }
               $employee = User::find(Auth::user()->id);

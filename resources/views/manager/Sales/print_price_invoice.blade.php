@@ -96,6 +96,9 @@
             <th style="width: 100px">Barcode</th>
             <th style="width: 250px" class="big-padding">الاسم</th> 
             <th style="width: 30px">السعر</th>
+            @if(!$repository->isSpecial())   {{-- Normal repository --}}
+            <th style="width: 30px">الضريبة</th>
+            @endif
             <th style="width: 30px">الكمية</th>
             <th style="width: 30px">المجموع</th>
           </thead>
@@ -111,6 +114,11 @@
                 <td style="width: 30px">
                     {{$records[$i]['price']}}
                 </td>
+                @if(!$repository->isSpecial())   {{-- Normal repository --}}
+                <td style="width: 30px">
+                  {{$records[$i]['tax_row']}}
+                </td>
+                @endif
                 <td style="width: 30px">
                     {{$records[$i]['quantity']}}
                 </td>

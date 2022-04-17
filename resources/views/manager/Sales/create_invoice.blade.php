@@ -347,10 +347,10 @@ input:read-only{
               <table class="table table-c">
                 <thead class="text-primary">
                       <input type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
-                  <th style="width: 20%">
+                  <th style="width: 18%">
                     Barcode  
                   </th>
-                  <th style="width: 30%">
+                  <th style="width: 20%">
                     {{__('sales.name')}}  
                   </th>
                   <th style="width: 10%">
@@ -524,14 +524,14 @@ input:read-only{
        </div>
 
        <div>
-         {{--
+         
         <h5>{{__('sales.discount')}}</h5>
-        --}}
+        
        <div style="display: flex; flex-direction: column; margin-top: 3px;">
          <div style="display: flex;">
           @if($repository->setting->discount_by_percent == true)
           {{--<i style="color: #001bb7" id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.max_is')}} %{{$repository->max_discount}} ">live_help</i>--}}
-           <input style="margin: 10px; display:none;" type="number" name="max_discount"  step="0.01" min="0" max="{{$repository->max_discount}}" placeholder="{{__('sales.percent')}}"  id="max-field" class="form-control">
+           <input style="margin: 10px;" type="number" name="max_discount"  step="0.01" min="0" max="{{$repository->max_discount}}" placeholder="{{__('sales.percent')}}"  id="max-field" class="form-control">
            <input style="display:none;" type="number"  id="max-allowed" value="{{$repository->max_discount}}">
            <input type="hidden" name="discountVal" id="discountVal" value="0.00">
            <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">

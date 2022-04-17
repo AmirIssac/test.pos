@@ -1387,10 +1387,10 @@ input[id^=recipe_name]::-ms-input-placeholder{
               <table class="table table-c">
                 <thead class="text-primary">
                       <input style="display: none" type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
-                  <th style="width: 20%">
+                  <th style="width: 18%">
                     Barcode  
                   </th>
-                  <th style="width: 40%">
+                  <th style="width: 20%">
                     {{__('sales.name')}}  
                   </th>
                   <th style="width: 10%">

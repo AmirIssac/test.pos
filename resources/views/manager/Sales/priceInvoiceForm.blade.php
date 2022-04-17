@@ -237,10 +237,10 @@ input:read-only{
               <table class="table table-c">
                 <thead class="text-primary">
                       <input type="text" name="code" id="code" value="{{isset($code)?$code:''}}" readonly>
-                  <th style="width: 20%">
+                  <th style="width: 18%">
                     Barcode  
                   </th>
-                  <th style="width: 40%">
+                  <th style="width: 20%">
                     {{__('sales.name')}}  
                   </th>
                   <th style="width: 10%">
@@ -248,6 +248,9 @@ input:read-only{
                   </th>
                   <th style="width: 10%">
                     {{__('sales.quantity')}} 
+                  </th>
+                  <th style="width: 10%">
+                    Tax
                   </th>
                   <th style="width: 10%">
                     {{__('sales.in_stock')}}
@@ -290,11 +293,15 @@ input:read-only{
                         <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
                       </td>
                       <td>
+                        {{--
                         @if($repository->setting->discount_change_price == true)
                         <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
                         @else
                         <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
                         @endif
+                        --}}
+                        <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
+                        <input style="display: none" type="number" id="price-inc-tax0" min="0" step="0.01"  name="price_inc[]" value="{{old('price_inc0')}}" class="form-control">
                       </td>
                       <td>
                         @if(old('quantity0'))
@@ -302,6 +309,9 @@ input:read-only{
                         @else
                         <input type="number" id="quantity0" min="1" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
                         @endif
+                    </td>
+                    <td>
+                      <input type="number" id="tax-row0" name="tax_row[]" min="0" step="0.01" class="form-control" readonly>
                     </td>
                     <td>
                       <input type="text" id="ava0" name="availability[]" value=""  class="form-control availability" readonly>
@@ -342,11 +352,15 @@ input:read-only{
                         <input type="hidden" id="cost_price{{$count}}"  name="cost_price[]" value="{{old('cost_price.'.$count)}}" class="form-control blank" readonly>
                       </td>
                       <td>
+                        {{--
                         @if($repository->setting->discount_change_price == true)
                         <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                         @else
                         <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank" readonly>
                         @endif
+                        --}}
+                        <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank" readonly>
+                        <input style="display: none" type="number" id="price-inc-tax{{$count}}" min="0" step="0.01"  name="price_inc[]" value="{{old('price_inc.'.$count)}}" class="form-control">
                       </td>
                       <td>
                         @if(old('quantity.'.$count))
@@ -354,6 +368,9 @@ input:read-only{
                         @else
                         <input type="number" id="quantity{{$count}}" min="1" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
                         @endif
+                    </td>
+                    <td>
+                      <input type="number" id="tax-row{{$count}}" name="tax_row[]" min="0" step="0.01" class="form-control" readonly>
                     </td>
                     <td>
                       <input type="text" id="ava{{$count}}" name="availability[]" value=""  class="form-control availability" readonly>
@@ -512,7 +529,14 @@ input:read-only{
               $('#details'+gold+'').val(value.name_en);
               $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
-              $('#price'+gold+'').val(value.price);
+              //$('#price'+gold+'').val(value.price);
+              var price_inc = value.price * $('#quantity'+gold).val();
+              $('#price-inc-tax'+gold).val(price_inc);
+              var tax_setting = $('#tax').val();
+              var fraction = 1 + (tax_setting / 100) ;
+              var pure_price = value.price / fraction ; //  السعر بدون ضريبة يساوي السعر شامل الضريبة تقسيم المعامل 
+              $('#price'+gold+'').val(pure_price.toFixed(2));
+              $('#tax-row'+gold+'').val(((value.price - pure_price) * $('#quantity'+gold).val()).toFixed(2));
               if(value.stored == true)
                 $('#ava'+gold+'').val(value.quantity);
               else
@@ -892,6 +916,12 @@ $('#sell-form').keypress(function(e) {
                 var s = 0 ;
                 var s1 = 0;
                 var s2 = 0 ;
+                var tax_setting = $('#tax').val();
+                var price_inc_tax = parseFloat($('#price-inc-tax'+gold).val()) * parseFloat($('#quantity'+gold).val()) ;
+                var frac = 1+(tax_setting / 100);
+                var price_pure = price_inc_tax / frac;
+                var tax_row = price_inc_tax - price_pure ;
+                $('#tax-row'+gold+'').val(tax_row.toFixed(2));
                 for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0){
                      s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
@@ -1747,7 +1777,14 @@ window.onload=function(){
               $('#details'+gold+'').val(value.name_en);
               $('#cost_price'+gold+'').val(value.cost_price);
               //$('#details'+gold+'').addClass('ajaxSuccess');
-              $('#price'+gold+'').val(value.price);
+              //$('#price'+gold+'').val(value.price);
+              var price_inc = value.price * $('#quantity'+gold).val();
+              $('#price-inc-tax'+gold).val(price_inc);
+              var tax_setting = $('#tax').val();
+              var fraction = 1 + (tax_setting / 100) ;
+              var pure_price = value.price / fraction ; //  السعر بدون ضريبة يساوي السعر شامل الضريبة تقسيم المعامل 
+              $('#price'+gold+'').val(pure_price.toFixed(2));
+              $('#tax-row'+gold+'').val(((value.price - pure_price) * $('#quantity'+gold).val()).toFixed(2));
               if(value.stored == true)
                 $('#ava'+gold+'').val(value.quantity);
               else

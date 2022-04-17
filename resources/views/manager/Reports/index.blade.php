@@ -69,7 +69,7 @@
               </div>
             </a>
              </div>
-
+             @if($repository->isBasic())
              <div class="col-lg-3 col-md-6 col-sm-6">
               <a href="{{route('show.price.invoices',$repository->id)}}">
               <div class="box blue">
@@ -81,6 +81,7 @@
               </div>
             </a>
              </div>
+             @endif
              @endcan
              @can('عرض التقارير اليومية')
 

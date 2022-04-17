@@ -90,16 +90,19 @@
     <h4>رقم الفاتورة {{$invoice->code}}</h4>
     <h4>التاريخ {{$invoice->created_at}}</h4>
     <h4>الرقم الضريبي {{$repository->tax_code}}</h4>
+    <?php $records = unserialize($invoice->details) ?>
       <div class="bordred">
         <table class="table-c"> 
           <thead class="head">
             <th style="width: 100px">Barcode</th>
             <th style="width: 250px" class="big-padding">الاسم</th> 
             <th style="width: 30px">السعر</th>
+            @if(!$repository->isSpecial() && isset($records[1]['tax_row']))   {{-- Normal repository --}}
+            <th style="width: 30px">الضريبة</th>
+            @endif
             <th style="width: 30px">الكمية</th>
             <th style="width: 30px">المجموع</th>
           </thead>
-          <?php $records = unserialize($invoice->details) ?>
             @for($i=1;$i<count($records);$i++)
             <tr>
                 <td style="width: 100px">
@@ -117,6 +120,11 @@
                     {{$records[$i]['price']}}
                   </p>
                 </td>
+                @if(!$repository->isSpecial() && isset($records[$i]['tax_row']))   {{-- Normal repository --}}
+                <td style="width: 30px">
+                  {{$records[$i]['tax_row']}}
+                </td>
+                @endif
                 <td style="width: 30px">
                   <p id="quantity{{$i}}">
                     {{$records[$i]['quantity']}}

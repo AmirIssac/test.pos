@@ -233,6 +233,8 @@ input[type="number"]{
                     <td>
                        {{__('repository.available_in_stock')}}
                     </td>
+                    @endif
+                    @endif
                     <td>
                       @if($product->quantity<=10)
                         <span class="badge badge-danger">
@@ -248,8 +250,6 @@ input[type="number"]{
                         </span>
                       @endif
                     </td>
-                    @endif
-                    @endif
                     @if($repository->isSpecial() || $repository->isStorehouse())  {{-- محل خاص --}}
                     @if(!$product->stored)
                     <td>
@@ -307,6 +307,7 @@ input[type="number"]{
                 </table>
                 {{ $products->links() }}
               </div>
+              @if($repository->isSpecial())
               <a data-toggle="modal" data-target="#exampleModal" id="modaltrigger"><img src="{{asset('public/images/png/microsoft-excel.png')}}" height="35px"></a>
                               <!-- Modal for export excel -->
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -324,9 +325,9 @@ input[type="number"]{
                   </div>
                 </div>
             </div>
-
+            @endif
             <button style="float: left" data-toggle="modal" data-target="#deleteall" class="btn btn-danger">{{__('repository.delete_all_products')}}</button>
-                              <!-- Modal for export excel -->
+                              <!-- Modal for delete -->
                               <div class="modal fade" id="deleteall" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelall" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">

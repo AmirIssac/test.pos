@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Throwable;
 
-class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading , WithStartRow , WithColumnFormatting
+class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation , SkipsOnFailure , WithBatchInserts , WithChunkReading , WithStartRow 
 {
     use Importable , SkipsErrors , SkipsFailures;
     /**
@@ -107,13 +107,14 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
         return 1000;
     }
 
-    
+    /*
     public function columnFormats(): array
     {
         return [
             'باركود' => '@',
         ];
     }
+    */
     
     
 }
