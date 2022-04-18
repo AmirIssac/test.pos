@@ -38,10 +38,10 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
 
     public function model(array $row)
     {   
-        $product = Product::where('repository_id',$this->repository_id)->where('barcode',$row['باركود'])->first();
+        $product = Product::where('repository_id',$this->repository_id)->where('barcode',(integer)$row['باركود'])->first();
         if($product)  // found it
         {
-        $new_quantity = $product->quantity + $row['الكمية'];
+        $new_quantity = (integer)$product->quantity + $row['الكمية'];
         $new_cost_price = $row['سعر التكلفة'];
         $new_price = $row['سعر المبيع'];
         $product->update([
@@ -53,12 +53,12 @@ class ProductsImport implements ToModel , SkipsOnError , WithValidation , SkipsO
     else{
         return new Product([
         'repository_id' => $this->repository_id,
-           'barcode' => $row['باركود'],
+           'barcode' => (integer)$row['باركود'],
            'name_ar'    => $row['الاسم بالعربية'], 
            'name_en' => $row['الاسم بالانجليزية'],
            'cost_price' => $row['سعر التكلفة'],
            'price'   => $row['سعر المبيع'],
-           'quantity'=> $row['الكمية'],
+           'quantity'=> (integer)$row['الكمية'],
            'accept_min' => false,
         ]);
         }

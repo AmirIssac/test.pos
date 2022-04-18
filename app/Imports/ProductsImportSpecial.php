@@ -35,10 +35,10 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
     
     
     public function model(array $row){
-        $product = Product::where('repository_id',$this->repository_id)->where('barcode','=',$row[0])->first();
+        $product = Product::where('repository_id',$this->repository_id)->where('barcode','=',(integer)$row[0])->first();
         if($product)  // found it
         {
-            $new_quantity = $product->quantity + $row[5];
+            $new_quantity = (integer)$product->quantity + $row[5];
             $new_cost_price = $row[3];
             $new_price = $row[4];
             $new_type = $row[6];
@@ -56,12 +56,12 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
         else{
             return new Product([
             'repository_id' => $this->repository_id,
-            'barcode' => $row[0],
+            'barcode' => (integer)$row[0],
             'name_ar'    => $row[1], 
             'name_en' => $row[2],
             'cost_price' => $row[3],
             'price'   => $row[4],
-            'quantity'=> $row[5],
+            'quantity'=> (integer)$row[5],
             'type_id' => $row[6],
             'accept_min' => $row[7],
             'stored' => $row[8],
@@ -78,6 +78,7 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
     }
 
 
+    
     public function rules(): array
     {
         return [
@@ -86,11 +87,12 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
             '*.3' => 'required',
             '*.4' => 'required',
             '*.5' => 'required',
-            '*.6' => 'required|numeric',
-            '*.7' => 'required|numeric|min:0|max:1',
-            '*.8' => 'required|numeric|min:0|max:1',
+            '*.6' => 'required',
+            '*.7' => 'required',
+            '*.8' => 'required',
         ];
     }
+    
     
     public function onFailure(Failure ...$failures)
     {
