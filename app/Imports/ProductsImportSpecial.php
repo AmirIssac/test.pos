@@ -35,7 +35,7 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
     
     
     public function model(array $row){
-        $product = Product::where('repository_id',$this->repository_id)->where('barcode','=',(integer)$row[0])->first();
+        $product = Product::where('repository_id',$this->repository_id)->where('barcode','=',(string)$row[0])->first();
         if($product)  // found it
         {
             $new_quantity = (integer)$product->quantity + $row[5];
@@ -56,7 +56,7 @@ class ProductsImportSpecial implements ToModel , SkipsOnError , WithValidation ,
         else{
             return new Product([
             'repository_id' => $this->repository_id,
-            'barcode' => (integer)$row[0],
+            'barcode' => (string)$row[0],
             'name_ar'    => $row[1], 
             'name_en' => $row[2],
             'cost_price' => $row[3],
