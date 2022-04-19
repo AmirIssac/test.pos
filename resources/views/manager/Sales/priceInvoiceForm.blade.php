@@ -39,7 +39,11 @@ input[name=date]{
     display: none;
   }
   
-  #total_price,#final_total_price,#taxfield{
+  #total_price,#taxfield{
+    font-size: 18px;
+    background-color: white !important;
+  }
+  #final_total_price{
     font-size: 32px;
     background-color: white !important;
   }
@@ -390,14 +394,14 @@ input:read-only{
        <div id="cash-info">
         <div style="display: flex;">
        <div>
-         <h5>
+         <h6>
            {{__('sales.sum')}} 
-         </h5>
+         </h6>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
          <input type="number" name="sum" id="total_price" class="form-control" value="0" readonly>
        </div>
        <div id="tax-container">
-         <h5>{{__('sales.tax')}}</h5>
+         <h6>{{__('sales.tax')}}</h6>
         <div style="display: flex; flex-direction: column; margin-top: 3px;">
           <div style="display: flex;">
             <input type="number" name="taxprint" value="0"  id="taxfield" class="form-control" readonly>
@@ -408,7 +412,7 @@ input:read-only{
 
 
       <div>
-       <h5>{{__('sales.discount')}}</h5>
+       <h6>{{__('sales.discount')}}</h6>
       <div style="display: flex; flex-direction: column; margin-top: 3px;">
         <div style="display: flex;">
          @if($repository->setting->discount_by_percent == true)

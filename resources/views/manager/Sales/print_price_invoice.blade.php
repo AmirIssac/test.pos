@@ -131,7 +131,7 @@
         </div>
         <br>
             @if(isset($sum))
-            <p class="p-inline">المجموع
+            <p class="p-inline">المجموع قبل الضريبة
                 {{$sum}}
             </p>
             <p class="p-inline">الضريبة
@@ -145,7 +145,7 @@
            
             </p>
             <p>
-            <p class="p-inline">المبلغ الإجمالي
+            <p class="p-inline"> الإجمالي شامل الضريبة
                 {{$total_price}}
             </p>
             </p>

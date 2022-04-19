@@ -188,7 +188,7 @@
                    <div style="display: flex; justify-content: space-between">
                   <div>
                     <h5>
-                       المجموع 
+                       المجموع قبل الضريبة 
                     </h5>
                     {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
                     <input type="number" name="sum" id="total_price" class="form-control" value="{{$sum}}" readonly>
@@ -214,7 +214,7 @@
                    @if(!isset($complete_invoice))
                  <div>
                    <h3>
-                     المبلغ الإجمالي 
+                      الإجمالي شامل الضريبة 
                    </h3>  
                    <input type="number" name="total_price" id="final_total_price" class="form-control" value="{{$total_price}}" readonly>
                  </div>

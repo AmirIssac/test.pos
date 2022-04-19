@@ -141,7 +141,7 @@
         </div>
         <br>
         <p>
-        <p class="p-inline"> المجموع
+        <p class="p-inline"> المجموع قبل الضريبة
               <p id="total_price" class="p-inline">
               </p> </p>
               <p class="p-inline">   الضريبة
@@ -153,7 +153,7 @@
         </p>
               <p>
               <p class="p-inline">
-            المبلغ الإجمالي
+             الإجمالي شامل الضريبة
               @if($invoice->status == 'retrieved')
               <p>{{$invoice->total_price}}-</p>
               @else
