@@ -3972,6 +3972,18 @@ class SellController extends Controller
         return redirect(route('sales.index',$repository->id))->with('retrievedSuccess',__('alerts.purchase_retrieve_success'));
     } 
 
+    public function replaceInvoiceForm($uuid){
+        $invoice = Invoice::where('uuid',$uuid)->first();
+        $repository = $invoice->repository;
+        $records = unserialize($invoice->details);
+        switch($repository->isSpecial()){
+            case true : {
+                return view('manager.Sales.replace_special_invoice_form',['repository'=>$repository,'invoice'=>$invoice,
+                            'records'=>$records]);
+            } 
+        }
+    }
+
     public function changePayment($uuid){   // form
         //$invoice = Invoice::find($id);
         $invoice = Invoice::where('uuid',$uuid)->first();

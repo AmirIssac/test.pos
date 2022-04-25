@@ -166,7 +166,10 @@
                               {{$invoice->user->name}}
                           </td>
                           <td>
-                            <button type="button" data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="btn btn-danger"> {{__('sales.retrieve')}} </button> 
+                            <button type="button" data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="btn btn-danger"> {{__('sales.retrieve')}} </button>
+                            {{--
+                            <a href="{{route('replace.invoice.form',$invoice->uuid)}}" class="btn btn-info"> استبدال </a>  
+                            --}}
                           </td>
                         </tr>
                         <tr> 

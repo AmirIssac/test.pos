@@ -616,7 +616,7 @@ input:read-only{
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
@@ -653,7 +653,7 @@ input:read-only{
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                  $('#taxfield').val(increment);
+                  $('#taxfield').val(increment.toFixed(2));
 
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
@@ -810,7 +810,7 @@ input:read-only{
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
@@ -847,7 +847,7 @@ input:read-only{
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                  $('#taxfield').val(increment);
+                  $('#taxfield').val(increment.toFixed(2));
 
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
@@ -973,7 +973,7 @@ $('#sell-form').keypress(function(e) {
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
 
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
@@ -1010,7 +1010,7 @@ $('#sell-form').keypress(function(e) {
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
 
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
@@ -1185,7 +1185,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -1220,7 +1220,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                  $('#taxfield').val(increment);
+                  $('#taxfield').val(increment.toFixed(2));
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -1290,7 +1290,7 @@ window.onload=function(){
                 var tax =  parseFloat($('#tax').val());
                 var total_price =  parseFloat($('#total_price').val());
                 var increment = (tax * total_price) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
@@ -1398,7 +1398,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -1433,7 +1433,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -1518,7 +1518,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -1559,7 +1559,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discountv)) / 100;
                   var increment1 = (tax * (total_price_acc-discountv)) / 100;
                   var increment2 = (tax * (total_price_notacc-discountv)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -1643,7 +1643,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -1678,7 +1678,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -1863,7 +1863,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -1898,7 +1898,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment);
+                $('#taxfield').val(increment.toFixed(2));
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);

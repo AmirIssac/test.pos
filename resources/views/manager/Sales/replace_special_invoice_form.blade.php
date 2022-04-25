@@ -1,6 +1,5 @@
 @extends('layouts.main')
 @section('links')
-<link rel="stylesheet" href="{{asset('public/alerts/style.css')}}"/>
 
 <style>
 
@@ -125,42 +124,6 @@ select{
   overflow: hidden
 
         }
-        /*
-.yesNo{
-  height: 20px;
-  width: 120px;
-  font-size: 1rem;
-  margin-top: 8px;
-}
-
-.yesNo::before {
-  content: "no";
-  padding: 0.5rem 1rem;
-  border: 2px solid #0d6efd;
-  background-color: #f24336;
-  color: white;
-}
-
-.yesNo::after {
-  content: "yes";
-  padding: 0.5rem 1rem;
-  border: 2px solid #0d6efd;
-  background-color: rgb(255, 255, 255);
-  color: black;
-}
-
-.yesNo:checked::before {
-  border: 2px solid #0d6efd;
-  background-color: white;
-  color: blue;
-}
-
-.yesNo:checked::after {
-  border: 2px solid #0d6efd;
-  background-color: rgb(12, 190, 66);
-  color: white;
-}
-*/
 
 .yesNo {
     width: 12mm;
@@ -257,95 +220,22 @@ input:read-only{
           <strong>{{ session('fail') }}</strong>
   </div>
   @endif
-  
+  <form id="sell-form" action="{{route('store.price.invoice',$repository->id)}}" method="POST">
+    @csrf
   <div  class="container-fluid">
     <div class="row">
       <div class="col-md-12">
         <div class="card" id="data-invoice">
-          @if($setting->customer_data)
-          <form method="GET" action="{{route('create.invoice',$repository->id)}}">
-            @csrf
-                    @if(isset($new))
-                    @if($new)
-                    <span class="badge badge-info">{{__('sales.new_customer')}}</span>
-                    @else
-                    <span class="badge badge-success">{{__('sales.exist_customer')}}</span>
-                    @endif
-                    @else
-                    {{__('sales.search')}}
-                    @endif
-                    <div class="table-responsive">
-                      <table class="table">
-                        <thead class="text-primary">
-                          <th>
-                            {{__('sales.phone')}}  
-                          </th>
-                          @if(!request()->query('phone'))
-                          <th class="hidden">
-                            {{__('sales.name')}}  
-                          </th>
-                          @else
-                          <th>
-                            {{__('sales.name')}}  
-                          </th>
-                          @endif
-                          <th>
-                            {{__('sales.search/add')}}  
-                          </th>
-                        </thead>
-                        <tbody>
-                      <tr>
-                        <td>
-                          <input type="phone" name="phone" value="{{isset($phone)?$phone:''}}" class="form-control" placeholder="{{__('sales.type_here_input_new_cust')}}" required autofocus>
-                        </td>
-                        @if(!request()->query('phone'))
-                        <td>
-                          <input type="text" name="name" id="customerName" value="{{isset($customer_name)?$customer_name:''}}" class="form-control displaynone">
-                          <div>
-                        @else
-                        <td>
-                          <input type="text" name="name" id="customerName" value="{{isset($customer_name)?$customer_name:''}}" class="form-control">
-                          <div>
-                        @endif
-                          @if(isset($name_generated))
-                            @if($name_generated)
-                            <span class="badge badge-warning">{{__('sales.generated_name')}}</span>
-                            @endif
-                            @endif
-                          </div>
-                        </td>
-                        <td>
-                          <button type="submit" class="btn btn-primary"> {{__('sales.search/add')}} </button>
-                        </td>
-                      </tr>
-                      
-                </tbody>
-              </table>
-               </div>
-          </form>
-          
-          @else
-              <div class="card-header">
-                @if(isset($date) && $date == 'custom')
-                <h4>{{__('sales.plz_input_date_invoice')}}</h4>
-                <input type="datetime-local" name="date" class="form-control">
-                @else
-                <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
-                @endif
-                <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
-                <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
-              </div>
-          @endif
-          <form id="sell-form" action="{{route('make.sell',$repository->id)}}" method="POST">
-            @csrf
+          <div class="card-header">
+            @if(isset($date) && $date == 'custom')
+            <h4>{{__('sales.plz_input_date_invoice')}}</h4>
+            <input type="datetime-local" name="date" class="form-control">
+            @else
+            <input style="display: none" type="text" name="date" value="{{isset($date)?$date:''}}" readonly>
+            @endif
             <input style="display: none" type="text" name="customer_phone" id="customer_phone" value="{{isset($phone)?$phone:''}}" readonly>
-                <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
-                @if(request()->query('phone'))
-                <label>{{__('sales.customer_tax_code')}}</label>
-                          <input type="text" name="customer_tax_code" value="{{isset($customer_tax_code) ? $customer_tax_code : ''}}" style="border-radius: 3px; padding:5px; marging:0 5px;">
-                <label>{{__('sales.customer_tax_address')}}</label>
-                          <input type="text" name="customer_tax_address" value="{{isset($customer_tax_address) ? $customer_tax_address : ''}}" style="border-radius: 3px; padding:5px; marging:0 5px;">
-                @endif
+            <input type="hidden" name="customer_name" id="customerN" value="{{isset($customer_name)?$customer_name:''}}">
+          </div>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-c">
@@ -364,13 +254,7 @@ input:read-only{
                     {{__('sales.quantity')}} 
                   </th>
                   <th style="width: 10%">
-                    Tax
-                  </th>
-                  <th style="width: 10%">
                     {{__('sales.in_stock')}}
-                  </th>
-                  <th style="width: 10%" id="del" class="">
-                    {{__('sales.delivered')}}   
                   </th>
                   <th style="width: 10%">
                     {{__('sales.total_price')}}
@@ -380,71 +264,69 @@ input:read-only{
                 </thead>
 
                 <tbody>
-                    <tr id="record0">
-                      <td>
-                        <input type="hidden" name="repo_id" id="repo_id" class="form-control" value="{{$repository->id}}">
-                          <input type="text" id="bar0" name="barcode[]" value="{{old('barcode0')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus" autofocus>
-                          {{-- error delay --}}
-                          <input type="hidden" id="timeout0" value="">
-                          <input type="hidden" id="cart-init0" value="0">
-
-                      </td>
-                      @if(LaravelLocalization::getCurrentLocale() == 'ar')
-                      <td>
-                        <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank" readonly>
-                      </td>
-                      <td class="displaynone">
-                       {{-- we get the english input beacause we need it in storing invoice details all --}}
-                        <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank" readonly>
-                      </td>
+                  <input type="hidden" value="{{$repository->id}}" id="repo_id">
+                  @php
+                        $loop_counter = 0 ;
+                  @endphp
+                  @foreach($records as $record)
+                  @if($loop->index == 0)
+                    <?php continue; ?>  {{-- first record is empty --}}
+                  @endif
+                  <tr id="record{{$loop_counter}}">
+                    <td>
+                        <input type="text" id="bar{{$loop_counter}}" name="barcode[]" value="{{$record['barcode']}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus">
+                        {{-- error delay --}}
+                        <input type="hidden" id="timeout{{$loop_counter}}" value="">
+                        <input type="hidden" id="cart-init{{$loop_counter}}" value="0">
+                    </td>
+                    @if(LaravelLocalization::getCurrentLocale() == 'ar')
+                    <td>{{-- الاسم بالعربي --}}
+                      <input type="text" id="name{{$loop_counter}}"  name="name[]" value="{{$record['name_ar']}}" class="form-control name blank" readonly>
+                    </td>
+                    <td class="displaynone">{{-- الاسم بالانكليزي --}}
+                      <input type="text" id="details{{$loop_counter}}"  name="details[]" value="{{$record['name_en']}}" class="form-control details blank" readonly>
+                    </td>
+                    @else
+                    <td class="displaynone">
+                      <input type="text" id="name{{$loop_counter}}"  name="name[]" value="{{$record['name_ar']}}" class="form-control name blank" readonly>
+                    </td>
+                    <td>
+                      <input type="text" id="details{{$loop_counter}}"  name="details[]" value="{{$record['name_en']}}" class="form-control details blank" readonly>
+                    </td>
+                    @endif
+                    <td style="display: none;">
+                      <input type="hidden" id="cost_price{{$loop_counter}}"  name="cost_price[]" value="{{$record['cost_price']}}" class="form-control blank" readonly>
+                    </td>
+                    <td>
+                      {{--
+                      @if($repository->setting->discount_change_price == true)
+                      <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank">
                       @else
-                      <td class="displaynone">
-                        {{-- we get the arabic input beacause we need it in storing invoice details all --}}
-                        <input type="text" id="name0"  name="name[]" value="{{old('name0')}}" class="form-control name blank" readonly>
-                      </td>
-                      <td>
-                        <input type="text" id="details0"  name="details[]" value="{{old('details0')}}" class="form-control details blank" readonly>
-                      </td>
+                      <input type="number" id="price{{$count}}" min="0" step="0.01"  name="price[]" value="{{old('price.'.$count)}}" class="form-control price blank" readonly>
                       @endif
-                      <td style="display: none;">
-                        <input type="hidden" id="cost_price0"  name="cost_price[]" value="{{old('cost_price0')}}" class="form-control blank" readonly>
-                      </td>
-                      <td>
-                        {{--
-                        @if($repository->setting->discount_change_price == true)
-                        <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank">
-                        @else
-                        <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
-                        @endif
-                        --}}
-                        <input type="number" id="price0" min="0" step="0.01"  name="price[]" value="{{old('price0')}}" class="form-control price blank" readonly>
-                        <input style="display: none" type="number" id="price-inc-tax0" min="0" step="0.01"  name="price_inc[]" value="{{old('price_inc0')}}" class="form-control">
-                      </td>
-                      <td>
-                        @if(old('quantity0'))
-                        <input type="number" id="quantity0" min="1" name="quantity[]" value="{{old('quantity0')}}" class="form-control quantity" placeholder="الكمية">
-                        @else
-                        <input type="number" id="quantity0" min="1" name="quantity[]"  class="form-control quantity" value="1" placeholder="الكمية">
-                        @endif
+                      --}}
+                      <input type="number" id="price{{$loop_counter}}" min="0" step="0.01"  name="price[]" value="{{$record['price']}}" class="form-control price blank" readonly>
                     </td>
                     <td>
-                      <input type="number" id="tax-row0" name="tax_row[]" min="0" step="0.01" class="form-control" readonly>
-                    </td>
-                    <td>
-                      <input type="text" id="ava0" name="availability[]" value=""  class="form-control availability" readonly>
-                    </td>
-                    <td>
-                      <input type="checkbox" name="del[]" id="d0"  class="delivered hidden yesNo" value="0" checked>  {{-- need it just in hanging invoices --}}
-                      <input type="hidden" id="accept_min0">
+                      <input type="number" id="quantity{{$loop_counter}}" min="1" name="quantity[]" value="{{$record['quantity']}}" class="form-control quantity" placeholder="الكمية">
                   </td>
                   <td>
-                    <input type="number" id="sum-row0" name="sum-row[]" value=""  class="form-control" readonly>
+                    <input type="text" id="ava{{$loop_counter}}" name="availability[]" value=""  class="form-control availability" readonly>
                   </td>
                   <td>
-                    <a id="delete0" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                    <input type="number" id="sum-row{{$loop_counter}}" name="sum-row[]" value=""  class="form-control" readonly>
+                  </td>
+                  <td>
+                    <a id="delete{{$loop_counter}}" class="delete"><img src="{{asset('public/img/delete-icon.jpg')}}" width="45px" height="45px"></a>
+                    <input type="hidden" id="accept_min{{$loop_counter}}">
                 </td>
                 </tr>
-                  @for ($count=1;$count<=25;$count++)
+                    @php
+                        $loop_counter++;
+                    @endphp
+                  @endforeach
+                  <input type="hidden" value="{{$loop_counter-1}}" id="start-row-enter">
+                  @for($count=$loop_counter;$count<=25;$count++)
                     <tr id="record{{$count}}" class="displaynone">
                       <td>
                           <input type="text" id="bar{{$count}}" name="barcode[]" value="{{old('barcode[$count]')}}"  class="form-control barcode" placeholder="{{__('sales.scanner_input')}}" id="autofocus">
@@ -495,9 +377,6 @@ input:read-only{
                       <input type="text" id="ava{{$count}}" name="availability[]" value=""  class="form-control availability" readonly>
                     </td>
                     <td>
-                        <input type="checkbox" name="del[]" id="d{{$count}}" value="{{$count}}"  class="delivered hidden yesNo" checked>  {{-- need it just in hanging invoices --}}
-                    </td>
-                    <td>
                       <input type="number" id="sum-row{{$count}}" name="sum-row[]" value=""  class="form-control" readonly>
                     </td>
                     <td>
@@ -508,66 +387,67 @@ input:read-only{
             @endfor
          </tbody>
        </table>
+       
        <div id="cash-info">
-         <div style="display: flex;">
-        <div>
-          <h6>
-            {{__('sales.sum')}} 
-          </h6>
-          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
-          <input type="number" name="sum" id="total_price" class="form-control" value="0" readonly>
-        </div>
-        <div id="tax-container">
-          <h6>{{__('sales.tax')}}</h6>
-         <div style="display: flex; flex-direction: column; margin-top: 3px;">
-           <div style="display: flex;">
-             <input type="number" name="taxprint" value="0"  id="taxfield" class="form-control" readonly>
-             <input style="margin-right: 10px;" type="hidden" value="{{$repository->tax}}" name="tax" id="tax" class="form-control">
-           </div>
-         </div>
-       </div>
-
+        <div style="display: flex;">
        <div>
-         
-        <h6>{{__('sales.discount')}}</h6>
-        
-       <div style="display: flex; flex-direction: column; margin-top: 3px;">
-         <div style="display: flex;">
-          @if($repository->setting->discount_by_percent == true)
-          {{--<i style="color: #001bb7" id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.max_is')}} %{{$repository->max_discount}} ">live_help</i>--}}
-           <input style="margin: 10px;" type="number" name="max_discount"  step="0.01" min="0" max="{{$repository->max_discount}}" placeholder="{{__('sales.percent')}}"  id="max-field" class="form-control">
-           <input style="display:none;" type="number"  id="max-allowed" value="{{$repository->max_discount}}">
-           <input type="hidden" name="discountVal" id="discountVal" value="0.00">
-           <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
-           @else
-           <input style="display: none" type="number" name="max_discount" value="0" step="0.01" min="0" max="{{$repository->max_discount}}"  id="max-field" class="form-control">
-           <input type="hidden" name="discountVal" id="discountVal" value="0.00">
-           <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
-          @endif
-          @if($repository->setting->discount_by_value == true)
-         {{-- <i style="color: #001bb7" id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.discount_by_value')}}">live_help</i> --}}
-           <input style="margin: 10px;" type="number" name="discount_by_value" step="0.01" min="0" placeholder="{{__('settings.discount_by_value')}}"  id="discount-by-value" class="form-control">
-           <input type="hidden" name="check_discount_by_value" value="1" id="check-discount-by-value">
-           @else
-           <input style="display: none" type="number" name="discount_by_value" value="0" step="0.01" min="0"  id="discount-by-value" class="form-control">
-           <input type="hidden" name="check_discount_by_value" value="1" id="check-discount-by-value">
-          @endif
-         </div>
-       </div>
-     </div>
-          </div>
-       <div>
-         <h5>
-          {{__('sales.total_price')}} 
-         </h5>
+         <h6>
+           {{__('sales.sum')}} 
+         </h6>
          {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
-         <input type="number" name="total_price" id="final_total_price" class="form-control" value="0" readonly>
-         <input type="hidden" id="total_price_acc">
-         <input type="hidden" id="total_price_notacc">
-         <input type="hidden" id="f_total_price_acc">
-         <input type="hidden" id="f_total_price_notacc">
+         <input type="number" name="sum" id="total_price" class="form-control" value="0" readonly>
        </div>
-       </div>
+       <div id="tax-container">
+         <h6>{{__('sales.tax')}}</h6>
+        <div style="display: flex; flex-direction: column; margin-top: 3px;">
+          <div style="display: flex;">
+            <input type="number" name="taxprint" value="0"  id="taxfield" class="form-control" readonly>
+            <input style="margin-right: 10px;" type="hidden" value="{{$repository->tax}}" name="tax" id="tax" class="form-control">
+          </div>
+        </div>
+      </div>
+
+
+      <div>
+       <h6>{{__('sales.discount')}}</h6>
+      <div style="display: flex; flex-direction: column; margin-top: 3px;">
+        <div style="display: flex;">
+         @if($repository->setting->discount_by_percent == true)
+         {{--<i style="color: #001bb7" id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title=" {{__('sales.max_is')}} %{{$repository->max_discount}} ">live_help</i>--}}
+          <input style="margin: 10px;" type="number" name="max_discount"  step="0.01" min="0" max="{{$repository->max_discount}}" placeholder="{{__('sales.percent')}}"  id="max-field" class="form-control">
+          <input style="display:none;" type="number"  id="max-allowed" value="{{$repository->max_discount}}">
+          <input type="hidden" name="discountVal" id="discountVal" value="0.00">
+          <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
+          @else
+          <input style="display: none" type="number" name="max_discount" value="0" step="0.01" min="0" max="{{$repository->max_discount}}"  id="max-field" class="form-control">
+          <input type="hidden" name="discountVal" id="discountVal" value="0.00">
+          <input type="hidden" name="check_discount_by_percent" value="1" id="check-discount-by-percent">
+         @endif
+         @if($repository->setting->discount_by_value == true)
+        {{-- <i style="color: #001bb7" id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('settings.discount_by_value')}}">live_help</i> --}}
+          <input style="margin: 10px;" type="number" name="discount_by_value" step="0.01" min="0" placeholder="{{__('settings.discount_by_value')}}"  id="discount-by-value" class="form-control">
+          <input type="hidden" name="check_discount_by_value" value="1" id="check-discount-by-value">
+          @else
+          <input style="display: none" type="number" name="discount_by_value" value="0" step="0.01" min="0"  id="discount-by-value" class="form-control">
+          <input type="hidden" name="check_discount_by_value" value="1" id="check-discount-by-value">
+         @endif
+        </div>
+      </div>
+    </div>
+         </div>
+      <div>
+        <h5>
+         {{__('sales.total_price')}} 
+        </h5>
+        {{--<h1 id="total_price">{{$invoice_total_price}}</h1>--}}
+        <input type="number" name="total_price" id="final_total_price" class="form-control" value="0" readonly>
+        <input type="hidden" id="total_price_acc">
+        <input type="hidden" id="total_price_notacc">
+        <input type="hidden" id="f_total_price_acc">
+        <input type="hidden" id="f_total_price_notacc">
+      </div>
+      </div>
+
        {{--<i class="material-icons">add_circle</i>--}}
        <a class="position-relative mx-3">
         <span style="color: #001bb7;" class="icon"><i style="font-size: 2em;" class="bi bi-cart"></i></span>
@@ -583,53 +463,45 @@ input:read-only{
 
        </div>
         <div>
-          <div style="display: flex; flex-direction: column; margin-top: 10px">
-            <div style="display: flex;">
-          <h4> &nbsp; {{__('sales.cash')}}</h4>
-          <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
+
+          <div>
+            <div style="display: flex; flex-direction: column; margin-top: 10px">
+              <div style="display: flex;">
+            <h4> &nbsp; {{__('sales.cash')}}</h4>
+            <input style="margin: 7px 10px 0 0" type="checkbox" name="cash" id="cash" checked>
+              </div>
+            <input type="hidden" id="all_price_value">   {{-- to set value for all payment method when activate from this input --}}
+            <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cashVal" id="cashVal" value="" placeholder="{{__('settings.input_cash_here')}}" class="visible">
             </div>
-          <input type="hidden" id="all_price_value">   {{-- to set value for all payment method when activate from this input --}}
-          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cashVal" id="cashVal" value="" placeholder="{{__('settings.input_cash_here')}}" class="visible">
-          </div>
-          <div style="display: flex;flex-direction: column;">
-            <div style="display: flex;">
-          <h4> &nbsp; {{__('sales.card')}}</h4>
-          <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
+            <div style="display: flex;flex-direction: column;">
+              <div style="display: flex;">
+            <h4> &nbsp; {{__('sales.card')}}</h4>
+            <input style="margin: 7px 10px 0 0" type="checkbox" id="card" name="card">
+              </div>
+            <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cardVal" id="cardVal" value="" placeholder="{{__('settings.input_card_here')}}" class="hidden">
             </div>
-          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="cardVal" id="cardVal" value="" placeholder="{{__('settings.input_card_here')}}" class="hidden">
-          </div>
-          <div style="display: flex;flex-direction: column;">
-            <div style="display: flex;">
-          <h4> &nbsp; STC pay</h4>
-          <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
+            <div style="display: flex;flex-direction: column;">
+              <div style="display: flex;">
+            <h4> &nbsp; STC pay</h4>
+            <input style="margin: 7px 10px 0 0" type="checkbox" id="stc" name="stc">
+              </div>
+            <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="stcVal" id="stcVal" value="" placeholder="{{__('settings.input_stc_here')}}" class="hidden">
             </div>
-          <input style="margin-right: 0px" type="number" min="0.0000001" step="0.0000001" name="stcVal" id="stcVal" value="" placeholder="{{__('settings.input_stc_here')}}" class="hidden">
-          </div>
-          </div>
-          @if(!$setting->customer_data)
+            </div>
+          
           <h4>جوال العميل</h4>
           <input type="text" name="customer_phone" id="phone">
-          @endif
           <h4>{{__('sales.note')}}</h4>
           <input type="text" name="note" placeholder="{{__('sales.type_note')}}" class="form-control">
-          @if(isset($date) && $date == 'custom')
-          <h4>{{__('sales.inv_not_belong_to_todays_invoices')}}</h4>
-          <input type="checkbox" name="old_invoice" value="yes" checked>
-          @endif
           <div>
             <div style="margin-top: 10px;" class="col-12">
               <div class="form-group text-end">
-                @if($setting->customer_data)
-                      <button id="submit" type="submit" name="action" value="sell-with-customer-data" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
-                @else
-                      <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
-                @endif
+                  <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
                   <a href="{{route('create.invoice',$repository->id)}}" style="color: white;" class="btn btn-red">{{__('buttons.cancel')}}</a>
               </div>
           </div>
           </div>
           </div>
-        </form>
        </div>
    </div>
 </div>
@@ -637,11 +509,10 @@ input:read-only{
 </div>
 </div>
 </div>
-<input type="hidden" id="error-audio" value="{{asset('public/audio/error.wav')}}">
+</form>
 
 @endsection
 @section('scripts')
-<script src="{{asset('public/alerts/cute-alert.js')}}"></script>
 
 <script>
   
@@ -662,6 +533,139 @@ input:read-only{
     return true;
 }
  
+</script>
+<script>
+$(document).ready(function() {
+              var cartVal = 0 ;
+              for(var c=0;c<=25;c++){
+                if($('#name'+c).val() != null){
+                  cartVal = cartVal + parseInt($('#cart-init'+c).val());
+                //$('#cart').text(parseInt($('#cart').text()) + parseInt($('#cart-init'+c).val()));
+                }
+              }
+              $('#cart').text(cartVal);
+
+                var s = 0 ;  
+                var s1 = 0 ; // sum for accept min value
+                var s2 = 0 ;   // sum for not accept min value
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0){
+                     s = s + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price').val(s);
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
+                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_acc').val(s1);  // hidden
+                for(var i=0;i<=25;i++){   // number of records
+                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
+                    console.log('second');
+                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
+                  }
+                } // end for loop
+                $('#total_price_notacc').val(s2);  // hidden
+                //tax
+                var tax =  parseFloat($('#tax').val());
+                var total_price =  parseFloat($('#total_price').val());
+                var total_price_acc =  parseFloat($('#total_price_acc').val());
+                var total_price_notacc =  parseFloat($('#total_price_notacc').val());
+                /*
+                var increment = (tax * total_price) / 100;
+                var increment1 = (tax * total_price_acc) / 100;
+                var increment2 = (tax * total_price_notacc) / 100;
+                $('#taxfield').val(increment);*/
+                
+                var check_discount_by_percent = $('#check-discount-by-percent').val();
+                var check_discount_by_value = $('#check-discount-by-value').val();
+                if($('#check-discount-by-percent').val() == '1'){
+                var discount_percent = parseFloat($('#max-field').val());
+                if(Number.isNaN(discount_percent))
+                  discount_percent = 0;    // to accept null value for discount
+                var discount = (parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                discount = discount.toFixed(2);
+                $('#discountVal').val(discount);
+                var discount1 = (parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                discount1 = discount1.toFixed(2);
+                var discount2 = (parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                discount2 = discount2.toFixed(2);
+
+                var increment = (tax * (total_price-discount)) / 100;
+                var increment1 = (tax * (total_price_acc-discount1)) / 100;
+                var increment2 = (tax * (total_price_notacc-discount2)) / 100;
+                $('#taxfield').val(increment);
+                
+                $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
+                $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
+                $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
+                  if($('#check-discount-by-value').val() == '1'){
+                  var discountv = parseFloat($('#discount-by-value').val());
+                  if(Number.isNaN(discountv))
+                    discountv = 0; // to accept null value for discount
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
+                  }
+                }
+                else{
+                if($('#check-discount-by-value').val() == '1'){
+                var discountv = parseFloat($('#discount-by-value').val());
+                if(Number.isNaN(discountv))
+                    discountv = 0;
+                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
+                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
+                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
+                  if($('#check-discount-by-percent').val() == '1'){
+                  var discount_percent = parseFloat($('#max-field').val());
+                  if(Number.isNaN(discount_percent))
+                    discount_percent = 0;
+                  var discount = (parseFloat($('#total_price').val()) ) * discount_percent / 100;
+                  discount = discount.toFixed(2);
+                  $('#discountVal').val(discount);
+                  var discount1 = (parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
+                  discount1 = discount1.toFixed(2);
+                  var discount2 = (parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
+                  discount2 = discount2.toFixed(2);
+
+                  var increment = (tax * (total_price-discount)) / 100;
+                  var increment1 = (tax * (total_price_acc-discount1)) / 100;
+                  var increment2 = (tax * (total_price_notacc-discount2)) / 100;
+                  $('#taxfield').val(increment);
+
+                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
+                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
+                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
+                  }
+                }
+                }
+                
+                //min
+                $('#cashVal').val($('#final_total_price').val());     // cash value input
+                $('#all_price_value').val($('#final_total_price').val());
+                // update min value when total price change
+                //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
+                var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
+                //console.log(newMin);
+                $('#inputmin').val(newMin);
+                $('#minVal').text(newMin);
+                // check min validation
+                var cash =  parseFloat($('#cashVal').val());
+                var card = parseFloat($('#cardVal').val());
+                var stc = parseFloat($('#stcVal').val());
+                // min payment
+                var min = parseFloat($('#inputmin').val());
+                  if(card+cash+stc<min){
+                  $('#submit').prop('disabled', true);
+                  $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
+                  } 
+                  else{
+                  $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
+                  $('#submit').prop('disabled', false);
+                  }
+            });
 </script>
 <script>    // Ajax
     $('.barcode').on('keyup input paste',function(){
@@ -767,7 +771,7 @@ input:read-only{
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
@@ -804,7 +808,7 @@ input:read-only{
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                  $('#taxfield').val(increment.toFixed(2));
+                  $('#taxfield').val(increment);
 
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
@@ -836,7 +840,6 @@ input:read-only{
                   $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
                   $('#submit').prop('disabled', false);
                   }
-                  
               } // end if
 
                           // warning notification if quantity not enough
@@ -961,7 +964,7 @@ input:read-only{
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
@@ -998,7 +1001,7 @@ input:read-only{
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                  $('#taxfield').val(increment.toFixed(2));
+                  $('#taxfield').val(increment);
 
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
@@ -1069,7 +1072,7 @@ $('#sell-form').keypress(function(e) {
                 var gold =  id.slice(8);   // remove bar from id to take just the number
 
                 var s = 0 ;
-                var s1 = 0 ;
+                var s1 = 0;
                 var s2 = 0 ;
                 var tax_setting = $('#tax').val();
                 var price_inc_tax = parseFloat($('#price-inc-tax'+gold).val()) * parseFloat($('#quantity'+gold).val()) ;
@@ -1085,6 +1088,7 @@ $('#sell-form').keypress(function(e) {
                 $('#total_price').val(s);
                 for(var i=0;i<=25;i++){   // number of records
                   if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
+                    console.log('first');
                      s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
                   }
                   $('#sum-row'+gold).val($('#price'+gold).val() * $('#quantity'+gold).val());
@@ -1123,7 +1127,7 @@ $('#sell-form').keypress(function(e) {
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
 
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
@@ -1160,7 +1164,7 @@ $('#sell-form').keypress(function(e) {
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
 
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
@@ -1248,356 +1252,8 @@ $('#sell-form').keypress(function(e) {
                 });
   });
 </script>
-<script>  // hide and show div
-    $('#toggle-recipe').on('click',function(){
-    $("#recipe").toggle();
-    });
-    $('#toggle-invoices').on('click',function(){
-    $("#invoices").toggle();
-    });
-</script>
-<script>
-  $('#cash').on('click',function(){
-if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
-    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="cashVal"]').val($('#all_price_value').val());
-}
-if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').val($('#all_price_value').val());
-  $('#cardVal').val(null);
-  $('#stcVal').val(null);
-}
-if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').val($('#all_price_value').val());
-  $('#cardVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('#cashVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('#cashVal').val(null);
-  $('#stcVal').val(null);
-}
-if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').val($('#all_price_value').val());
-  $('#stcVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('#cashVal').val(null);
-  $('#cardVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
-  //$('#cash').prop('checked',true);
-  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  //$('#cashVal').val( $('#total_price').val());
-  $('#cashVal').val(null);
-  $('#cardVal').val(null);
-  $('#stcVal').val(null);
-  //$('#submit').prop('disabled', true);
-  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='' && parseFloat($('#percent').val())==0)   // we put name0 to prevent confirm empty invoice
-  $('#submit').prop('disabled', false);
-  else
-  $('#submit').prop('disabled', true);
-}
-});
-</script>
-<script>
-  $('#card').on('click',function(){
-if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
-    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="cardVal"]').val($('#all_price_value').val());
-}
-if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('#cardVal').val(null);
-  $('#stcVal').val(null);
-}
-if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('#cardVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cardVal"]').val($('#all_price_value').val());
-  $('#cashVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cardVal"]').val($('#all_price_value').val());
-  $('#cashVal').val(null);
-  $('#stcVal').val(null);
-}
-if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cardVal"]').val($('#all_price_value').val());
-  $('#stcVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('#cashVal').val(null);
-  $('#cardVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
-  //$('#cash').prop('checked',true);
-  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  //$('#cashVal').val( $('#total_price').val());
-  $('#cashVal').val(null);
-  $('#cardVal').val(null);
-  $('#stcVal').val(null);
-  //$('#submit').prop('disabled', true);
-  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='' && parseFloat($('#percent').val())==0)   // we put name0 to prevent confirm empty invoice
-  $('#submit').prop('disabled', false);
-  else
-  $('#submit').prop('disabled', true);
-}
-});
-</script>
-<script>
-  $('#stc').on('click',function(){
-if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
-    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-    $('input[name="stcVal"]').val($('#all_price_value').val());
-}
-if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('#cardVal').val(null);
-  $('#stcVal').val(null);
-}
-if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').val($('#all_price_value').val());
-  $('input[name="stcVal"]').val($('#all_price_value').val());
-  $('#cardVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').val($('#all_price_value').val());
-  $('#cashVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('#cashVal').val(null);
-  $('#stcVal').val(null);
-}
-if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
-  $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  $('#stcVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
-  $('input[name="stcVal"]').val($('#all_price_value').val());
-  $('#cashVal').val(null);
-  $('#cardVal').val(null);
-}
-if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
-  //$('#cash').prop('checked',true);
-  //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
-  $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
-  $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
-  //$('#cashVal').val( $('#total_price').val());
-  $('#cashVal').val(null);
-  $('#cardVal').val(null);
-  $('#stcVal').val(null);
-  //$('#submit').prop('disabled', true);
-  if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='' && parseFloat($('#percent').val())==0)   // we put name0 to prevent confirm empty invoice
-  $('#submit').prop('disabled', false);
-  else
-  $('#submit').prop('disabled', true);
-}
-});
-</script>
-<script>
-  //$('#cashVal').val($('#final_total_price').val());
-window.onload=function(){
-  $('#submit').prop('disabled',true);
-  $('#cashVal').val($('#final_total_price').val());
-  $('#all_price_value').val($('#final_total_price').val());
 
-  // tax
-  var tax =  parseFloat($('#tax').val());
-    var total_price =  parseFloat($('#total_price').val());
-    var increment = (tax * total_price) / 100;
-    $('#taxfield').val(increment.toFixed(2));
-    // min init
-    var initmin = parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()) / 100 ;
-    $('#inputmin').val(initmin);
-};
-  var c = $('input[name="barcode[]"]');
-  var count = c.length;    // number of records
- 
-$('input[name="quantity[]"]').on("keyup",function(){
-  var sum = 0 ;
-  var s1 = 0;
-  var s2 = 0 ;
-  for(var i=0;i<count;i++){
-    sum = sum + $('.price').eq(i).val()*$('.quantity').eq(i).val();
-    //$('#total_price').val($('#total_price').val()+($('.price').eq(i).val()*$('.quantity').eq(i).val()));
-  }
-  $('#total_price').val(sum);
-  for(var i=0;i<=25;i++){   // number of records
-                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==1){
-                    console.log('first');
-                     s1 = s1 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
-                  }
-                } // end for loop
-                $('#total_price_acc').val(s1);  // hidden
-                for(var i=0;i<=25;i++){   // number of records
-                  if(!$('#price'+i+'').val().length == 0 && parseInt($('#accept_min'+i+'').val())==0){
-                    console.log('second');
-                     s2 = s2 + parseFloat($('#price'+i+'').val()) * parseFloat($('#quantity'+i+'').val());
-                  }
-                } // end for loop
-                $('#total_price_notacc').val(s2);  // hidden
- // tax
-    var tax =  parseFloat($('#tax').val());
-    var total_price =  parseFloat($('#total_price').val());
-    var total_price_acc =  parseFloat($('#total_price_acc').val());
-    var total_price_notacc =  parseFloat($('#total_price_notacc').val());
-               /* var increment = (tax * total_price) / 100;
-                var increment1 = (tax * total_price_acc) / 100;
-                var increment2 = (tax * total_price_notacc) / 100;
-    $('#taxfield').val(increment);*/
-    var check_discount_by_percent = $('#check-discount-by-percent').val();
-                var check_discount_by_value = $('#check-discount-by-value').val();
-                if($('#check-discount-by-percent').val() == '1'){
-                var discount_percent = parseFloat($('#max-field').val());
-                if(Number.isNaN(discount_percent))
-                    discount_percent = 0;
-                var discount = (parseFloat($('#total_price').val()) ) * discount_percent / 100;
-                discount = discount.toFixed(2);
-                $('#discountVal').val(discount);
-                var discount1 = (parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
-                discount1 = discount1.toFixed(2);
-                var discount2 = (parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
-                discount2 = discount2.toFixed(2);
-                var increment = (tax * (total_price-discount)) / 100;
-                var increment1 = (tax * (total_price_acc-discount1)) / 100;
-                var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
-                $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
-                $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
-                $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
-                  if($('#check-discount-by-value').val() == '1'){
-                  var discountv = parseFloat($('#discount-by-value').val());
-                  if(Number.isNaN(discountv))
-                    discountv = 0;
-                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discountv);
-                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discountv);
-                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discountv);
-                  }
-                }
-                else{
-                if($('#check-discount-by-value').val() == '1'){
-                var discountv = parseFloat($('#discount-by-value').val());
-                if(Number.isNaN(discountv))
-                    discountv = 0;
-                $('#final_total_price').val(increment+parseFloat($('#total_price').val())-discountv);
-                $('#f_total_price_acc').val(increment1+parseFloat($('#total_price_acc').val())-discountv);
-                $('#f_total_price_notacc').val(increment2+parseFloat($('#total_price_notacc').val())-discountv);
-                  if($('#check-discount-by-percent').val() == '1'){
-                  var discount_percent = parseFloat($('#max-field').val());
-                  if(Number.isNaN(discount_percent))
-                    discount_percent = 0;
-                  var discount = (parseFloat($('#total_price').val()) ) * discount_percent / 100;
-                  discount = discount.toFixed(2);
-                  $('#discountVal').val(discount);
-                  var discount1 = (parseFloat($('#total_price_acc').val()) ) * discount_percent / 100;
-                  discount1 = discount1.toFixed(2);
-                  var discount2 = (parseFloat($('#total_price_notacc').val()) ) * discount_percent / 100;
-                  discount2 = discount2.toFixed(2);
-                  var increment = (tax * (total_price-discount)) / 100;
-                var increment1 = (tax * (total_price_acc-discount1)) / 100;
-                var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
-                  $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
-                  $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
-                  $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
-                  }
-                }
-                }
-   //console.log($('#final_total_price').val());
-  $('#cashVal').val($('#final_total_price').val());     // cash value input
-  $('#all_price_value').val($('#final_total_price').val());
 
-   // update min value when total price change
-    //var newMin = (parseFloat($('#percent').val()) * parseFloat($('#final_total_price').val()))/100;
-    var newMin = (parseFloat($('#percent').val()) * parseFloat($('#f_total_price_acc').val()))/100 + parseFloat($('#f_total_price_notacc').val());
-    //console.log(newMin);
-    $('#inputmin').val(newMin);
-    $('#minVal').text(newMin);
-    // check min validation
-    var cash =  parseFloat($('#cashVal').val());
-    var card = parseFloat($('#cardVal').val());
-    var stc = parseFloat($('#stcVal').val());
-     // min payment
-     var min = parseFloat($('#inputmin').val());
-      if(card+cash+stc<min){
-      $('#submit').prop('disabled', true);
-      $('#badgecolor').removeClass('badge-success').addClass('badge-danger');
-      } 
-      else{
-      $('#badgecolor').removeClass('badge-danger').addClass('badge-success');
-    }
-     
-});
-</script>
-
-</script>
 <script>   // stop submiting form when click enter
   $('#sell-form').keypress(function(e) {
       if (e.keyCode == 13) {
@@ -1608,7 +1264,8 @@ $('input[name="quantity[]"]').on("keyup",function(){
   </script>
 <script>
 window.onload=function(){
-  var count_press = 0;
+  //var count_press = 0;
+  var count_press = parseInt($('#start-row-enter').val());
   $('#sell-form').keypress(function(e) {
       if (e.keyCode == 13) {
         count_press = count_press + 1 ;
@@ -1641,21 +1298,212 @@ window.onload=function(){
       }
   });
   </script>
-  <script>   // hanging
-    $('.delivered').on('change',function(){
-      if ($('.delivered:checked').length != $('.delivered').length)
-        $('#badgecolor').removeClass('hidden').addClass('visible');
-        else
-        $('#badgecolor').removeClass('visible').addClass('hidden');
-    });
+  <script>
+    $('#cash').on('click',function(){
+  if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
+      $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="cashVal"]').val($('#all_price_value').val());
+  }
+  if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').val($('#all_price_value').val());
+    $('#cardVal').val(null);
+    $('#stcVal').val(null);
+  }
+  if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').val($('#all_price_value').val());
+    $('#cardVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('#cashVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('#cashVal').val(null);
+    $('#stcVal').val(null);
+  }
+  if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').val($('#all_price_value').val());
+    $('#stcVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('#cashVal').val(null);
+    $('#cardVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+    //$('#cash').prop('checked',true);
+    //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    //$('#cashVal').val( $('#total_price').val());
+    $('#cashVal').val(null);
+    $('#cardVal').val(null);
+    $('#stcVal').val(null);
+    //$('#submit').prop('disabled', true);
+    if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='' && parseFloat($('#percent').val())==0)   // we put name0 to prevent confirm empty invoice
+    $('#submit').prop('disabled', false);
+    else
+    $('#submit').prop('disabled', true);
+  }
+  });
   </script>
-  
-  <script>  // changing the name dynamically
-    $('#customerName').on('keyup',function(){
-        $('#customerN').val($(this).val());
-        $('input[name="customer_name_s"]').val($(this).val());
-    });
+  <script>
+    $('#card').on('click',function(){
+  if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
+      $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="cardVal"]').val($('#all_price_value').val());
+  }
+  if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('#cardVal').val(null);
+    $('#stcVal').val(null);
+  }
+  if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('#cardVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cardVal"]').val($('#all_price_value').val());
+    $('#cashVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cardVal"]').val($('#all_price_value').val());
+    $('#cashVal').val(null);
+    $('#stcVal').val(null);
+  }
+  if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cardVal"]').val($('#all_price_value').val());
+    $('#stcVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('#cashVal').val(null);
+    $('#cardVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+    //$('#cash').prop('checked',true);
+    //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    //$('#cashVal').val( $('#total_price').val());
+    $('#cashVal').val(null);
+    $('#cardVal').val(null);
+    $('#stcVal').val(null);
+    //$('#submit').prop('disabled', true);
+    if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='' && parseFloat($('#percent').val())==0)   // we put name0 to prevent confirm empty invoice
+    $('#submit').prop('disabled', false);
+    else
+    $('#submit').prop('disabled', true);
+  }
+  });
   </script>
+  <script>
+    $('#stc').on('click',function(){
+  if($('#cash').is(':checked') && $('#card').is(':checked') && $('#stc').is(':checked')){
+      $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+      $('input[name="stcVal"]').val($('#all_price_value').val());
+  }
+  if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('#cardVal').val(null);
+    $('#stcVal').val(null);
+  }
+  if($('#cash').is(':checked') && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').val($('#all_price_value').val());
+    $('input[name="stcVal"]').val($('#all_price_value').val());
+    $('#cardVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').val($('#all_price_value').val());
+    $('#cashVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('#cashVal').val(null);
+    $('#stcVal').val(null);
+  }
+  if($('#cash').prop('checked') == true && $('#card').prop('checked') == true && $('#stc').prop('checked') == false){
+    $('input[name="cardVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="cashVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    $('#stcVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == true){
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('hidden').addClass('visible');
+    $('input[name="stcVal"]').val($('#all_price_value').val());
+    $('#cashVal').val(null);
+    $('#cardVal').val(null);
+  }
+  if($('#cash').prop('checked') == false && $('#card').prop('checked') == false && $('#stc').prop('checked') == false){   // error
+    //$('#cash').prop('checked',true);
+    //$('input[name="cashVal"]').removeClass('hidden').addClass('visibl');
+    $('input[name="cashVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="cardVal"]').removeClass('visible').addClass('hidden');
+    $('input[name="stcVal"]').removeClass('visible').addClass('hidden');
+    //$('#cashVal').val( $('#total_price').val());
+    $('#cashVal').val(null);
+    $('#cardVal').val(null);
+    $('#stcVal').val(null);
+    //$('#submit').prop('disabled', true);
+    if($('.delivered:checked').length != $('.delivered').length && $('#name0').val()!='' && parseFloat($('#percent').val())==0)   // we put name0 to prevent confirm empty invoice
+    $('#submit').prop('disabled', false);
+    else
+    $('#submit').prop('disabled', true);
+  }
+  });
+  </script>
+ 
   <script>  // delete record by clicking the icon
     $('.delete').on('click',function(){
       var id = $(this).attr("id");  // extract id
@@ -1696,7 +1544,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -1731,7 +1579,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                   var increment1 = (tax * (total_price_acc-discount1)) / 100;
                   var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                  $('#taxfield').val(increment.toFixed(2));
+                  $('#taxfield').val(increment);
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -1801,7 +1649,7 @@ window.onload=function(){
                 var tax =  parseFloat($('#tax').val());
                 var total_price =  parseFloat($('#total_price').val());
                 var increment = (tax * total_price) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 
                 $('#final_total_price').val(increment+parseFloat($('#total_price').val()));
                 //min
@@ -1845,7 +1693,6 @@ window.onload=function(){
     window.scrollTo(0,0);
   });
 </script>
-
 <script>    // cant submit if cash + card != total real price    //Except if we make invoice pending
   $('input[name="quantity[]"],#cashVal,#cardVal,#cash,#card,#stcVal,#stc').on("keyup change",function(){
      var sum;
@@ -1941,6 +1788,7 @@ window.onload=function(){
      }
    });
  </script>
+
  <script>  /* change discount value */
   $('#max-field').on("keyup",function(){
                 var maxy = $(this).val();
@@ -2003,7 +1851,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -2038,7 +1886,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -2123,7 +1971,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -2164,7 +2012,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discountv)) / 100;
                   var increment1 = (tax * (total_price_acc-discountv)) / 100;
                   var increment2 = (tax * (total_price_notacc-discountv)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -2248,7 +2096,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -2283,7 +2131,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -2336,22 +2184,6 @@ window.onload=function(){
   });
 </script>--}}
 
-<script>   // add new recipe
-  $('#plus-recipe').on('change',function(){
-    var value = $('#plus-recipe').val();
-    for(s=0;s<6;s++){
-      if(s<=value){    // show all recipes from index and back steps
-        $('#extra-recipe'+s).removeClass('displaynone');
-        $('#recipe_name'+s).prop('required',true);
-      }
-      else{
-        $('#extra-recipe'+s).addClass('displaynone');
-        $('#recipe_name'+s).prop('required',false);
-      }
-    }
-  });
-</script>
-
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 {{-- Ajax request to autocomplete barcode --}}
@@ -2364,7 +2196,7 @@ window.onload=function(){
           url: "{{url('autocomplete/invoice/products')}}",
           data: {
                   term : request.term,
-                  repos_id : $('#repo_id').val(),
+                  repos_id : parseInt($('#repo_id').val()),
            },
           dataType: "json",
           success: function(data){
@@ -2484,7 +2316,7 @@ window.onload=function(){
                 var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                 $('#final_total_price').val(parseFloat(increment+parseFloat($('#total_price').val())-discount).toFixed(2));
                 $('#f_total_price_acc').val(parseFloat(increment1+parseFloat($('#total_price_acc').val())-discount1).toFixed(2));
                 $('#f_total_price_notacc').val(parseFloat(increment2+parseFloat($('#total_price_notacc').val())-discount2).toFixed(2));
@@ -2519,7 +2351,7 @@ window.onload=function(){
                   var increment = (tax * (total_price-discount)) / 100;
                 var increment1 = (tax * (total_price_acc-discount1)) / 100;
                 var increment2 = (tax * (total_price_notacc-discount2)) / 100;
-                $('#taxfield').val(increment.toFixed(2));
+                $('#taxfield').val(increment);
                   $('#final_total_price').val(parseFloat($('#final_total_price').val())-discount);
                   $('#f_total_price_acc').val(parseFloat($('#f_total_price_acc').val())-discount1);
                   $('#f_total_price_notacc').val(parseFloat($('#f_total_price_notacc').val())-discount2);
@@ -2600,4 +2432,14 @@ window.onload=function(){
 
 
 </script>   
+
+<script>
+  $(document).ready(function() {
+    setTimeout(
+  function() 
+  {
+    $('#submit').prop('disabled',false);
+  }, 1000);
+  });
+</script>
 @endsection

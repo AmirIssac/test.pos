@@ -114,6 +114,7 @@ Route::group(['middleware' => ['permission:المبيعات']], function () {
     Route::post('/make/retrieve/{invoice_id}','Manager\SellController@retrieveInvoice')->name('retrieve.invoice');
     Route::get('change/invoice/payment/{invoice_uuid}','Manager\SellController@changePayment')->name('change.invoice.payment');
     Route::post('make/change/invoice/payment/{invoice_id}','Manager\SellController@makeChangePayment')->name('make.change.invoice.payment');
+    Route::get('/replace/invoice/{invoice_uuid}','Manager\SellController@replaceInvoiceForm')->name('replace.invoice.form');
     /*
     Route::post('delete/invoice/{invoice_id}','Manager\SellController@deleteInvoice')->name('delete.invoice');
     */
