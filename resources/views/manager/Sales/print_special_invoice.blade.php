@@ -101,7 +101,8 @@
                           @endif
                           <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
                             <h2>فاتورة ضريبية مبسطة</h2>
-                            <h2>{{$repository->name}} / {{$repository->address}}</h2>
+                            &nbsp;
+                            <h2>{{$repository->name}} - {{$repository->address}}</h2>
                           </div>
                           </div>
                         <div style="display: flex; justify-content: space-between">
@@ -112,34 +113,60 @@
                         <hr>
                         <table class="table">
                           <thead class="text-primary">
-                            <th>
+                            @if($repository->isSpecial())
+                            <th style="width: 18%">
                               Barcode  
                             </th>
-                            <th>
+                            <th style="width: 20%">
                               الاسم  
                             </th>
-                            <th> 
+                            <th style="width: 13%">
                               السعر  
                             </th>
                             @if(!$repository->isSpecial())   {{-- Normal repository --}}
-                            <th>الضريبة</th>
+                            <th style="width: 13%">الضريبة</th>
                             @endif
-                            <th>
+                            <th style="width: 7%">
                               الكمية 
                             </th>
-                            <th>
+                            <th style="width: 13%">
                               المجموع 
                             </th>
                             @if(isset($complete_invoice))
-                            <th>
+                            <th style="width:3%">
                               الواجب تسليمها 
                             </th>
                             @endif
-                            <th id="del">
+                            <th style="width:7%" id="del">
                               تم تسليمها  
                             </th>
+                            @else   {{-- basic repository --}}
+                            <th style="width: 12%">
+                              Barcode  
+                            </th>
+                            <th style="width: 12%">
+                              الاسم  
+                            </th>
+                            <th style="width: 15%">
+                              السعر  
+                            </th>
+                            <th style="width: 15%">الضريبة</th>
+                            <th style="width: 7%">
+                              الكمية 
+                            </th>
+                            <th style="width: 15%">
+                              المجموع 
+                            </th>
+                            @if(isset($complete_invoice))
+                            <th style="width:3%">
+                              الواجب تسليمها 
+                            </th>
+                            @endif
+                            <th style="width:7%" id="del">
+                              تم تسليمها  
+                            </th>
+                            @endif
                           </thead>
-          
                           <tbody>
                             @for($i=1;$i<$num;$i++)
                              <div>
@@ -246,7 +273,7 @@
                  {{--<i class="material-icons">add_circle</i>--}}
                  <div id="settings">
                   <div style="display: flex; justify-content: space-between;">
-                    <div style="display: flex; flex-direction: column; margin-top: 10px">
+                    <div style="display: flex; flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp;الدفع كاش</h4>
                       </div>

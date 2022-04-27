@@ -229,6 +229,5 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>--}} {{-- use it in specific page only --}}
     <script src="{{asset('public/js/main.js')}}"></script>
     @yield('scripts')
-
 </body>
 </html>

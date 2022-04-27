@@ -40,7 +40,7 @@
   hr{
     border: 1px solid black;
   }
-  #back{
+  #back,#print-additional{
     display: none;
   }
   /*#print-content {
@@ -56,7 +56,7 @@
                       <div id="print-content" class="table-responsive">
                           <button id="back" onclick="history.back()" class="btn btn-warning">رجوع</button>
                           @if($repository->isSpecial())
-                          <a href="{{route('print.additional.recipe',$invoice->id)}}" class="btn btn-info">{{__('reports.print_workshop_invoice')}}</a>
+                          <a href="{{route('print.additional.recipe',$invoice->id)}}" class="btn btn-info" id="print-additional">{{__('reports.print_workshop_invoice')}}</a>
                           @endif
                         <div style="display: flex;">
                           @if($repository->logo)
@@ -64,7 +64,8 @@
                           @endif
                           <div style="display: flex; justify-content: center;align-items: center; margin-right: 10px;">
                             <h2>فاتورة ضريبية مبسطة</h2>
-                            <h2>{{$repository->name}} / {{$repository->address}}</h2>
+                            &nbsp;
+                            <h2>{{$repository->name}} - {{$repository->address}}</h2>
                           </div>
                           </div> 
                         <div style="display: flex; justify-content: space-between">
@@ -79,29 +80,50 @@
                         <hr>
                         <table class="table">
                           <thead class="text-primary">
-                            <th>
+                            @if($repository->isSpecial())
+                            <th style="width: 18%">
                               Barcode  
                             </th>
-                            <th>
+                            <th style="width: 20%">
                               الاسم  
                             </th>
-                            <th>
+                            <th style="width: 13%">
                               السعر  
                             </th>
                             @if(!$repository->isSpecial() && isset($records[1]['tax_row']))   {{-- Normal repository --}}
-                            <th>الضريبة</th>
+                            <th style="width: 13%">الضريبة</th>
                             @endif
-                            <th>
+                            <th style="width: 7%">
                               الكمية 
                             </th>
-                            <th>
+                            <th style="width: 13%">
                               المجموع 
                             </th>
-                            <th id="del" class="">
+                            <th style="width:7%" id="del" class="">
                               تم تسليمها  
                             </th>
                           </thead>
-          
+                          @else   {{-- basic repository --}}
+                          <th style="width: 12%">
+                            Barcode  
+                          </th>
+                          <th style="width: 12%">
+                            الاسم  
+                          </th>
+                          <th style="width: 15%">
+                            السعر  
+                          </th>
+                          <th style="width: 15%">الضريبة</th>
+                          <th style="width: 7%">
+                            الكمية 
+                          </th>
+                          <th style="width: 15%">
+                            المجموع 
+                          </th>
+                          <th style="width:7%" id="del">
+                            تم تسليمها  
+                          </th>
+                          @endif
                           <tbody>
                             @for($i=1;$i<count($records);$i++)
                              <div>
@@ -190,7 +212,7 @@
                  {{--<i class="material-icons">add_circle</i>--}}
                  <div id="settings">
                   <div style="display: flex; justify-content: space-between;">
-                    <div style="display: flex; flex-direction: column; margin-top: 10px">
+                    <div style="display: flex; flex-direction: column;">
                       <div style="display: flex;">
                     <h4> &nbsp;الدفع كاش</h4>
                       </div>

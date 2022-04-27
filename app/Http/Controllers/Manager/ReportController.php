@@ -163,7 +163,6 @@ class ReportController extends Controller
             else
             return view('manager.Sales.epson_recipe_data')->with(['repository'=>$repository,'invoice'=>$invoice,'qrcode'=>$base64]);
         }
-        
     }
 
     public function filterPending(Request $request,$id){

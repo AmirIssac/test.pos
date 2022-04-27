@@ -149,7 +149,12 @@ input[type=number] {
                           {{$detail['price']}}
                           <input type="hidden" name="price[]" value="{{$detail['price']}}">
                         </td>
-                        
+                        @if($repository->isBasic() && isset($detail['tax_row']))
+                        <td>
+                          {{$detail['tax_row']}}
+                          <input type="hidden" name="tax_row[]" value="{{$detail['tax_row']}}">
+                        </td>
+                        @endif
                         <td>
                           {{$detail['quantity']}}
                           <input type="hidden" name="quan[]" value="{{$detail['quantity']}}">

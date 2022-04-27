@@ -357,22 +357,22 @@ input:read-only{
                   <th style="width: 20%">
                     {{__('sales.name')}}  
                   </th>
-                  <th style="width: 10%">
+                  <th style="width: 13%">
                     {{__('sales.price')}}  
                   </th>
-                  <th style="width: 10%">
+                  <th style="width: 7%">
                     {{__('sales.quantity')}} 
                   </th>
-                  <th style="width: 10%">
+                  <th style="width: 13%">
                     Tax
                   </th>
-                  <th style="width: 10%">
+                  <th style="width: 7%">
                     {{__('sales.in_stock')}}
                   </th>
-                  <th style="width: 10%" id="del" class="">
+                  <th style="width: 7%" id="del" class="">
                     {{__('sales.delivered')}}   
                   </th>
-                  <th style="width: 10%">
+                  <th style="width: 13%">
                     {{__('sales.total_price')}}
                   </th>
                   <th style="width: 10%">

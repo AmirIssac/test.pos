@@ -3463,7 +3463,6 @@ class SellController extends Controller
                         }    
                         
                     } 
-            
                     if($request->cash){
                         $cash = true;
                     }
@@ -3574,7 +3573,10 @@ class SellController extends Controller
                         for($i=0;$i<$count;$i++){   
                             if($request->barcode[$i] && $request->price[$i]){
                                 $del = 'نعم'; // always yes
-                            $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name_ar[$i],'price'=>$request->price[$i],'quantity'=>$request->quan[$i],'must_del'=>$request->quantity[$i],'del'=>$del);
+                            if($repository->isBasic())
+                                $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name_ar[$i],'price'=>$request->price[$i],'tax_row'=>$request->tax_row[$i],'quantity'=>$request->quan[$i],'must_del'=>$request->quantity[$i],'del'=>$del);
+                            elseif($repository->isSpecial())
+                                $records[]=array('barcode'=>$request->barcode[$i],'name_ar'=>$request->name_ar[$i],'price'=>$request->price[$i],'quantity'=>$request->quan[$i],'must_del'=>$request->quantity[$i],'del'=>$del);
                             }
                         }
                         $complete_invoice = true; // to check in blade if we sell invoice for first time or we are completing an invoice
