@@ -289,6 +289,7 @@ class ReportController extends Controller
         return redirect()->route('view.monthly.reports',$repository->id)->with('success','تم انشاء تقرير شهري بنجاح'); 
     } */
 
+    
     public function makeMonthlyReport($id){
         ini_set('max_execution_time', 500);
         $repository = Repository::find($id);
@@ -349,9 +350,12 @@ class ReportController extends Controller
                 ]
                 );
             */
+            
         }
         return redirect()->route('view.monthly.reports',$repository->id)->with('success',__('alerts.monthly_report_create_success')); 
     }
+    
+   
    /* public function viewMonthlyReports($id){
         $repository = Repository::find($id);
         $reports = $repository->monthlyReports()->orderBy('created_at','DESC')->paginate(1);
