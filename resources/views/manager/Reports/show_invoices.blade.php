@@ -245,6 +245,7 @@ i:hover{
                           @endcan
                           .
                        {{--   @if($invoice->daily_report_check==false && $invoice->transform=='no') {{-- change the payment values for today invoices and not edited ones --}}
+                       @can('تعديل طريقة الدفع')
                           @if($invoice->daily_report_check==false && ($invoice->transform=='no' || $invoice->transform=='p-d')) {{-- change the payment values for today invoices and not edited or edited invoices just for p-d and allow from another day --}}
                           <a style="color: #fc8f04" href="{{route('change.invoice.payment',$invoice->uuid)}}" class="active-a"> <i id="{{$i}}" class="material-icons">
                             price_change
@@ -254,6 +255,8 @@ i:hover{
                             price_change
                           </i> </a>
                           @endif
+                          .
+                        @endcan
                           {{--
                           .
                           @if($invoice->daily_report_check==false && $invoice->transform=='no') 
@@ -289,7 +292,6 @@ i:hover{
                           </i> </a>
                           @endif
                           --}}
-                          .
                           {{--
                           @if($invoice->status == 'pending') {{-- change the payment values for today invoices and not edited or edited invoices just for p-d and allow from another day 
                           <a style="color: #17d13f" data-toggle="modal" data-target="#exampleModal{{$invoice->id}}" class="active-a"> <i id="{{$i}}" class="material-icons">
