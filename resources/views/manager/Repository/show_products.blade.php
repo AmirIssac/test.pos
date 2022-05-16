@@ -43,6 +43,12 @@ input[type="number"]{
           <strong>{{ session('success') }}</strong>
   </div>
   @endif
+  @if (session('deleteProductSuccess'))
+  <div class="alert alert-success alert-block">
+  <button type="button" class="close" data-dismiss="alert">×</button>	
+  <strong>{{ session('deleteProductSuccess') }}</strong>
+</div>
+@endif
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">

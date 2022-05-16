@@ -620,9 +620,9 @@ input:read-only{
             <div style="margin-top: 10px;" class="col-12">
               <div class="form-group text-end">
                 @if($setting->customer_data)
-                      <button id="submit" type="submit" name="action" value="sell-with-customer-data" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
+                      <button id="submit" type="submit" name="action" value="sell-with-customer-data" class="btn btn-main mx-3">{{__('buttons.confirm_create_invoice')}}</button>
                 @else
-                      <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
+                      <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm_create_invoice')}}</button>
                 @endif
                   <a href="{{route('create.invoice',$repository->id)}}" style="color: white;" class="btn btn-red">{{__('buttons.cancel')}}</a>
               </div>

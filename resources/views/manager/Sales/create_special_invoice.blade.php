@@ -545,7 +545,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
             </td>
             <td>
               <select name="cyl_r" class="form-control" required>
-                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @for($i=0;$i>=-20.00;$i-=0.25)
                 @if($i==$saved_recipe['cyl_r'] && $i>0)
                 <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['cyl_r'] && $i<=0)
@@ -614,7 +614,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
             </td>
             <td>
               <select name="cyl_l" class="form-control" required>
-                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @for($i=0;$i>=-20.00;$i-=0.25)
                 @if($i==$saved_recipe['cyl_l'] && $i>0)
                 <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i==$saved_recipe['cyl_l'] && $i<=0)
@@ -762,7 +762,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
             </td>
             <td>
               <select name="cyl_r" class="form-control" required>
-                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @for($i=0;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
                 <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
@@ -812,7 +812,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
             </td>
             <td>
               <select name="cyl_l" class="form-control" required>
-                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @for($i=0;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
                 <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
@@ -979,7 +979,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
               </td>
               <td>
                 <select name="cyl_r_arr[]" class="form-control" required>
-                  @for($i=20.00;$i>=-20.00;$i-=0.25)
+                  @for($i=0;$i>=-20.00;$i-=0.25)
                   @if($i==$saved_recipe['cyl_r'] && $i>0)
                   <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                   @elseif($i==$saved_recipe['cyl_r'] && $i<=0)
@@ -1048,7 +1048,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
               </td>
               <td>
                 <select name="cyl_l_arr[]" class="form-control" required>
-                  @for($i=20.00;$i>=-20.00;$i-=0.25)
+                  @for($i=0;$i>=-20.00;$i-=0.25)
                   @if($i==$saved_recipe['cyl_l'] && $i>0)
                   <option value="{{number_format((float)$i, 2, '.', '')}}" selected>+{{number_format((float)$i, 2, '.', '')}}</option>
                   @elseif($i==$saved_recipe['cyl_l'] && $i<=0)
@@ -1231,7 +1231,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
             </td>
             <td>
               <select name="cyl_r_arr[]" class="form-control" required>
-                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @for($i=0;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
                 <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
@@ -1281,7 +1281,7 @@ input[id^=recipe_name]::-ms-input-placeholder{
             </td>
             <td>
               <select name="cyl_l_arr[]" class="form-control" required>
-                @for($i=20.00;$i>=-20.00;$i-=0.25)
+                @for($i=0;$i>=-20.00;$i-=0.25)
                 @if($i==0)  {{-- default value --}}
                 <option value="{{number_format((float)$i, 2, '.', '')}}" selected>{{number_format((float)$i, 2, '.', '')}}</option>
                 @elseif($i>0)
@@ -1643,8 +1643,8 @@ input[id^=recipe_name]::-ms-input-placeholder{
           <div>
             <div style="margin-top: 10px;" class="col-12">
               <div class="form-group text-end">
-                  <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm')}}</button>
-                  <button type="submit" name="action" value="save" class="btn btn-green mx-3">{{__('buttons.save')}}</button>
+                  <button id="submit" type="submit" name="action" value="sell" class="btn btn-main mx-3">{{__('buttons.confirm_create_invoice')}}</button>
+                  <button type="submit" name="action" value="save" class="btn btn-green mx-3">{{__('buttons.save_prescription')}}</button>
                   <a href="{{route('create.special.invoice',$repository->id)}}" style="color: white;" class="btn btn-red">{{__('buttons.cancel')}}</a>
               </div>
           </div>

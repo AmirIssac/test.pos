@@ -327,9 +327,9 @@ class RepositoryController extends Controller
         $product = Product::find($request->product_id);
         $repository = $product->repository;
         $product->delete();
-        return redirect(route('repository.index',$repository->id))->with('deleteProductSuccess',__('alerts.product_delete_success'));
+        return redirect(route('show.products',$repository->id))->with('deleteProductSuccess',__('alerts.product_delete_success'));
     }
-
+ 
     public function deleteAllProducts($id){
         $repository = Repository::findOrFail($id);
         $repository->products()->delete();

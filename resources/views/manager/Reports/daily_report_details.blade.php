@@ -135,6 +135,7 @@ input[type=number] {
                         {{__('purchases.purchases')}} {{$total_sum_purchases}}
                       </td>
                     </tr>
+                    {{--
                     <tr class="price">
                       <td>
                         {{__('reports.decrease_amount_in_cashier')}}   &nbsp;{{$report->cash_shortage}}
@@ -149,6 +150,7 @@ input[type=number] {
                       </td>
                       <td></td>
                     </tr>
+                    --}}
                     <tr class="price">
                       <td>
                         {{__('reports.increase_amount_in_cashier')}}   &nbsp;{{$report->cash_plus}} 

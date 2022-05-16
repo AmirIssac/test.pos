@@ -17,5 +17,7 @@
         'delete' => 'حذف',
         'close_cashier' => 'اغلاق الكاشير',
         'view' => 'عرض',
+        'confirm_create_invoice' => 'تأكيد وانشاء الفاتورة',
+        'save_prescription' => 'حفظ الوصفة الطبية فقط',
     ];
     ?>

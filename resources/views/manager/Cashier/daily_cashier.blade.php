@@ -54,6 +54,7 @@ input[type=number] {
                     </th>
                   </thead>
                   <tbody>
+                    {{--
                     <tr>
                       <td>
                         {{__('cashier.The_amount_of_shortage_in_the_cashier')}}
@@ -68,6 +69,7 @@ input[type=number] {
                           <input type="number" name="stcNeg"  class="form-control" placeholder="{{__('cashier.Theamountoftheshortageinthestc_if_there_shortage')}}">
                       </td>
                     </tr>
+                    --}}
                     <tr>
                         <td>
                           {{__('cashier.The_amount_of_increase_in_the_cashier')}}

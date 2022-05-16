@@ -125,6 +125,15 @@
           </div>
       </div>
       <div class="col-md-3">
+        @can('اغلاق الكاشير')
+        <a href="{{route('daily.cashier.form',$repository->id)}}">
+        <div style="background-color: rgb(6, 27, 59)" class="box overflow-hidden">
+              <div class="text-center">
+                  <h3 style="color: rgb(185, 185, 185)">{{__('cashier.close_cashier')}}</h3>
+              </div>
+          </div>
+        </a>                   
+        @endcan
         @can('عرض البضائع')
           <div class="box overflow-hidden">
             <a href="{{route('show.products',$repository->id)}}">

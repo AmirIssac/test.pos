@@ -17,5 +17,7 @@
         'delete' => 'delete',
         'close_cashier' => 'close cashier',
         'view' => 'View',
+        'confirm_create_invoice' => 'confirm and create invoice',
+        'save_prescription' => 'save prescription only',
     ];
-    ?>
+?>
