@@ -85,9 +85,42 @@ i:hover{
                         {{__('reports.current_month')}}
                       </td>
                       <td>
-                        <?php $total_sum_invoices = 0 ?>
+                        {{--
+                        <php $total_sum_invoices = 0 ?>
                             @foreach($invoices as $invoice)
                             @if($invoice->status != 'retrieved' && $invoice->status != 'deleted')
+                            <php $total_sum_invoices += $invoice->total_price ?>
+                            @endif
+                            @endforeach
+                            {{$total_sum_invoices}}
+                            --}}
+
+                            {{--
+                            <php $total_sum_invoices = 0 ?>
+                            @foreach($invoices as $invoice)
+                              @if($invoice->invoiceProcesses()->count()>0)
+                                  <php
+                                  $old_process_date = $invoice->invoiceProcesses[0]->created_at;
+                                  $old_process_date = Carbon::createFromFormat('Y-m-d H:i:s', $old_process_date); 
+                                  ?>
+                                  @if($old_process_date->month == now()->month && $old_process_date->year == now()->year) 
+                                  <php     
+                                  $total_sum_invoices += $invoice->total_price;
+                                  continue;
+                                  ?>
+                                  @endif
+                              @else
+                              <php
+                                  $total_sum_invoices += $invoice->total_price;
+                                  ?>
+                              @endif
+                            @endforeach
+                            {{$total_sum_invoices}}
+                            --}}
+
+                            <?php $total_sum_invoices = 0 ?>
+                            @foreach($invoices as $invoice)
+                            @if($invoice->status != 'retrieved' && $invoice->status != 'deleted' && $invoice->monthlyReports()->count()==0) 
                             <?php $total_sum_invoices += $invoice->total_price ?>
                             @endif
                             @endforeach
@@ -116,7 +149,6 @@ i:hover{
                         <a style="color: #ffffff" href="{{route('view.purchase.current.monthly.report.details',$repository->id)}}"> <i class="material-icons eye">
                           visibility
                         </i> </a>
-                        
                         .
                         <a style="color: #ffffff" href="{{route('print.purchase.current.monthly.report.details',$repository->id)}}"> <i class="material-icons eye">
                           print

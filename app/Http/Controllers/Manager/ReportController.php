@@ -372,7 +372,7 @@ class ReportController extends Controller
         ->whereMonth('created_at','=',now()->month)->where('monthly_report_check',false)->get();
         return view('manager.Reports.monthly_reports')->with(['repository'=>$repository,'reports'=>$reports,'invoices' => $invoices,'purchases'=>$purchases]);
     }
-
+ 
     public function monthlyReportDetails($id){
         $report = MonthlyReport::find($id);
         $repository = $report->repository;

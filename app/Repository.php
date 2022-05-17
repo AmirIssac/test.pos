@@ -392,7 +392,7 @@ class Repository extends Model
         }
         return $month_sales;
     }*/
-
+    /*
     public function monthSales(){
         $month_sales = 0;
         $invoices = $this->invoices()->where('status','!=','retrieved')->
@@ -412,6 +412,20 @@ class Repository extends Model
              }
              else
                  $month_sales += $invoice->total_price;
+         }
+         return $month_sales;
+     }
+     */
+
+     public function monthSales(){
+        $month_sales = 0;
+        $invoices = $this->invoices()->where('status','!=','retrieved')->
+        where('status','!=','deleted')->where('monthly_report_check',false)
+        ->whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
+        ->get();
+         foreach($invoices as $invoice){
+            if($invoice->status != 'retrieved' && $invoice->status != 'deleted' && $invoice->monthlyReports()->count()==0) 
+                $month_sales += $invoice->total_price;
          }
          return $month_sales;
      }
