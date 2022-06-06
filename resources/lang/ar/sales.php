@@ -86,5 +86,6 @@ return [
     'customer_tax_address' => 'العنوان الضريبي للعميل',
     'view_price_invoice' => 'فاتورة عرض سعر',
     'do_you_want_transfer_money_to_cashier' => 'هل تريد أن يتم ارسال الأموال الى الصندوق ؟',
+    'show_prescription' => 'عرض الوصفة الطبية',
 ];
 ?>

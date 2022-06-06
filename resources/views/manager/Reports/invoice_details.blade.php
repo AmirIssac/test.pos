@@ -48,7 +48,11 @@
           <div class="card">
               <div class="card-header card-header-primary">
               <h4 class="card-title"> </h4>
-              <h4> {{__('sales.invoice_details')}} {{$invoice->created_at}}   <span class="badge badge-success">{{$invoice->code}}</span></h4>
+              <h4> {{__('sales.invoice_details')}} {{$invoice->created_at}}   <span class="badge badge-success">{{$invoice->code}}</span>
+                <a href="{{route('prescription.details',$invoice->uuid)}}" class="btn btn-danger">
+                  {{__('sales.show_prescription')}}
+                </a>
+              </h4>
               {{--<i style="float: left" id="{{$i}}" class="material-icons eye">
                 visibility
               </i>--}}
@@ -223,6 +227,7 @@
                   @endif
                   @endforeach
                   <i id="tooltip" class="material-icons" data-toggle="popover" data-trigger="hover" title="{{__('reports.multiple')}}" data-content=" {{$message}}">live_help</i>
+                  
                   @endif
 
                   @else  {{-- old version --}}

@@ -86,5 +86,6 @@ return [
     'customer_tax_address' => 'customer_tax_address',
     'view_price_invoice' => 'view price invoice',
     'do_you_want_transfer_money_to_cashier' => 'Do you want to transfer money to the cashier ?',
+    'show_prescription' => 'show prescription',
 ];
 ?>

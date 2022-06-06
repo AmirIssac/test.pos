@@ -47,6 +47,28 @@ class ReportController extends Controller
         return view('manager.Reports.invoice_details')->with(['repository'=>$repository,'invoice'=>$invoice,'invoice_processes'=>$invoice_processes]);
     }
 
+    public function prescriptionDetails($uuid){
+        $invoice = Invoice::where('uuid',$uuid)->first();
+        $repository = $invoice->repository;
+        $recipe = unserialize($invoice->recipe);
+        // prepare recipe array with checker names instead of IDs
+        for($i=0;$i<count($recipe);$i++){
+            if(isset($recipe[$i]['recipe_source'])){
+                if($recipe[$i]['recipe_source'] != 'customer'){
+                    $checker = User::find($recipe[$i]['recipe_source']);
+                    $recipe[$i]['recipe_source'] = $checker->name;
+                }
+            }
+            if(isset($recipe[$i]['ipd_source'])){
+                if($recipe[$i]['ipd_source'] != 'customer'){
+                    $checker = User::find($recipe[$i]['ipd_source']);
+                    $recipe[$i]['ipd_source'] = $checker->name;
+                }
+            }
+        }
+        return view('manager.Reports.prescription_details',['recipe'=>$recipe,'repository'=>$repository]);
+    }
+
     // post
     public function invoiceDetailsByLog(Request $request){
         $invoice = Invoice::find($request->inv);

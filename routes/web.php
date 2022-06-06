@@ -193,6 +193,7 @@ Route::group(['middleware'=>['permission:التقارير']], function () {
     Route::get('/print/purchase/current/daily/report/details/{repository_id}','Manager\ReportController@reportPurchaseDetailsCurrentDay')->name('print.purchase.current.daily.report.details');
     Route::get('print/purchase/daily/report/details/{report_id}','Manager\ReportController@dailyPurchaseReportDetails')->name('print.purchase.daily.report.details');
     Route::get('/invoice/details/{invoice_uuid}','Manager\ReportController@invoiceDetails')->name('invoice.details');
+    Route::get('/prescription/details/{invoice_uuid}','Manager\ReportController@prescriptionDetails')->name('prescription.details');
     Route::get('/price/invoice/details/{invoice_uuid}','Manager\ReportController@priceInvoiceDetails')->name('price.invoice.details');
     Route::get('/print/price/invoice/{invoice_uuid}','Manager\ReportController@printPriceInvoice')->name('print.price.invoice');
     // id for activity_log
